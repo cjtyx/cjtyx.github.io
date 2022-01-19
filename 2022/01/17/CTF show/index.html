@@ -1,54 +1,491 @@
-extends base
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
 
-block title
-  title= page.title + ' | ' + config.title
 
-block content
-  .post
-    h1.post-title= page.title
-    .post-meta= page.date.format(config.date_format)
-      if page.categories.length > 0
-        span= ' | '
-        span.category
-          for category in page.categories.toArray()
-            a(href=url_for(category.path))= category.name
-      if theme.busuanzi == true
-        script(src='https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js', async)
-        span#busuanzi_container_page_pv= ' | '
-          span#busuanzi_value_page_pv
-          span= ' ' + __('Hits')
-      if theme.wordcount == true
-        include _partial/wordcount.pug
-    if theme.disqus.enable == true
-      a.disqus-comment-count(data-disqus-identifier=page.path, href=url_for(page.path) + '#disqus_thread')
-    if theme.changyan
-      a.ds-thread-count(href=url_for(page.path) + '#SOHUCS')
-        span#changyan_count_unit(style='font-size: 15px; color: #6E7173;') 0
-        span= ' ' + __('Comment')
-      script(src='https://assets.changyan.sohu.com/upload/plugins/plugins.count.js', async)
-    if theme.valine.enable
-      a.disqus-comment-count( href=url_for(page.path) + '#vcomment')
-        span.valine-comment-count(data-xid=url_for(page.path))
-        span= ' ' + __('Comment')
-    if page.toc
-      div(class='clear')
-        div(id='toc' class='toc-article')
-          div(class='toc-title')= __('contents')
-          != toc(page.content, {list_number: theme.toc_number})
-    .post-content
-      != page.content
-    if theme.donate.enable == true && page.donate != false
-      include _widget/donate.pug
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    if theme.post_copyright.enable == true && page.copyright != false
-      include _widget/copyright.pug
+<link rel="stylesheet" href="/css/main.css">
 
-    if theme.shareto == true
-      script(type='text/javascript', src=url_for(theme.js) + '/share.js' + '?v=' + theme.version, async)
-      a.article-share-link(data-url=page.permalink, data-id=page._id, data-qrcode=qrcode(page.permalink))= __('shareto')
 
-    include _partial/tag.pug
-    include _partial/post_nav.pug
 
-    if page.comments
-      include _partial/comments.pug
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="CTF showweb1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTFshow 做题记录">
+<meta property="og:url" content="http://example.com/2022/01/17/CTF%20show/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="CTF showweb1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115164912202.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115165115804.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115170052755.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115204306731.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115204339638.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115204605393.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115204702358.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115205037263.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115210116656.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115210543987.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115210710041.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115210734790.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115221144978.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115221125272.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115221452471.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115221625932.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115222114188.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115222503948.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115222551664.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115224231678.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115224616061.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115224847800.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115224902121.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116134407774.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116134911085.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116135003467.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116135617684.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116135532861.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116135844808.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116141900525.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116142105448.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116142117466.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116142252074.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116142348164.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116142752905.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116143037122.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116143629362.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116143552228.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116143754042.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144035834.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144246693.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144409085.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144448192.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144736889.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144839363.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116144920937.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116145025640.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116145520659.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116150323740.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116150618762.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116150644760.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116150722008.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116150834750.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116151831468.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116153458454.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116153607572.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116153831221.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116154606705.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116154622944.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116154949245.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116155025878.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116155402143.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116155602966.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116155944387.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116160044874.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116160830902.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116162609743.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116202537401.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116203852617.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116171821919.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116204048032.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116203131650.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116204646221.png">
+<meta property="og:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220116204721558.png">
+<meta property="article:published_time" content="2022-01-17T03:19:46.911Z">
+<meta property="article:modified_time" content="2022-01-16T13:51:01.166Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/DELL/AppData/Roaming/Typora/typora-user-images/image-20220115164912202.png">
+
+
+<link rel="canonical" href="http://example.com/2022/01/17/CTF%20show/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/01/17/CTF%20show/","path":"2022/01/17/CTF show/","title":"CTFshow 做题记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CTFshow 做题记录 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-show"><span class="nav-number">1.</span> <span class="nav-text">CTF show</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web1"><span class="nav-number">1.1.</span> <span class="nav-text">web1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web2"><span class="nav-number">1.2.</span> <span class="nav-text">web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3"><span class="nav-number">1.3.</span> <span class="nav-text">web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4"><span class="nav-number">1.4.</span> <span class="nav-text">web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web5"><span class="nav-number">1.5.</span> <span class="nav-text">web5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web6"><span class="nav-number">1.6.</span> <span class="nav-text">web6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web7"><span class="nav-number">1.7.</span> <span class="nav-text">web7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web8"><span class="nav-number">1.8.</span> <span class="nav-text">web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web9"><span class="nav-number">1.9.</span> <span class="nav-text">web9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web10"><span class="nav-number">1.10.</span> <span class="nav-text">web10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web11"><span class="nav-number">1.11.</span> <span class="nav-text">web11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web12"><span class="nav-number">1.12.</span> <span class="nav-text">web12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web13"><span class="nav-number">1.13.</span> <span class="nav-text">web13</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web14"><span class="nav-number">1.14.</span> <span class="nav-text">web14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web15"><span class="nav-number">1.15.</span> <span class="nav-text">web15</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web16"><span class="nav-number">1.16.</span> <span class="nav-text">web16</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web17"><span class="nav-number">1.17.</span> <span class="nav-text">web17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web18"><span class="nav-number">1.18.</span> <span class="nav-text">web18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web19"><span class="nav-number">1.19.</span> <span class="nav-text">web19</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web20"><span class="nav-number">1.20.</span> <span class="nav-text">web20</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web21"><span class="nav-number">1.21.</span> <span class="nav-text">web21</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/17/CTF%20show/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTFshow 做题记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-17 11:19:46" itemprop="dateCreated datePublished" datetime="2022-01-17T11:19:46+08:00">2022-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-01-16 21:51:01" itemprop="dateModified" datetime="2022-01-16T21:51:01+08:00">2022-01-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="CTF-show"><a href="#CTF-show" class="headerlink" title="CTF show"></a>CTF show</h1><h2 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h2><p>flag在源代码里</p>
+<h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a>web2</h2><p>方法一：bp抓包，POST源码</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115164912202.png" alt="image-20220115164912202"></p>
+<p>方法二：URL前加view-source：</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115165115804.png" alt="image-20220115165115804"></p>
+<h2 id="web3"><a href="#web3" class="headerlink" title="web3"></a>web3</h2><p>bp抓包，查看响应包</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115170052755.png" alt="image-20220115170052755"></p>
+<h2 id="web4"><a href="#web4" class="headerlink" title="web4"></a>web4</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115204306731.png" alt="image-20220115204306731"></p>
+<p>访问robots.txt</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115204339638.png" alt="image-20220115204339638"></p>
+<p>flag在flagishere.txt里</p>
+<p>robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛爬行，减少搜索引擎蜘蛛的工作量。</p>
+<p>当搜索引擎蜘蛛访问网站时，它会首先检查该站点根目录下是否存在robots.txt文件，如果该文件存在，搜索引擎蜘蛛就会按照该文件中的内容来确定爬行的范围；如果该文件不存在，则所有的搜索引擎蜘蛛将能够访问网站上所有没有被口令保护的页面。</p>
+<p>通常搜索引擎对网站派出的蜘蛛是有配额的，多大规模的网站放出多少蜘蛛。如果我们不配置robots文件，那么蜘蛛来到网站以后会无目的的爬行，造成的一个结果就是，需要它爬行的目录，没有爬行到，不需要爬行的，也就是我们不想被收录的内容却被爬行并放出快照。所以robots文件对于我们做网站优化来说具有很重要的影响。</p>
+<h2 id="web5"><a href="#web5" class="headerlink" title="web5"></a>web5</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115204605393.png" alt="image-20220115204605393"></p>
+<p>phps文件泄露 phps源码访问：index.phps</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115204702358.png" alt="image-20220115204702358"></p>
+<p>index.phps 其用于查看php的源代码<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115205037263.png" alt="image-20220115205037263" style="zoom:67%;" /></p>
+<p>phps即为 PHP Source，phps文件就是php的源代码文件，通常用于提供给用户（访问者）查看php代码，因为用户无法直接通过Web浏览器看到php文件的内容，所以需要用phps文件代替</p>
+<h2 id="web6"><a href="#web6" class="headerlink" title="web6"></a>web6</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115210116656.png" alt="image-20220115210116656"></p>
+<p>bp抓包源码出不来，网站源码泄露，访问<a target="_blank" rel="noopener" href="http://www.zip获取网站源码/">www.zip获取网站源码</a></p>
+<p><a href="http://www.zip:网站的文件都是放置在www文件夹下面的,WWW文件夹里面的文件全部压缩在[www.zip](http://www.zip)里面了。">www.zip:网站的文件都是放置在www文件夹下面的,WWW文件夹里面的文件全部压缩在[www.zip](http://www.zip)里面了。</a></p>
+<p>解压后：<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115210543987.png" alt="image-20220115210543987"></p>
+<p>为假的flag</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115210710041.png" alt="image-20220115210710041"></p>
+<p>在网页打开文件，直接访问</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115210734790.png" alt="image-20220115210734790"></p>
+<h2 id="web7"><a href="#web7" class="headerlink" title="web7"></a>web7</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115221144978.png" alt="image-20220115221144978"></p>
+<p>.开头的文件在Linux为隐藏文件夹，这为版本控制系统，多人协作，git可以版本控制，每个人的代码放到仓库中</p>
+<p> .git文件夹是git init后在当前目录生成的一个管理git仓库的文件夹，这里包含所有git操作所需要的东西</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115221125272.png" alt="image-20220115221125272"></p>
+<h2 id="web8"><a href="#web8" class="headerlink" title="web8"></a>web8</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115221452471.png" alt="image-20220115221452471"></p>
+<p>同样为这个</p>
+<p>.git 没反应</p>
+<p>.svn</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115221625932.png" alt="image-20220115221625932"></p>
+<p>svn泄露</p>
+<p>svn仍为版本控制系统</p>
+<p>协作开发需要版本控制系统，git和SVN，应该是目前使用最多的两个版本控制系统。在Linux环境下git，是命令行的方式，现在在Windows下，与tortoiseSVN一样，有tortoisegit，不过需要先安装git（msysgit）。</p>
+<p>git与SVN的区别0</p>
+<p>1.git是分布式的，SVN是集中式的</p>
+<p>开发人员可以建立自己的分支，并在自己的分支上进行操作，减少了冲突</p>
+<p>2.git可以在没有网络的情况下使用</p>
+<p>从远程库clone一个到本地库，没有网络的情况下，可以将修改提交到本地库，等有网的时候再传上去。</p>
+<p>3.git和SVN的版本控制</p>
+<p>是通过.git和.svn文件，.git只是在本地的版本库的目录下存在，而.svn存在于每一个文件夹，当我们不需要版本控制的时候，要删除.svn很费时。</p>
+<p>4.版本号问题</p>
+<p>svn有明确的版本号，git对于每一个版本，都通过SHA1算法生成一个唯一标示的码，方便追溯到之前的版本。</p>
+<h2 id="web9"><a href="#web9" class="headerlink" title="web9"></a>web9</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115222114188.png" alt="image-20220115222114188"></p>
+<p>vim缓存文件泄露</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115222503948.png" alt="image-20220115222503948"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115222551664.png" alt="image-20220115222551664"></p>
+<p>在生产环境下，在vim非正常退出的情况下，会产生一个交换文件，.php.swp，里面有还没有完成的内容</p>
+<p>使用vi/vim，经常可以看到swp这个文件,那这个文件是怎么产生的呢，当你打开一个文件，vi就会生成这么一个.(filename)swp文件 以备不测（不测下面讨论），如果你正常退出，那么这个这个swp文件将会自动删除 。下面说不测。<br> 不测分为：<br> 1 当你用多个程序编辑同一个文件时。<br> 2 非常规退出时。</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115224231678.png" alt="image-20220115224231678"></p>
+<h2 id="web10"><a href="#web10" class="headerlink" title="web10"></a>web10</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115224616061.png" alt="image-20220115224616061"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115224847800.png" alt="image-20220115224847800"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220115224902121.png" alt="image-20220115224902121"></p>
+<p>URL解码：</p>
+<p>ctfshow{b07aa290-1d42-4d61-b993-6b3e27dbf1ea}</p>
+<h2 id="web11"><a href="#web11" class="headerlink" title="web11"></a>web11</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116134407774.png" alt="image-20220116134407774"></p>
+<p>在线域名解析</p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116134911085.png" alt="image-20220116134911085" style="zoom:67%;" />
+
+<h2 id="web12"><a href="#web12" class="headerlink" title="web12"></a>web12</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116135003467.png" alt="image-20220116135003467"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116135617684.png" alt="image-20220116135617684"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116135532861.png" alt="image-20220116135532861"></p>
+<p>用户名：admin 密码：372619038</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116135844808.png" alt="image-20220116135844808"></p>
+<h2 id="web13"><a href="#web13" class="headerlink" title="web13"></a>web13</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116141900525.png" alt="image-20220116141900525"></p>
+<p>找到技术文档</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116142105448.png" alt="image-20220116142105448"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116142117466.png" alt="image-20220116142117466"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116142252074.png" alt="image-20220116142252074"></p>
+<p>登录后<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116142348164.png" alt="image-20220116142348164"></p>
+<h2 id="web14"><a href="#web14" class="headerlink" title="web14"></a>web14</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116142752905.png" alt="image-20220116142752905"></p>
+<p>提示访问editor</p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116143037122.png" alt="image-20220116143037122" style="zoom:67%;" />
+
+<p>图片空间里面找到一个文件<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116143629362.png" alt="image-20220116143629362"></p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116143552228.png" alt="image-20220116143552228" style="zoom:67%;" />
+
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116143754042.png" alt="image-20220116143754042" style="zoom:67%;" />
+
+<p>不对</p>
+<p>nothinghere文件夹里的fl000g.txt</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144035834.png" alt="image-20220116144035834"></p>
+<h2 id="web15"><a href="#web15" class="headerlink" title="web15"></a>web15</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144246693.png" alt="image-20220116144246693"></p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144409085.png" alt="image-20220116144409085" style="zoom:67%;" />
+
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144448192.png" alt="image-20220116144448192" style="zoom:33%;" />
+
+<p>点击忘记密码：</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144736889.png" alt="image-20220116144736889"></p>
+<p>搜素刚刚的QQ，陕西西安</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144839363.png" alt="image-20220116144839363"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116144920937.png" alt="image-20220116144920937"></p>
+<h2 id="web16"><a href="#web16" class="headerlink" title="web16"></a>web16</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116145025640.png" alt="image-20220116145025640"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116145520659.png" alt="image-20220116145520659"></p>
+<p>默认探针名字：tz.php</p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116150323740.png" alt="image-20220116150323740" style="zoom:67%;" />
+
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116150618762.png" alt="image-20220116150618762"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116150644760.png" alt="image-20220116150644760"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116150722008.png" alt="image-20220116150722008"></p>
+<p>可以点，点进去</p>
+<p>在环境哪儿：<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116150834750.png" alt="image-20220116150834750"></p>
+<h2 id="web17"><a href="#web17" class="headerlink" title="web17"></a>web17</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116151831468.png" alt="image-20220116151831468"></p>
+<p>备份的sql文件：backup.sql</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116153458454.png" alt="image-20220116153458454"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116153607572.png" alt="image-20220116153607572"></p>
+<h2 id="web18"><a href="#web18" class="headerlink" title="web18"></a>web18</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116153831221.png" alt="image-20220116153831221"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116154606705.png" alt="image-20220116154606705"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116154622944.png" alt="image-20220116154622944"></p>
+<p>若分数大于100，会弹出一个框</p>
+<p>这是Unicode编码，解码后：<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116154949245.png" alt="image-20220116154949245"></p>
+<p>110.php看看<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116155025878.png" alt="image-20220116155025878"></p>
+<h2 id="web19"><a href="#web19" class="headerlink" title="web19"></a>web19</h2><p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116155402143.png" alt="image-20220116155402143"></p>
+<p>查看网页源代码</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116155602966.png" alt="image-20220116155602966"></p>
+<p>输入仍为错误，前端有加密</p>
+<p>用bp抓包修改<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116155944387.png" alt="image-20220116155944387"></p>
+<p>在此修改</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116160044874.png" alt="image-20220116160044874"></p>
+<h2 id="web20"><a href="#web20" class="headerlink" title="web20"></a>web20</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mdb文件是早期asp+access构架的数据库文件，文件泄露相当于数据库被脱裤了。</span><br></pre></td></tr></table></figure>
+
+<p>db目录，数据库作为一个文件存储，访问/db/db.mdb，下载文件。mdb是一种文件格式，它是Access数据库的一种文件存储格式，由于对数据操作的方便性，常用在一些中小型程序中；对于mdb格式的文件可以用Access打开。</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116160830902.png"></p>
+<p>用记事本打开，搜索flag<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116162609743.png" alt="image-20220116162609743"></p>
+<h2 id="web21"><a href="#web21" class="headerlink" title="web21"></a>web21</h2><p>用bp抓包</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116202537401.png" alt="image-20220116202537401"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116203852617.png" alt="image-20220116203852617"></p>
+<p>是输入的用户密码，不过中间带了冒号</p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116171821919.png" alt="image-20220116171821919" style="zoom:67%;" />
+
+<p>payload2(密码)：导入提供的字典，base64加密</p>
+<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116204048032.png" alt="image-20220116204048032" style="zoom:67%;" />
+
+<p>payload1和payload2都需要取消勾选</p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116203131650.png" alt="image-20220116203131650"></p>
+<p><img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116204646221.png" alt="image-20220116204646221"></p>
+<p>查看响应包<img src="C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20220116204721558.png" alt="image-20220116204721558" style="zoom:67%;" /></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/17/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
