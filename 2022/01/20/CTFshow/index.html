@@ -21,12 +21,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="CTF showweb1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛">
+<meta name="description" content="CTF show信息收集web1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CTFshow">
 <meta property="og:url" content="http://example.com/2022/01/20/CTFshow/index.html">
 <meta property="og:site_name" content="Echo">
-<meta property="og:description" content="CTF showweb1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛">
+<meta property="og:description" content="CTF show信息收集web1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220115164912202.png">
 <meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220115165115804.png">
@@ -130,8 +130,20 @@
 <meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220120215219382.png">
 <meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220120221628641.png">
 <meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220120222045923.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121150757284.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121150936152.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121151034044.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121151258500.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121152107557.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121155601615.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121160527232.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121160609695.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121163156964.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121163736641.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121163916210.png">
+<meta property="og:image" content="http://example.com/2022/01/20/CTFshow/image-20220121165055553.png">
 <meta property="article:published_time" content="2022-01-20T09:38:06.000Z">
-<meta property="article:modified_time" content="2022-01-20T14:27:43.399Z">
+<meta property="article:modified_time" content="2022-01-21T11:58:37.346Z">
 <meta property="article:author" content="CJ">
 <meta property="article:tag" content="GOGOGO">
 <meta name="twitter:card" content="summary">
@@ -225,7 +237,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-show"><span class="nav-number">1.</span> <span class="nav-text">CTF show</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web1"><span class="nav-number">1.1.</span> <span class="nav-text">web1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web2"><span class="nav-number">1.2.</span> <span class="nav-text">web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3"><span class="nav-number">1.3.</span> <span class="nav-text">web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4"><span class="nav-number">1.4.</span> <span class="nav-text">web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web5"><span class="nav-number">1.5.</span> <span class="nav-text">web5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web6"><span class="nav-number">1.6.</span> <span class="nav-text">web6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web7"><span class="nav-number">1.7.</span> <span class="nav-text">web7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web8"><span class="nav-number">1.8.</span> <span class="nav-text">web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web9"><span class="nav-number">1.9.</span> <span class="nav-text">web9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web10"><span class="nav-number">1.10.</span> <span class="nav-text">web10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web11"><span class="nav-number">1.11.</span> <span class="nav-text">web11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web12"><span class="nav-number">1.12.</span> <span class="nav-text">web12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web13"><span class="nav-number">1.13.</span> <span class="nav-text">web13</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web14"><span class="nav-number">1.14.</span> <span class="nav-text">web14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web15"><span class="nav-number">1.15.</span> <span class="nav-text">web15</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web16"><span class="nav-number">1.16.</span> <span class="nav-text">web16</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web17"><span class="nav-number">1.17.</span> <span class="nav-text">web17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web18"><span class="nav-number">1.18.</span> <span class="nav-text">web18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web19"><span class="nav-number">1.19.</span> <span class="nav-text">web19</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web20"><span class="nav-number">1.20.</span> <span class="nav-text">web20</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web21"><span class="nav-number">1.21.</span> <span class="nav-text">web21</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web22"><span class="nav-number">1.22.</span> <span class="nav-text">web22</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web23"><span class="nav-number">1.23.</span> <span class="nav-text">web23</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web24"><span class="nav-number">1.24.</span> <span class="nav-text">web24</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web25"><span class="nav-number">1.25.</span> <span class="nav-text">web25</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web26"><span class="nav-number">1.26.</span> <span class="nav-text">web26</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web27"><span class="nav-number">1.27.</span> <span class="nav-text">web27</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-show"><span class="nav-number">1.</span> <span class="nav-text">CTF show</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web1"><span class="nav-number">2.1.</span> <span class="nav-text">web1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web2"><span class="nav-number">2.2.</span> <span class="nav-text">web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3"><span class="nav-number">2.3.</span> <span class="nav-text">web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4"><span class="nav-number">2.4.</span> <span class="nav-text">web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web5"><span class="nav-number">2.5.</span> <span class="nav-text">web5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web6"><span class="nav-number">2.6.</span> <span class="nav-text">web6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web7"><span class="nav-number">2.7.</span> <span class="nav-text">web7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web8"><span class="nav-number">2.8.</span> <span class="nav-text">web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web9"><span class="nav-number">2.9.</span> <span class="nav-text">web9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web10"><span class="nav-number">2.10.</span> <span class="nav-text">web10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web11"><span class="nav-number">2.11.</span> <span class="nav-text">web11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web12"><span class="nav-number">2.12.</span> <span class="nav-text">web12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web13"><span class="nav-number">2.13.</span> <span class="nav-text">web13</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web14"><span class="nav-number">2.14.</span> <span class="nav-text">web14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web15"><span class="nav-number">2.15.</span> <span class="nav-text">web15</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web16"><span class="nav-number">2.16.</span> <span class="nav-text">web16</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web17"><span class="nav-number">2.17.</span> <span class="nav-text">web17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web18"><span class="nav-number">2.18.</span> <span class="nav-text">web18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web19"><span class="nav-number">2.19.</span> <span class="nav-text">web19</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web20"><span class="nav-number">2.20.</span> <span class="nav-text">web20</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%88%86%E7%A0%B4"><span class="nav-number">3.</span> <span class="nav-text">爆破</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web21"><span class="nav-number">3.1.</span> <span class="nav-text">web21</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web22"><span class="nav-number">3.2.</span> <span class="nav-text">web22</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web23"><span class="nav-number">3.3.</span> <span class="nav-text">web23</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web24"><span class="nav-number">3.4.</span> <span class="nav-text">web24</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web25"><span class="nav-number">3.5.</span> <span class="nav-text">web25</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web26"><span class="nav-number">3.6.</span> <span class="nav-text">web26</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web27"><span class="nav-number">3.7.</span> <span class="nav-text">web27</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web28"><span class="nav-number">3.8.</span> <span class="nav-text">web28</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web29"><span class="nav-number">4.1.</span> <span class="nav-text">web29</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web30"><span class="nav-number">4.2.</span> <span class="nav-text">web30</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -311,9 +323,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-01-20 17:38:06 / Modified: 22:27:43" itemprop="dateCreated datePublished" datetime="2022-01-20T17:38:06+08:00">2022-01-20</time>
+      <time title="Created: 2022-01-20 17:38:06" itemprop="dateCreated datePublished" datetime="2022-01-20T17:38:06+08:00">2022-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-01-21 19:58:37" itemprop="dateModified" datetime="2022-01-21T19:58:37+08:00">2022-01-21</time>
     </span>
 
   
@@ -323,14 +341,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>4.6k</span>
+      <span>5.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>5 mins.</span>
     </span>
 </div>
 
@@ -341,7 +359,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="CTF-show"><a href="#CTF-show" class="headerlink" title="CTF show"></a>CTF show</h1><h2 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h2><p>flag在源代码里</p>
+        <h1 id="CTF-show"><a href="#CTF-show" class="headerlink" title="CTF show"></a>CTF show</h1><h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><h2 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h2><p>flag在源代码里</p>
 <h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a>web2</h2><p>方法一：bp抓包，POST源码</p>
 <p><img src="/2022/01/20/CTFshow/image-20220115164912202.png" alt="image-20220115164912202"></p>
 <p>方法二：URL前加view-source：</p>
@@ -470,7 +488,7 @@
 <p>db目录，数据库作为一个文件存储，访问/db/db.mdb，下载文件。mdb是一种文件格式，它是Access数据库的一种文件存储格式，由于对数据操作的方便性，常用在一些中小型程序中；对于mdb格式的文件可以用Access打开。</p>
 <p><img src="/2022/01/20/CTFshow/image-20220116160830902.png"></p>
 <p>用记事本打开，搜索flag<img src="/2022/01/20/CTFshow/image-20220116162609743.png" alt="image-20220116162609743"></p>
-<h2 id="web21"><a href="#web21" class="headerlink" title="web21"></a>web21</h2><p>用bp抓包</p>
+<h1 id="爆破"><a href="#爆破" class="headerlink" title="爆破"></a>爆破</h1><h2 id="web21"><a href="#web21" class="headerlink" title="web21"></a>web21</h2><p>用bp抓包</p>
 <p><img src="/2022/01/20/CTFshow/image-20220116202537401.png" alt="image-20220116202537401"></p>
 <p><img src="/2022/01/20/CTFshow/image-20220116203852617.png" alt="image-20220116203852617"></p>
 <p>是输入的用户密码，不过中间带了冒号</p>
@@ -556,6 +574,32 @@
 <p><img src="/2022/01/20/CTFshow/image-20220120221628641.png" alt="image-20220120221628641"></p>
 <p>\u606d\u559c\u60a8\uff0c\u60a8\u5df2\u88ab\u6211\u6821\u5f55\u53d6\uff0c\u4f60\u7684\u5b66\u53f7\u4e3a02015237 \u521d\u59cb\u5bc6\u7801\u4e3a\u8eab\u4efd\u8bc1\u53f7\u7801</p>
 <p>Unicode解码：恭喜您，您已被我校录取，你的学号为02015237 初始密码为身份证号码 621022199002015237<img src="/2022/01/20/CTFshow/image-20220120222045923.png" alt="image-20220120222045923"></p>
+<h2 id="web28"><a href="#web28" class="headerlink" title="web28"></a>web28</h2><p><img src="/2022/01/20/CTFshow/image-20220121150757284.png" alt="image-20220121150757284"></p>
+<p>诡异的0/1</p>
+<p>爆破目录,去掉2.txt<img src="/2022/01/20/CTFshow/image-20220121150936152.png" alt="image-20220121150936152"></p>
+<p>选择模式Cluster bomb</p>
+<p><img src="/2022/01/20/CTFshow/image-20220121151034044.png" alt="image-20220121151034044"></p>
+<p>构造payloads，payload1与payload2 都为数字<img src="/2022/01/20/CTFshow/image-20220121151258500.png" alt="image-20220121151258500"></p>
+<p><img src="/2022/01/20/CTFshow/image-20220121152107557.png" alt="image-20220121152107557"></p>
+<h1 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h1><h2 id="web29"><a href="#web29" class="headerlink" title="web29"></a>web29</h2><p><img src="/2022/01/20/CTFshow/image-20220121155601615.png" alt="image-20220121155601615"></p>
+<p>过滤了flag ，eval():可以接受一个字符串str作为参数，并把这个参数作为脚本代码来执行。<strong>命令执行：带system(“”);</strong> <strong>绕过flag，通过*省略或者？代替</strong></p>
+<p><img src="/2022/01/20/CTFshow/image-20220121160527232.png" alt="image-20220121160527232"></p>
+<p>页面无显示，然后查看网页源代码<img src="/2022/01/20/CTFshow/image-20220121160609695.png" alt="image-20220121160609695"></p>
+<h2 id="web30"><a href="#web30" class="headerlink" title="web30"></a>web30</h2><p><img src="/2022/01/20/CTFshow/image-20220121163156964.png" alt="image-20220121163156964"></p>
+<p>过滤了flag，php,system</p>
+<p>方法一：</p>
+<p><img src="/2022/01/20/CTFshow/image-20220121163736641.png" alt="image-20220121163736641"></p>
+<p><img src="/2022/01/20/CTFshow/image-20220121163916210.png" alt="image-20220121163916210"></p>
+<p>tac命令：反序输出文件的内容，文件的最后一行显示在第一行</p>
+<p>cat命令用不了可能被过滤了</p>
+<p>方法二：</p>
+<p>过滤了system，只能用其他命令执行函数</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">system</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">passthru</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">exec</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">shell_exec</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">popen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">proc_open</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">pcntl_exec</span><span class="params">()</span></span></span><br><span class="line">反引号 同shell_exec() </span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意一下，只有system函数是有回显的，其他的函数可以通过echo等显示</p>
+<p>这里采用反引号绕过<img src="/2022/01/20/CTFshow/image-20220121165055553.png" alt="image-20220121165055553"></p>
+<p>查看网页源代码即可得到flag</p>
+<p>方法三：采用passthru()函数：payload：?c=passthru(“cat fla*”);</p>
 
     </div>
 
@@ -608,7 +652,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">7k</span>
+    <span title="Symbols count total">8k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
