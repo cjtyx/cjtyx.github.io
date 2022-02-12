@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Docker Docker2022.emmx  理念  解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。  下载：  docker的基本组成：镜像、容器、仓库 Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。 Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker">
+<meta property="og:url" content="http://example.com/2022/02/07/Docker/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="Docker Docker2022.emmx  理念  解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。  下载：  docker的基本组成：镜像、容器、仓库 Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。 Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220207160920948.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220207213525918.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220207215908104.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208164705609.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208210231369.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208203537983.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208210123260.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208210739352.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208211414716.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208211531019.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208211945086.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208212848797.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208214215292.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208224044650.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208224352638.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208225158572.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208230624380.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208231407892.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208232110416.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208232415371.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208232629127.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208233352186.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220208233550875.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209133048489.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209134509646.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209135330608.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209140210903.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209141632866.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209143149643.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209150702321.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209152951178.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209153311897.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209154343472.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209154704146.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209161123444.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209162039243.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209160729996.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209162524802.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209163554541.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209163852709.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209164214395.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209164739866.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209215615669.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209220328906.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209222109214.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209222227755.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209223013679.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209223150169.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209223413804.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220209224444527.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210114434360.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210114613620.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210114854173.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210114923535.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210115014282.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210115308783.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210115607336.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210115723557.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210123451823.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210123600493.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210124418605.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210125730105.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210130049739.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210130206934.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210130306929.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210130409895.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210130437773.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210141817103.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210141914460.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210151115289.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210143045906.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210144457591.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210144614121.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210145214016.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210145249820.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210145620458.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210160856814.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210162848795.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210163049206.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210194529147.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210201955588.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210202351746.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210202457995.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210203523391.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210202532495.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210202651658.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210202737338.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210202823125.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210232707127.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210233228417.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210233704516.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210233809179.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210233837682.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210233912262.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220210233935364.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211222125685.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211223621109.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211224511997.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211225108861.png">
+<meta property="article:published_time" content="2022-02-07T06:22:05.000Z">
+<meta property="article:modified_time" content="2022-02-12T07:19:41.925Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/02/07/Docker/image-20220207160920948.png">
+
+
+<link rel="canonical" href="http://example.com/2022/02/07/Docker/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/02/07/Docker/","path":"2022/02/07/Docker/","title":"Docker"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Docker | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">一、安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-CentOS%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 CentOS上的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 镜像加速器配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">二、Docker常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%B8%AE%E5%8A%A9%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 帮助启动类命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 镜像命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 容器命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Docker-%E9%95%9C%E5%83%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 Docker 镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-commit%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 commit命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F%E5%8F%91%E5%B8%83%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91"><span class="nav-number">1.3.</span> <span class="nav-text">三、本地镜像发布到阿里云</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81docker%E7%A7%81%E6%9C%89%E5%BA%93"><span class="nav-number">1.4.</span> <span class="nav-text">四、docker私有库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81docker%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-number">1.5.</span> <span class="nav-text">五、docker容器数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%9D%91"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E7%90%86%E8%A7%A3%EF%BC%8C%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 理解，是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E8%83%BD%E5%B9%B2%E5%98%9B"><span class="nav-number">1.5.4.</span> <span class="nav-text">5.4 能干嘛</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-%E6%95%B0%E6%8D%AE%E5%8D%B7%E6%A1%88%E4%BE%8B"><span class="nav-number">1.5.5.</span> <span class="nav-text">5.5 数据卷案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-1-%E5%AE%B9%E5%99%A8%E5%8D%B7%E5%92%8C%E4%B8%BB%E6%9C%BA%E4%BA%92%E9%80%9A%E4%BA%92%E8%BF%9E"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">5.5.1 容器卷和主机互通互连</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-2-%E5%AE%B9%E5%99%A8%E5%8D%B7ro%E5%92%8Crw%E8%AF%BB%E5%86%99%E8%A7%84%E5%88%99"><span class="nav-number">1.5.5.2.</span> <span class="nav-text">5.5.2 容器卷ro和rw读写规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-3-%E5%8D%B7%E7%9A%84%E7%BB%A7%E6%89%BF%E5%92%8C%E5%85%B1%E4%BA%AB"><span class="nav-number">1.5.5.3.</span> <span class="nav-text">5.5.3 卷的继承和共享</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Docker%E4%B8%8A%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="nav-number">1.6.</span> <span class="nav-text">六、Docker上安装常用软件说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%80%BB%E4%BD%93%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1  总体步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E5%AE%89%E8%A3%85tomcat"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 安装tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%AE%89%E8%A3%85mysql"><span class="nav-number">1.6.3.</span> <span class="nav-text">6.3 安装mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%89%88%EF%BC%9A"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">简单版：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E7%89%88%EF%BC%9A"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">实战版：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/07/Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-07 14:22:05" itemprop="dateCreated datePublished" datetime="2022-02-07T14:22:05+08:00">2022-02-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-12 15:19:41" itemprop="dateModified" datetime="2022-02-12T15:19:41+08:00">2022-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>5 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p> <a href="C:\Users\DELL\Desktop\学习资料\Docker2022.emmx">Docker2022.emmx</a> </p>
+<p>理念</p>
+<p><img src="/2022/02/07/Docker/image-20220207160920948.png" alt="image-20220207160920948"></p>
+<p>解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。</p>
+<p> 下载：<img src="/2022/02/07/Docker/image-20220207213525918.png" alt="image-20220207213525918"></p>
+<p><img src="/2022/02/07/Docker/image-20220207215908104.png" alt="image-20220207215908104"></p>
+<p>docker的基本组成：镜像、容器、仓库</p>
+<p>Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。</p>
+<p>Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器里面，容器就类似于一个虚拟化的运行环境，容器是用镜像创建的运行实例。可以把容器看做是一个简易版的Linux 环境〈包括root用户权限、进程空间、用户空间和网络空间等）和运行在其中的应用程序。</p>
+<p>仓库（Reppsitory）是集中存放镜像文件的场所。仓库分为公开仓库和私有仓库两种形式。最大的公开仓库是 Docker Hub(<a target="_blank" rel="noopener" href="https://hub.docker.com/)%EF%BC%8C%E5%AD%98%E6%94%BE%E4%BA%86%E6%95%B0%E9%87%8F%E5%BA%9E%E5%A4%A7%E7%9A%84%E9%95%9C%E5%83%8F%E4%BE%9B%E7%94%A8%E6%88%B7%E4%B8%8B%E8%BD%BD%E3%80%82%E5%9B%BD%E5%86%85%E7%9A%84%E5%85%AC%E5%BC%80%E4%BB%93%E5%BA%93%E5%8C%85%E6%8B%AC%E9%98%BF%E9%87%8C%E4%BA%91%E3%80%81%E7%BD%91%E6%98%93%E4%BA%91%E7%AD%89">https://hub.docker.com/)，存放了数量庞大的镜像供用户下载。国内的公开仓库包括阿里云、网易云等</a></p>
+<h2 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h2><h3 id="1-1-CentOS上的安装"><a href="#1-1-CentOS上的安装" class="headerlink" title="1.1 CentOS上的安装"></a>1.1 CentOS上的安装</h3><p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos">https://docs.docker.com/engine/install/centos</a></p>
+<p><img src="/2022/02/07/Docker/image-20220208164705609.png" alt="image-20220208164705609"></p>
+<p>10.卸载：<img src="/2022/02/07/Docker/image-20220208210231369.png" alt="image-20220208210231369"></p>
+<p>*3：yum -y install gcc       yum -y install gcc-c++</p>
+<p>*4: yum install -y yum-utils</p>
+<p>*5: <img src="/2022/02/07/Docker/image-20220208203537983.png" alt="image-20220208203537983"></p>
+<p>原因是这是国外的，会报错</p>
+<p>国内：yum-config-manager –add-repo <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a></p>
+<p>*6: yum makecache fast</p>
+<p>*7: yum -y install docker-ce docker-ce-cli containerd.io</p>
+<p>*8:  <strong>systemctl start docker</strong>  </p>
+<p>查看：ps -ef | grep docker</p>
+<p>*9 docker version </p>
+<p>docker run hello-world   </p>
+<p>结果是：Unable to find image ‘hello-world:latest’ locally</p>
+<p>latest: Pulling from library/hello-world</p>
+<p><img src="/2022/02/07/Docker/image-20220208210123260.png" alt="image-20220208210123260"></p>
+<p>代表本地安装docker成功</p>
+<h3 id="1-2-镜像加速器配置"><a href="#1-2-镜像加速器配置" class="headerlink" title="1.2 镜像加速器配置"></a>1.2 镜像加速器配置</h3><p>阿里云镜像加速</p>
+<p><img src="/2022/02/07/Docker/image-20220208210739352.png" alt="image-20220208210739352">    </p>
+<p><img src="/2022/02/07/Docker/image-20220208211414716.png" alt="image-20220208211414716"></p>
+<p>找到容器镜像服务</p>
+<p><img src="/2022/02/07/Docker/image-20220208211531019.png" alt="image-20220208211531019"></p>
+<p><img src="/2022/02/07/Docker/image-20220208211945086.png" alt="image-20220208211945086"></p>
+<p>run干了什么</p>
+<p> <img src="/2022/02/07/Docker/image-20220208212848797.png" alt="image-20220208212848797"></p>
+<h2 id="二、Docker常用命令"><a href="#二、Docker常用命令" class="headerlink" title="二、Docker常用命令"></a>二、Docker常用命令</h2><h3 id="2-1-帮助启动类命令"><a href="#2-1-帮助启动类命令" class="headerlink" title="2.1 帮助启动类命令"></a>2.1 帮助启动类命令</h3><p><img src="/2022/02/07/Docker/image-20220208214215292.png" alt="image-20220208214215292"></p>
+<h3 id="2-2-镜像命令"><a href="#2-2-镜像命令" class="headerlink" title="2.2 镜像命令"></a>2.2 镜像命令</h3><p><strong>1、docker images</strong> :列出本地主机上的镜像                                                                               -a:列出本地所有镜像（含历史映像层）   -q:只显示镜像ID</p>
+<p><img src="/2022/02/07/Docker/image-20220208224044650.png" alt="image-20220208224044650"></p>
+<p><img src="/2022/02/07/Docker/image-20220208224352638.png" alt="image-20220208224352638"></p>
+<p><strong>2、docker search [options] 某个xxx镜像名字</strong>：在网站搜寻某个镜像，一般要第一个 官方认证过的  </p>
+<p>options：  –limit：只列出N个镜像，默认25    –limit 5</p>
+<p><img src="/2022/02/07/Docker/image-20220208225158572.png" alt="image-20220208225158572"></p>
+<p><strong>3、docker pull 镜像名字</strong> ：下载镜像</p>
+<p>两套写法：docker pull 镜像名字[:TAG]</p>
+<p>docker pull 镜像名字 ：没有TAG就是最新版 ，等价于 docker pull 镜像名字:latest</p>
+<p><img src="/2022/02/07/Docker/image-20220208230624380.png" alt="image-20220208230624380"></p>
+<p><strong>4、docker system df 查看镜像/容器/数据卷所占的空间</strong>  与Linux的                  df -h 类似</p>
+<p><img src="/2022/02/07/Docker/image-20220208231407892.png" alt="image-20220208231407892"></p>
+<p><strong>5、docker rmi 镜像名字ID ：删除镜像</strong>    若名字没有重复也可以直接docker rmi 镜像名字</p>
+<p><img src="/2022/02/07/Docker/image-20220208232110416.png" alt="image-20220208232110416"></p>
+<p>docker rmi -f 镜像ID ：强制删除</p>
+<p><img src="/2022/02/07/Docker/image-20220208232415371.png" alt="image-20220208232415371"></p>
+<p><img src="/2022/02/07/Docker/image-20220208232629127.png" alt="image-20220208232629127"></p>
+<p>删除多个的时候也可以用多个image ID</p>
+<p><strong>面试题：docker虚悬镜像是<img src="/2022/02/07/Docker/image-20220208233352186.png" alt="image-20220208233352186"></strong></p>
+<p><img src="/2022/02/07/Docker/image-20220208233550875.png" alt="image-20220208233550875"></p>
+<h3 id="2-3-容器命令"><a href="#2-3-容器命令" class="headerlink" title="2.3 容器命令"></a>2.3 容器命令</h3><p>有镜像才能创建容器</p>
+<p><img src="/2022/02/07/Docker/image-20220209133048489.png" alt="image-20220209133048489"></p>
+<p>下载 一个Ubuntu镜像 docker pull ubuntu</p>
+<p><strong>1、新建+启动容器  docker run [options] IMAGE [COMMAND] [ARG…]</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220209134509646.png" alt="image-20220209134509646"></p>
+<p><img src="/2022/02/07/Docker/image-20220209135330608.png" alt="image-20220209135330608"></p>
+<p>启动交互式容器   -it  弹出一个终端输入更多的命令</p>
+<p>docker run -it ubuntu <strong>bash （或者/bin/bash）</strong>  bash: shell交互命令的接口</p>
+<p>使用镜像ubuntu以交互模式启动一个容器，在容器内执行/bin/bash命令  /bin/bash或者bash ：放在镜像名后的是命令，这里我们希望有个交互式shell，因此用这，要退出终端，直接输入exit</p>
+<p><img src="/2022/02/07/Docker/image-20220209140210903.png" alt="image-20220209140210903"></p>
+<p>docker run –help</p>
+<p><strong>2、docker ps [options] ：列出当前所有正在运行的容器</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220209141632866.png" alt="image-20220209141632866"></p>
+<p>–name=busy_rubin</p>
+<p>options：<img src="/2022/02/07/Docker/image-20220209143149643.png" alt="image-20220209143149643"></p>
+<p>docker ps -n 1</p>
+<p><strong>3、退出容器</strong></p>
+<p>两种方式：（1）<strong>exit</strong> ：run进去容器，exit退出，容器停止</p>
+<p>（2）<strong>Ctrl+p+q</strong> ：run进去容器，Ctrl+p+q退出，容器不停止</p>
+<p><strong>4、启动已停止运行的容器：docker start 容器ID或者容器名</strong></p>
+<p><strong>5、重启容器：docker restart 容器ID或者容器名</strong></p>
+<p>**6、停止容器：docker stop 容器ID或者容器名 **</p>
+<p><strong>7、强制停止容器： docker kill 容器ID或者容器名</strong></p>
+<p><strong>8、删除已经停止的容器:  docker rm 容器ID或者容器名</strong></p>
+<p>强制删除不管是否已停止    docker rm -f 容器ID或者容器名   </p>
+<p><img src="/2022/02/07/Docker/image-20220209150702321.png" alt="image-20220209150702321"></p>
+<p><strong>重要</strong></p>
+<p>下载一个Redis6.0.8镜像演示</p>
+<p>（1）启动守护式容器（后台服务器）</p>
+<p><img src="/2022/02/07/Docker/image-20220209152951178.png" alt="image-20220209152951178"></p>
+<p><img src="/2022/02/07/Docker/image-20220209153311897.png" alt="image-20220209153311897"></p>
+<p><img src="/2022/02/07/Docker/image-20220209154343472.png" alt="image-20220209154343472"></p>
+<p><img src="/2022/02/07/Docker/image-20220209154704146.png" alt="image-20220209154704146"></p>
+<p>(2)查看容器日志 docker logs 容器ID</p>
+<p>(3)查看容器内运行的进程  ：docker top 容器ID</p>
+<p>(4)查看容器内部细节 ：docker inspect 容器ID</p>
+<p>(5)进入正在运行的容器并以命令行交互</p>
+<p><img src="/2022/02/07/Docker/image-20220209161123444.png" alt="image-20220209161123444"></p>
+<p><img src="/2022/02/07/Docker/image-20220209162039243.png" alt="image-20220209162039243"></p>
+<p><img src="/2022/02/07/Docker/image-20220209160729996.png" alt="image-20220209160729996"></p>
+<p>(6)从容器内拷贝文件到主机上</p>
+<p><img src="/2022/02/07/Docker/image-20220209162524802.png" alt="image-20220209162524802"></p>
+<p><img src="/2022/02/07/Docker/image-20220209163554541.png" alt="image-20220209163554541"></p>
+<p>(7)导入和导出容器 整个容器备份</p>
+<p><img src="/2022/02/07/Docker/image-20220209163852709.png" alt="image-20220209163852709"></p>
+<p><img src="/2022/02/07/Docker/image-20220209164214395.png" alt="image-20220209164214395"></p>
+<p><img src="/2022/02/07/Docker/image-20220209164739866.png" alt="image-20220209164739866"></p>
+<p>​    </p>
+<h3 id="2-4-Docker-镜像"><a href="#2-4-Docker-镜像" class="headerlink" title="2.4 Docker 镜像"></a>2.4 Docker 镜像</h3><p>镜像是分层的，远程下载镜像是一层一层下载的</p>
+<p>UnionFS(联合文件系统):Union文件系统〈UnionFS)是一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚报文件系统下。Union文件系统是Docker镜像的基础。镜像可以通过分层来进行继承，基于基础镜像（没有父镜像），可以制作各种具体的应用镜像。</p>
+<p>特性:一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录</p>
+<p><img src="/2022/02/07/Docker/image-20220209215615669.png" alt="image-20220209215615669"></p>
+<p><img src="/2022/02/07/Docker/image-20220209220328906.png" alt="image-20220209220328906"></p>
+<p>镜像分层最大的一个好处就是共享资源，方便复制迁移，就是为了复用。<br>比如说有多个镜像都从相同的base镜像构建而来，那么Docker Host只需在磁盘上保存一份 base镜像;同时内存中也只需加载一份base镜像，就可以为所有容器服务了。而且镜像的每一层都可以被共享。</p>
+<p><strong>Docker镜像层都是只读的，容器层是可写的</strong>，当容器启动时，一个新的可写层被加载到镜像的顶部。这一层通常被称作“容器层”，“容器层”之下的都叫“镜像层”。</p>
+<h3 id="2-5-commit命令"><a href="#2-5-commit命令" class="headerlink" title="2.5 commit命令"></a>2.5 commit命令</h3><p><img src="/2022/02/07/Docker/image-20220209222109214.png" alt="image-20220209222109214"></p>
+<p><img src="/2022/02/07/Docker/image-20220209222227755.png" alt="image-20220209222227755"></p>
+<p>在当前镜像的基础上，不具备vim命令，给它加一个vim命令，让其容器实例具备这个功能，在反向让他生成一个新的镜像，我们自己commit出来的新的镜像就具备vim命令的新的镜像版本</p>
+<p>*案例演示ubuntu安装vim</p>
+<p><img src="/2022/02/07/Docker/image-20220209223013679.png" alt="image-20220209223013679"></p>
+<p><strong>安装vim</strong> ：apt-get update      apt-get -y install vim</p>
+<p><img src="/2022/02/07/Docker/image-20220209223150169.png" alt="image-20220209223150169"></p>
+<p> <img src="/2022/02/07/Docker/image-20220209223413804.png" alt="image-20220209223413804"></p>
+<p><strong>commit新镜像</strong>：</p>
+<p><img src="/2022/02/07/Docker/image-20220209224444527.png" alt="image-20220209224444527"></p>
+<h2 id="三、本地镜像发布到阿里云"><a href="#三、本地镜像发布到阿里云" class="headerlink" title="三、本地镜像发布到阿里云"></a>三、本地镜像发布到阿里云</h2><p><strong>阿里云开发者平台</strong>：<a target="_blank" rel="noopener" href="https://promotion.aliyun.com/ntms/act/kubernetes.html">https://promotion.aliyun.com/ntms/act/kubernetes.html</a></p>
+<p><strong>进入后：创建仓库镜像</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220210114434360.png" alt="image-20220210114434360"></p>
+<p>命名空间</p>
+<p><img src="/2022/02/07/Docker/image-20220210114613620.png" alt="image-20220210114613620"></p>
+<p>仓库名称</p>
+<p><img src="/2022/02/07/Docker/image-20220210114854173.png" alt="image-20220210114854173"></p>
+<p><img src="/2022/02/07/Docker/image-20220210114923535.png" alt="image-20220210114923535"></p>
+<p>进入管理界面获得脚本<img src="/2022/02/07/Docker/image-20220210115014282.png" alt="image-20220210115014282"></p>
+<p><strong>将镜像推送到阿里云</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220210115308783.png" alt="image-20220210115308783"></p>
+<p><img src="/2022/02/07/Docker/image-20220210115607336.png" alt="image-20220210115607336"></p>
+<p><strong>将阿里云上的镜像下载到本地</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220210115723557.png" alt="image-20220210115723557"></p>
+<h2 id="四、docker私有库"><a href="#四、docker私有库" class="headerlink" title="四、docker私有库"></a>四、docker私有库</h2><p>Docker Registry 是官方提供的工具，可以用于构建私有镜像仓库</p>
+<p><strong>方法步骤：</strong></p>
+<p>（1）下载镜像Docker Registry</p>
+<p><img src="/2022/02/07/Docker/image-20220210123451823.png" alt="image-20220210123451823"></p>
+<p>(2)运行私有库Registry，相当于本地有个私有Docker hub</p>
+<p><img src="/2022/02/07/Docker/image-20220210123600493.png" alt="image-20220210123600493"></p>
+<p>(3)案例演示创建一个新镜像，ubuntu安装ifconfig命令</p>
+<p><img src="/2022/02/07/Docker/image-20220210124418605.png" alt="image-20220210124418605"></p>
+<p> apt-get update        apt-get install net-tools</p>
+<p>docker commit -m=”提交的描述信息” -a=”作者” 容器ID 要创建的目标镜像名:[标签名]</p>
+<p>命令：在容器外执行，记得</p>
+<p>(4)curl验证私服库上有什么镜像</p>
+<p><img src="/2022/02/07/Docker/image-20220210125730105.png" alt="image-20220210125730105"></p>
+<p>http后的ip自己改</p>
+<p>(5)将新镜像zzyyubuntu:1.2修改符合私服规范的Tag</p>
+<p><img src="/2022/02/07/Docker/image-20220210130049739.png" alt="image-20220210130049739"></p>
+<p>(6)修改配置文件使之支持http</p>
+<p><img src="/2022/02/07/Docker/image-20220210130206934.png" alt="image-20220210130206934"></p>
+<p>(7)push推送到私服库</p>
+<p><img src="/2022/02/07/Docker/image-20220210130306929.png" alt="image-20220210130306929"></p>
+<p>(8)curl验证私服库上有什么镜像2</p>
+<p><img src="/2022/02/07/Docker/image-20220210130409895.png" alt="image-20220210130409895"></p>
+<p>(9)pull到本地并运行</p>
+<p><img src="/2022/02/07/Docker/image-20220210130437773.png" alt="image-20220210130437773"></p>
+<h2 id="五、docker容器数据卷"><a href="#五、docker容器数据卷" class="headerlink" title="五、docker容器数据卷"></a>五、docker容器数据卷</h2><h3 id="5-1-坑"><a href="#5-1-坑" class="headerlink" title="5.1 坑"></a>5.1 坑</h3><p><img src="/2022/02/07/Docker/image-20220210141817103.png" alt="image-20220210141817103"></p>
+<p>why</p>
+<p><img src="/2022/02/07/Docker/image-20220210141914460.png" alt="image-20220210141914460"></p>
+<h3 id="5-2-回顾"><a href="#5-2-回顾" class="headerlink" title="5.2 回顾"></a>5.2 回顾</h3><p>上一节 运行私有库registry命令                             docker run -d -p 5000:5000 <strong>-v /zzyyuse/myregistry/:/tmp/registry –privileged=true</strong> registry</p>
+<p>-v:添加自定义的容器卷   冒号左边：宿主机的路径   冒号右边：容器内路径</p>
+<p>–privileged=true：放开权限</p>
+<h3 id="5-3-理解，是什么"><a href="#5-3-理解，是什么" class="headerlink" title="5.3 理解，是什么"></a>5.3 理解，是什么</h3><p>卷就是目录或文件，存在于一个或多个容器中，由docker挂载到容器，但不属于联合文件系统，因此能够绕过Union File System提供一些用于持续存储或共享数据的特性：<br>卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂载的数据卷</p>
+<p><img src="/2022/02/07/Docker/image-20220210151115289.png" alt="image-20220210151115289"></p>
+<p><img src="/2022/02/07/Docker/image-20220210143045906.png" alt="image-20220210143045906"></p>
+<p><strong>命令： docker run -it –privileged=true -v /宿主机绝对路径目录:/容器内目录      镜像名</strong></p>
+<h3 id="5-4-能干嘛"><a href="#5-4-能干嘛" class="headerlink" title="5.4 能干嘛"></a>5.4 能干嘛</h3><p>* 将运用与运行的环境打包镜像，run后形成容器实例运行 ，但是我们对数据的要求希望是持久化的</p>
+<p>Docker容器产生的数据，如果不备份，那么当容器实例删除后，容器内的数据自然也就没有了。</p>
+<p>为了能保存数据在docker中我们使用卷。</p>
+<p>特点：</p>
+<p>1：数据卷可在容器之间共享或重用数据</p>
+<p>2：卷中的更改可以直接实时生效，爽</p>
+<p>3：数据卷中的更改不会包含在镜像的更新中</p>
+<p>4：数据卷的生命周期一直持续到没有容器使用它为止</p>
+<h3 id="5-5-数据卷案例"><a href="#5-5-数据卷案例" class="headerlink" title="5.5 数据卷案例"></a>5.5 数据卷案例</h3><h4 id="5-5-1-容器卷和主机互通互连"><a href="#5-5-1-容器卷和主机互通互连" class="headerlink" title="5.5.1 容器卷和主机互通互连"></a>5.5.1 容器卷和主机互通互连</h4><p><img src="/2022/02/07/Docker/image-20220210144457591.png" alt="image-20220210144457591"></p>
+<p><img src="/2022/02/07/Docker/image-20220210144614121.png" alt="image-20220210144614121"></p>
+<p>若没有这个目录，这个命令可以自建这个目录</p>
+<p>容器内目录下的数据会同步到宿主机那个目录下:</p>
+<p><img src="/2022/02/07/Docker/image-20220210145214016.png" alt="image-20220210145214016"></p>
+<p><img src="/2022/02/07/Docker/image-20220210145249820.png" alt="image-20220210145249820"></p>
+<p>主机上操作的数据内容也会被同步到容器内目录，容器与宿主机之间数据共享</p>
+<p>1 docker修改，主机同步获得 </p>
+<p>2 主机修改，docker同步获得</p>
+<p>3 docker容器stop，主机修改，docker容器重启看数据也能成功同步。</p>
+<p><strong>查看数据卷是否挂载成功</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220210145620458.png" alt="image-20220210145620458"></p>
+<h4 id="5-5-2-容器卷ro和rw读写规则"><a href="#5-5-2-容器卷ro和rw读写规则" class="headerlink" title="5.5.2 容器卷ro和rw读写规则"></a>5.5.2 容器卷ro和rw读写规则</h4><p>（1）读写(默认)   默认同上案例，默认就是rw</p>
+<p> docker run -it –privileged=true -v /宿主机绝对路径目录:/容器内目录:rw      镜像名</p>
+<p>（2）只读</p>
+<p>容器实例内部被限制，只能读取不能写</p>
+<p> docker run -it –privileged=true -v /宿主机绝对路径目录:/容器内目录:ro      镜像名</p>
+<p><img src="/2022/02/07/Docker/image-20220210160856814.png" alt="image-20220210160856814"></p>
+<h4 id="5-5-3-卷的继承和共享"><a href="#5-5-3-卷的继承和共享" class="headerlink" title="5.5.3 卷的继承和共享"></a>5.5.3 卷的继承和共享</h4><p>（1）容器1完成和宿主机的映射</p>
+<p><img src="/2022/02/07/Docker/image-20220210162848795.png" alt="image-20220210162848795"></p>
+<p>（2）容器2继承容器1的卷规则</p>
+<p>docker run -it  –privileged=true –volumes-from 父类  –name u2 ubuntu</p>
+<p><img src="/2022/02/07/Docker/image-20220210163049206.png" alt="image-20220210163049206"></p>
+<p>三者共享</p>
+<h2 id="六、Docker上安装常用软件说明"><a href="#六、Docker上安装常用软件说明" class="headerlink" title="六、Docker上安装常用软件说明"></a>六、Docker上安装常用软件说明</h2><h3 id="6-1-总体步骤"><a href="#6-1-总体步骤" class="headerlink" title="6.1  总体步骤"></a>6.1  总体步骤</h3><p><img src="/2022/02/07/Docker/image-20220210194529147.png" alt="image-20220210194529147"></p>
+<h3 id="6-2-安装tomcat"><a href="#6-2-安装tomcat" class="headerlink" title="6.2 安装tomcat"></a>6.2 安装tomcat</h3><p>（1）docker hub上面查找tomcat镜像：docker search tomcat<img src="/2022/02/07/Docker/image-20220210201955588.png" alt="image-20220210201955588"></p>
+<p>(2)从docker hub上拉取tomcat镜像到本地: docker pull tomcat</p>
+<p>(3)docker images查看是否有拉取到的tomcat</p>
+<p>(4)使用tomcat镜像创建容器实例(也叫运行镜像):                                                   docker run -it -p 8080:8080 tomcat           -d:后台</p>
+<p><img src="/2022/02/07/Docker/image-20220210202351746.png" alt="image-20220210202351746"></p>
+<p>(5)访问猫首页  :在Linux浏览器上访问localhost:8080</p>
+<p><img src="/2022/02/07/Docker/image-20220210202457995.png" alt="image-20220210202457995"></p>
+<p><img src="/2022/02/07/Docker/image-20220210203523391.png" alt="image-20220210203523391"></p>
+<p>*先成功启动tomcat<img src="/2022/02/07/Docker/image-20220210202532495.png" alt="image-20220210202532495"></p>
+<p>*查看webapps文件夹查看为空<img src="/2022/02/07/Docker/image-20220210202651658.png" alt="image-20220210202651658"></p>
+<p>(6)免修改版说明</p>
+<p><img src="/2022/02/07/Docker/image-20220210202737338.png" alt="image-20220210202737338"></p>
+<p><img src="/2022/02/07/Docker/image-20220210202823125.png" alt="image-20220210202823125"></p>
+<h3 id="6-3-安装mysql"><a href="#6-3-安装mysql" class="headerlink" title="6.3 安装mysql"></a>6.3 安装mysql</h3><p><img src="/2022/02/07/Docker/image-20220210232707127.png" alt="image-20220210232707127"></p>
+<h4 id="简单版："><a href="#简单版：" class="headerlink" title="简单版："></a>简单版：</h4><p>（1）使用mysql镜像</p>
+<p><img src="/2022/02/07/Docker/image-20220210233228417.png" alt="image-20220210233228417"></p>
+<p>(2)建库建表插入数据</p>
+<p><img src="/2022/02/07/Docker/image-20220210233704516.png" alt="image-20220210233704516"></p>
+<p>(3)外部Win10也来连接运行在dokcer上的mysql容器实例服务</p>
+<p><img src="/2022/02/07/Docker/image-20220210233809179.png" alt="image-20220210233809179"></p>
+<p>(4)问题</p>
+<p><img src="/2022/02/07/Docker/image-20220210233837682.png" alt="image-20220210233837682"></p>
+<p><img src="/2022/02/07/Docker/image-20220210233912262.png" alt="image-20220210233912262"></p>
+<p><img src="/2022/02/07/Docker/image-20220210233935364.png" alt="image-20220210233935364"></p>
+<p>删除容器后，里面的mysql数据如何办?</p>
+<p>数据没有了</p>
+<h4 id="实战版："><a href="#实战版：" class="headerlink" title="实战版："></a>实战版：</h4><p>（1）新建mysql容器实例</p>
+<p>docker run -d -p 3306:3306 –privileged=true </p>
+<p>-v /zzyyuse/mysql/log:/var/log/mysql </p>
+<p>-v /zzyyuse/mysql/data:/var/lib/mysql </p>
+<p>-v /zzyyuse/mysql/conf:/etc/mysql/conf.d </p>
+<p>-e MYSQL_ROOT_PASSWORD=123456 –name mysql mysql:5.7</p>
+<p>conf: mysql配置文件 </p>
+<p><img src="/2022/02/07/Docker/image-20220211222125685.png" alt="image-20220211222125685"></p>
+<p>（2）<strong>新建my.cnf</strong>：通过容器卷同步给mysql容器实例，解决中文乱码问题</p>
+<p><img src="/2022/02/07/Docker/image-20220211223621109.png" alt="image-20220211223621109"></p>
+<p>（3）<strong>重新启动mysql</strong>容器实例再重新进入并查看字符编码</p>
+<p><img src="/2022/02/07/Docker/image-20220211224511997.png" alt="image-20220211224511997"></p>
+<p>（4）再新建库新建表再插入中文测试</p>
+<p><img src="/2022/02/07/Docker/image-20220211225108861.png" alt="image-20220211225108861"></p>
+<p>结论：docker安装完MySQL并run出容器后，建议请先修改完字符集编码后再新建mysql库-表-插数据</p>
+<p>假如将当前容器实例删除，再重新来一次，之前建的db01实例还有</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/24/Nginx/" rel="prev" title="Nginx">
+                  <i class="fa fa-chevron-left"></i> Nginx
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">25k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">23 mins.</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
