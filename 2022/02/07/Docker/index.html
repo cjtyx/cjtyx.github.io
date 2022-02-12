@@ -21,12 +21,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="Docker Docker2022.emmx  理念  解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。  下载：  docker的基本组成：镜像、容器、仓库 Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。 Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器">
+<meta name="description" content="基础篇 Docker2022.emmx  理念  解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。  下载：  docker的基本组成：镜像、容器、仓库 Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。 Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器里面，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker">
 <meta property="og:url" content="http://example.com/2022/02/07/Docker/index.html">
 <meta property="og:site_name" content="Echo">
-<meta property="og:description" content="Docker Docker2022.emmx  理念  解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。  下载：  docker的基本组成：镜像、容器、仓库 Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。 Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器">
+<meta property="og:description" content="基础篇 Docker2022.emmx  理念  解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。  下载：  docker的基本组成：镜像、容器、仓库 Docker镜像（Image）就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建很多容器。 Docker利用容器（Container)独立运行的一个或一组应用，应用程序或服务运行在容器里面，">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220207160920948.png">
 <meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220207213525918.png">
@@ -127,8 +127,31 @@
 <meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211223621109.png">
 <meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211224511997.png">
 <meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220211225108861.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212154851236.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155011424.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155059752.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155208087.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155605635.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155750246.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155844316.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212155914030.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212160043915.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212195317865.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212195530066.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212200805500.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212211225456.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212200925348.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212201001559.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212211841298.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212211915431.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212224033069.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212224131020.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212224217743.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212224316469.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212224348720.png">
+<meta property="og:image" content="http://example.com/2022/02/07/Docker/image-20220212224427256.png">
 <meta property="article:published_time" content="2022-02-07T06:22:05.000Z">
-<meta property="article:modified_time" content="2022-02-12T07:19:41.925Z">
+<meta property="article:modified_time" content="2022-02-12T15:19:38.664Z">
 <meta property="article:author" content="CJ">
 <meta property="article:tag" content="STUDY">
 <meta name="twitter:card" content="summary">
@@ -222,7 +245,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">1.</span> <span class="nav-text">Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">一、安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-CentOS%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 CentOS上的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 镜像加速器配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">二、Docker常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%B8%AE%E5%8A%A9%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 帮助启动类命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 镜像命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 容器命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Docker-%E9%95%9C%E5%83%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 Docker 镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-commit%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 commit命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F%E5%8F%91%E5%B8%83%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91"><span class="nav-number">1.3.</span> <span class="nav-text">三、本地镜像发布到阿里云</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81docker%E7%A7%81%E6%9C%89%E5%BA%93"><span class="nav-number">1.4.</span> <span class="nav-text">四、docker私有库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81docker%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-number">1.5.</span> <span class="nav-text">五、docker容器数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%9D%91"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E7%90%86%E8%A7%A3%EF%BC%8C%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 理解，是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E8%83%BD%E5%B9%B2%E5%98%9B"><span class="nav-number">1.5.4.</span> <span class="nav-text">5.4 能干嘛</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-%E6%95%B0%E6%8D%AE%E5%8D%B7%E6%A1%88%E4%BE%8B"><span class="nav-number">1.5.5.</span> <span class="nav-text">5.5 数据卷案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-1-%E5%AE%B9%E5%99%A8%E5%8D%B7%E5%92%8C%E4%B8%BB%E6%9C%BA%E4%BA%92%E9%80%9A%E4%BA%92%E8%BF%9E"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">5.5.1 容器卷和主机互通互连</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-2-%E5%AE%B9%E5%99%A8%E5%8D%B7ro%E5%92%8Crw%E8%AF%BB%E5%86%99%E8%A7%84%E5%88%99"><span class="nav-number">1.5.5.2.</span> <span class="nav-text">5.5.2 容器卷ro和rw读写规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-3-%E5%8D%B7%E7%9A%84%E7%BB%A7%E6%89%BF%E5%92%8C%E5%85%B1%E4%BA%AB"><span class="nav-number">1.5.5.3.</span> <span class="nav-text">5.5.3 卷的继承和共享</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Docker%E4%B8%8A%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="nav-number">1.6.</span> <span class="nav-text">六、Docker上安装常用软件说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%80%BB%E4%BD%93%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1  总体步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E5%AE%89%E8%A3%85tomcat"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 安装tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%AE%89%E8%A3%85mysql"><span class="nav-number">1.6.3.</span> <span class="nav-text">6.3 安装mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%89%88%EF%BC%9A"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">简单版：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E7%89%88%EF%BC%9A"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">实战版：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">基础篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">一、安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-CentOS%E4%B8%8A%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 CentOS上的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 镜像加速器配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">二、Docker常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%B8%AE%E5%8A%A9%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 帮助启动类命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 镜像命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 容器命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Docker-%E9%95%9C%E5%83%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 Docker 镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-commit%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 commit命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F%E5%8F%91%E5%B8%83%E5%88%B0%E9%98%BF%E9%87%8C%E4%BA%91"><span class="nav-number">1.3.</span> <span class="nav-text">三、本地镜像发布到阿里云</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81docker%E7%A7%81%E6%9C%89%E5%BA%93"><span class="nav-number">1.4.</span> <span class="nav-text">四、docker私有库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81docker%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-number">1.5.</span> <span class="nav-text">五、docker容器数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%9D%91"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E7%90%86%E8%A7%A3%EF%BC%8C%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 理解，是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E8%83%BD%E5%B9%B2%E5%98%9B"><span class="nav-number">1.5.4.</span> <span class="nav-text">5.4 能干嘛</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-%E6%95%B0%E6%8D%AE%E5%8D%B7%E6%A1%88%E4%BE%8B"><span class="nav-number">1.5.5.</span> <span class="nav-text">5.5 数据卷案例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-1-%E5%AE%B9%E5%99%A8%E5%8D%B7%E5%92%8C%E4%B8%BB%E6%9C%BA%E4%BA%92%E9%80%9A%E4%BA%92%E8%BF%9E"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">5.5.1 容器卷和主机互通互连</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-2-%E5%AE%B9%E5%99%A8%E5%8D%B7ro%E5%92%8Crw%E8%AF%BB%E5%86%99%E8%A7%84%E5%88%99"><span class="nav-number">1.5.5.2.</span> <span class="nav-text">5.5.2 容器卷ro和rw读写规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-3-%E5%8D%B7%E7%9A%84%E7%BB%A7%E6%89%BF%E5%92%8C%E5%85%B1%E4%BA%AB"><span class="nav-number">1.5.5.3.</span> <span class="nav-text">5.5.3 卷的继承和共享</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Docker%E4%B8%8A%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="nav-number">1.6.</span> <span class="nav-text">六、Docker上安装常用软件说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%80%BB%E4%BD%93%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1  总体步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E5%AE%89%E8%A3%85tomcat"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 安装tomcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%AE%89%E8%A3%85mysql"><span class="nav-number">1.6.3.</span> <span class="nav-text">6.3 安装mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%89%88%EF%BC%9A"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">简单版：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E7%89%88%EF%BC%9A"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">实战版：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-%E5%AE%89%E8%A3%85Redis"><span class="nav-number">1.6.4.</span> <span class="nav-text">6.4 安装Redis</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">高级篇</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81mysql%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6docker%E7%89%88"><span class="nav-number">2.1.</span> <span class="nav-text">一、mysql主从复制docker版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.</span> <span class="nav-text">二、分布式存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%93%88%E5%B8%8C%E5%8F%96%E4%BD%99%E7%AE%97%E6%B3%95%E5%88%86%E5%8C%BA"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 哈希取余算法分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95%E5%88%86%E5%8C%BA"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 一致性哈希算法分区</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -326,7 +349,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-12 15:19:41" itemprop="dateModified" datetime="2022-02-12T15:19:41+08:00">2022-02-12</time>
+      <time title="Modified: 2022-02-12 23:19:38" itemprop="dateModified" datetime="2022-02-12T23:19:38+08:00">2022-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -345,14 +368,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>5k</span>
+      <span>8.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>5 mins.</span>
+      <span>7 mins.</span>
     </span>
 </div>
 
@@ -363,7 +386,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p> <a href="C:\Users\DELL\Desktop\学习资料\Docker2022.emmx">Docker2022.emmx</a> </p>
+        <h1 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h1><p> <a href="C:\Users\DELL\Desktop\学习资料\Docker2022.emmx">Docker2022.emmx</a> </p>
 <p>理念</p>
 <p><img src="/2022/02/07/Docker/image-20220207160920948.png" alt="image-20220207160920948"></p>
 <p>解决了运行环境和配置问题的软件容器，方便做持续集成并有助于整体发布的容器虚拟化技术。</p>
@@ -608,6 +631,113 @@
 <p><img src="/2022/02/07/Docker/image-20220211225108861.png" alt="image-20220211225108861"></p>
 <p>结论：docker安装完MySQL并run出容器后，建议请先修改完字符集编码后再新建mysql库-表-插数据</p>
 <p>假如将当前容器实例删除，再重新来一次，之前建的db01实例还有</p>
+<h3 id="6-4-安装Redis"><a href="#6-4-安装Redis" class="headerlink" title="6.4 安装Redis"></a>6.4 安装Redis</h3><p>（1）从docker hub上(阿里云加速器)拉取redis镜像到本地标签为6.0.8</p>
+<p>（2）运行</p>
+<p><img src="/2022/02/07/Docker/image-20220212154851236.png" alt="image-20220212154851236"></p>
+<p>命令提醒：容器卷记得加入–privileged=true</p>
+<p>(3)在CentOS宿主机下新建目录/app/redis</p>
+<p><img src="/2022/02/07/Docker/image-20220212155011424.png" alt="image-20220212155011424"></p>
+<p>(4)将一个redis.conf文件模板拷贝进/app/redis目录下</p>
+<p><img src="/2022/02/07/Docker/image-20220212155059752.png" alt="image-20220212155059752"></p>
+<p>(5)/app/redis目录下修改redis.conf文件</p>
+<p><img src="/2022/02/07/Docker/image-20220212155208087.png" alt="image-20220212155208087"></p>
+<p>(6)使用redis6.0.8镜像创建容器(也叫运行镜像)</p>
+<p>docker run -p 6379:6379 –name myr3 –privileged=true </p>
+<p>-v /app/redis/redis.conf:/etc/redis/redis.conf </p>
+<p>-v /app/redis/data:/data </p>
+<p>-d redis:6.0.8 </p>
+<p>redis-server /etc/redis/redis.conf</p>
+<p><img src="/2022/02/07/Docker/image-20220212155605635.png" alt="image-20220212155605635"></p>
+<p>(7)测试redis-cli连接上来<img src="/2022/02/07/Docker/image-20220212155750246.png" alt="image-20220212155750246"></p>
+<p>(8)请证明docker启动使用了我们自己指定的配置文件</p>
+<p>修改前<img src="/2022/02/07/Docker/image-20220212155844316.png" alt="image-20220212155844316"></p>
+<p>修改后   <img src="/2022/02/07/Docker/image-20220212155914030.png" alt="image-20220212155914030"></p>
+<p>记得重启服务</p>
+<p>(9)测试redis-cli连接上来第2次</p>
+<p><img src="/2022/02/07/Docker/image-20220212160043915.png" alt="image-20220212160043915"></p>
+<h1 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h1><h2 id="一、mysql主从复制docker版"><a href="#一、mysql主从复制docker版" class="headerlink" title="一、mysql主从复制docker版"></a>一、mysql主从复制docker版</h2><p><strong>1、新建主服务器容器实例3307</strong></p>
+<p>docker run -p 3307:3306 –name mysql-master \</p>
+<p>-v /mydata/mysql-master/log:/var/log/mysql \</p>
+<p>-v /mydata/mysql-master/data:/var/lib/mysql \</p>
+<p>-v /mydata/mysql-master/conf:/etc/mysql \</p>
+<p>-e MYSQL_ROOT_PASSWORD=root \</p>
+<p>-d mysql:5.7</p>
+<p><strong>2、进入/mydata/mysql-master/conf目录下新建my.cnf：vim my.cnf</strong> </p>
+<p><img src="/2022/02/07/Docker/image-20220212195317865.png" alt="image-20220212195317865"></p>
+<p><strong>3、修改完配置后重启master实例</strong>:docker restart mysql-master</p>
+<p><strong>4、进入mysql-master容器</strong></p>
+<p>docker exec -it mysql-master /bin/bash      mysql -uroot -proot</p>
+<p><strong>5、master容器实例内创建数据同步用户</strong></p>
+<p>CREATE USER ‘slave‘@’%’ IDENTIFIED BY ‘123456’;</p>
+<p>GRANT REPLICATION SLAVE, REPLICATION CLIENT ON <em>.</em> TO ‘slave‘@’%’;</p>
+<p><strong>6、新建从服务器容器实例3308</strong></p>
+<p>docker run -p 3308:3306 –name mysql-slave \</p>
+<p>-v /mydata/mysql-slave/log:/var/log/mysql \</p>
+<p>-v /mydata/mysql-slave/data:/var/lib/mysql \</p>
+<p>-v /mydata/mysql-slave/conf:/etc/mysql \</p>
+<p>-e MYSQL_ROOT_PASSWORD=root \</p>
+<p>-d mysql:5.7</p>
+<p><strong>7、进入/mydata/mysql-slave/conf目录下新建my.cnf：vim my.cnf</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220212195530066.png" alt="image-20220212195530066"></p>
+<p><strong>8、修改完配置后重启slave实例：docker restart mysql-slave</strong></p>
+<p><strong>9、在主数据库中查看主从同步状态：show master status;</strong></p>
+<p><strong>10、进入mysql-slave容器</strong></p>
+<p>docker exec -it mysql-slave /bin/bash           mysql -uroot -proot</p>
+<p><strong>11、在从数据库中配置主从复制</strong></p>
+<p>change master to master_host=’192.168.197.134’, master_user=’slave’, master_password=’123456’, master_port=3307, master_log_file=’mall-mysql-bin.000001’, master_log_pos=617, master_connect_retry=30;</p>
+<p><img src="/2022/02/07/Docker/image-20220212200805500.png" alt="image-20220212200805500"></p>
+<p>主从复制命令参数说明</p>
+<p>master_host：主数据库的IP地址；</p>
+<p>master_port：主数据库的运行端口；</p>
+<p>master_user：在主数据库创建的用于同步数据的用户账号；</p>
+<p>master_password：在主数据库创建的用于同步数据的用户密码；</p>
+<p>master_log_file：指定从数据库要复制数据的日志文件，通过查看主数据的状态，获取File参数；</p>
+<p>master_log_pos：指定从数据库从哪个位置开始复制数据，通过查看主数据的状态，获取Position参数；</p>
+<p>master_connect_retry：连接失败重试的时间间隔，单位为秒。</p>
+<p><strong>12、在从数据库中查看主从同步状态</strong>：show slave status \G;</p>
+<p><img src="/2022/02/07/Docker/image-20220212211225456.png" alt="image-20220212211225456"></p>
+<p><strong>13、在从数据库中开启主从同步</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220212200925348.png" alt="image-20220212200925348"></p>
+<p><strong>14、查看从数据库状态发现已经同步</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220212201001559.png" alt="image-20220212201001559"></p>
+<p><strong>15、主从复制测试</strong></p>
+<p>主机新建库-使用库-新建表-插入数据，ok</p>
+<p>从机使用库-查看记录，ok</p>
+<p>主：<img src="/2022/02/07/Docker/image-20220212211841298.png" alt="image-20220212211841298"></p>
+<p>从：<img src="/2022/02/07/Docker/image-20220212211915431.png" alt="image-20220212211915431"></p>
+<h2 id="二、分布式存储"><a href="#二、分布式存储" class="headerlink" title="二、分布式存储"></a>二、分布式存储</h2><p>面试题：1~2亿条数据需要缓存，请问如何设计这个存储案例</p>
+<p>回答：单机单台100%不可能，肯定是分布式存储，用redis如何落地？</p>
+<p>上述问题阿里P6~P7工程案例和场景设计类必考题目，一般业界有3种解决方案</p>
+<h3 id="2-1-哈希取余算法分区"><a href="#2-1-哈希取余算法分区" class="headerlink" title="2.1 哈希取余算法分区"></a>2.1 哈希取余算法分区</h3><p><strong>哈希取余</strong>为第一种</p>
+<p>2亿条记录就是2亿个k,v，我们单机不行必须要分布式多机，假设有3台机器构成一个集群，用户每次读写操作都是根据公式：</p>
+<p>hash(key) % N个机器台数，计算出哈希值，用来决定数据映射到哪一个节点上。</p>
+<p>优点：</p>
+<p> 简单粗暴，直接有效，只需要预估好数据规划好节点，例如3台、8台、10台，就能保证一段时间的数据支撑。使用Hash算法让固定的一部分请求落到同一台服务器上，这样每台服务器固定处理一部分请求（并维护这些请求的信息），起到负载均衡+分而治之的作用。</p>
+<p>缺点：</p>
+<p>  原来规划好的节点，进行扩容或者缩容就比较麻烦了额，不管扩缩，每次数据变动导致节点有变动，映射关系需要重新进行计算，在服务器个数固定不变时没有问题，如果需要弹性扩容或故障停机的情况下，原来的取模公式就会发生变化：Hash(key)/3会变成Hash(key) /?。此时地址经过取余运算的结果将发生很大变化，根据公式获取的服务器也会变得不可控。</p>
+<p>某个redis机器宕机了，由于台数数量变化，会导致hash取余全部数据重新洗牌。</p>
+<h3 id="2-2-一致性哈希算法分区"><a href="#2-2-一致性哈希算法分区" class="headerlink" title="2.2 一致性哈希算法分区"></a>2.2 一致性哈希算法分区</h3><p>设计目标是为了解决分布式缓存数据变动和映射问题，某个机器宕机了，分母数量改变了，自然取余数不OK了。</p>
+<p>能干嘛：提出一致性Hash解决方案，目的是当服务器个数发生变动时，</p>
+<p>尽量减少影响客户端到服务器的映射关系</p>
+<p>三大步骤</p>
+<p>（1）算法构建一致性哈希环</p>
+<p><img src="/2022/02/07/Docker/image-20220212224033069.png" alt="image-20220212224033069"></p>
+<p>（2）服务器IP节点映射</p>
+<p>节点映射</p>
+<p>将集群中各个IP节点映射到环上的某一个位置。将各个服务器使用Hash进行一个哈希，具体可以选择服务器的IP或主机名作为关键字进行哈希，这样每台机器就能确定其在哈希环上的位置。假如4个节点NodeA、B、C、D，经过IP地址的哈希函数计算(hash(ip))，使用IP地址哈希后在环空间的位置如下： </p>
+<p><img src="/2022/02/07/Docker/image-20220212224131020.png" alt="image-20220212224131020"></p>
+<p>（3）key落到服务器的落键规则</p>
+<p><img src="/2022/02/07/Docker/image-20220212224217743.png" alt="image-20220212224217743"></p>
+<p>优点：</p>
+<p>一致性哈希算法的容错性<img src="/2022/02/07/Docker/image-20220212224316469.png" alt="image-20220212224316469"></p>
+<p>一致性哈希算法的扩展性<img src="/2022/02/07/Docker/image-20220212224348720.png" alt="image-20220212224348720"></p>
+<p>缺点：一致性哈希算法的数据倾斜问题<img src="/2022/02/07/Docker/image-20220212224427256.png" alt="image-20220212224427256"></p>
+<p>为了在节点数目发生改变时尽可能少的迁移数据</p>
+<p>将所有的存储节点排列在收尾相接的Hash环上，每个key在计算Hash后会顺时针找到临近的存储节点存放。而当有节点加入或退出时仅影响该节点在Hash环上顺时针相邻的后续节点。  </p>
+<p>优点</p>
+<p>加入和删除节点只影响哈希环中顺时针方向的相邻的节点，对其他节点无影响。 </p>
+<p>缺点 </p>
+<p>数据的分布和节点的位置有关，因为这些节点不是均匀的分布在哈希环上的，所以数据在进行存储时达不到均匀分布的效果。</p>
 
     </div>
 
@@ -660,13 +790,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">25k</span>
+    <span title="Symbols count total">28k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">23 mins.</span>
+    <span title="Reading time total">26 mins.</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
