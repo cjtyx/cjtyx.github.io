@@ -86,7 +86,7 @@
 <meta property="og:image" content="http://example.com/2022/01/24/Nginx/image-20220126223735631.png">
 <meta property="og:image" content="http://example.com/2022/01/24/Nginx/image-20220126225636786.png">
 <meta property="article:published_time" content="2022-01-24T07:05:05.000Z">
-<meta property="article:modified_time" content="2022-01-26T15:06:37.686Z">
+<meta property="article:modified_time" content="2022-02-08T14:27:23.658Z">
 <meta property="article:author" content="CJ">
 <meta property="article:tag" content="STUDY">
 <meta name="twitter:card" content="summary">
@@ -284,7 +284,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-01-26 23:06:37" itemprop="dateModified" datetime="2022-01-26T23:06:37+08:00">2022-01-26</time>
+      <time title="Modified: 2022-02-08 22:27:23" itemprop="dateModified" datetime="2022-02-08T22:27:23+08:00">2022-02-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -337,7 +337,7 @@
 <p>*安装之后,使用命令，查看版本号 pcre-config version</p>
 <p>(2)安装其他依赖：yum -y install make zlib zlib-devel gcc-c++ libtool openssl openssl-devel</p>
 <p>(3)安装Nginx</p>
-<p>*把安装压缩文件放到linux系统中                                                                                                         *解压压缩文件                                                                                                                         *进入解压之后的目录，执行./configure 完成后，执行make &amp;&amp; make install   </p>
+<p>*把安装压缩文件放到linux系统中                                                                                                         *解压压缩文件                                                                                                     *进入解压之后的目录，执行./configure 完成后，执行make &amp;&amp; make install   </p>
 <p><img src="/2022/01/24/Nginx/image-20220125144037177.png" alt="image-20220125144037177"></p>
 <p>安装成功之后，在usr多出来个文件夹 local/nginx,在nginx有sbin有启动脚本,启动nginx</p>
 <p><img src="/2022/01/24/Nginx/image-20220125144427247.png" alt="image-20220125144427247"></p>
@@ -439,7 +439,7 @@
 <h3 id="5-4-动静分离实例"><a href="#5-4-动静分离实例" class="headerlink" title="5.4 动静分离实例"></a>5.4 动静分离实例</h3><p>1、什么是动静分离</p>
 <p><img src="/2022/01/24/Nginx/image-20220126141849632.png" alt="image-20220126141849632"></p>
 <p>一种是纯粹把静态文件独立成单独的域名,放在独立的服务器上,也是目前主流推崇的方案;另外一种方法就是动态跟静态文件混合在一起发布，通过nginx来分开。</p>
-<p>通过location指定不同的后缀名实现不同的请求转发。通过 expires参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires定义:是给一个资源设定一个过期时间,也就是说无需去服务端验证,直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。(如果经常更新的文件，不建议使用Expires来缓存〉我这里设置3d，表示在这3天之内访问这个URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码304，如果有修改，则直接从服务器重新下载，返回状态码200。.</p>
+<p>通过location指定不同的后缀名实现不同的请求转发。通过 expires参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires定义:是给一个资源设定一个过期时间,也就是说无需去服务端验证,直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。(如果经常更新的文件，不建议使用Expires来缓存〉我这里设置3d，表示在这3天之内访问这个URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码304，如果有修改，则直接从服务器重新下载，返回状态码200。</p>
 <p>2、准备工作</p>
 <p>（1）在Linux系统中准备静态资源，用于进行访问   根目录下创建data文件夹，在data文件夹下创建www文件夹和image文件夹，然后在里面放如下文件</p>
 <p><img src="/2022/01/24/Nginx/image-20220126150518601.png" alt="image-20220126150518601"></p>
@@ -551,7 +551,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">19k</span>
+    <span title="Symbols count total">20k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">

