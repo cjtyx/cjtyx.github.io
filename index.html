@@ -220,7 +220,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-12 23:19:38" itemprop="dateModified" datetime="2022-02-12T23:19:38+08:00">2022-02-12</time>
+      <time title="Modified: 2022-02-13 23:31:57" itemprop="dateModified" datetime="2022-02-13T23:31:57+08:00">2022-02-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,14 +239,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>8.1k</span>
+      <span>15k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>7 mins.</span>
+      <span>13 mins.</span>
     </span>
 </div>
 
@@ -526,7 +526,7 @@
 <p>记得重启服务</p>
 <p>(9)测试redis-cli连接上来第2次</p>
 <p><img src="/2022/02/07/Docker/image-20220212160043915.png" alt="image-20220212160043915"></p>
-<h1 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h1><h2 id="一、mysql主从复制docker版"><a href="#一、mysql主从复制docker版" class="headerlink" title="一、mysql主从复制docker版"></a>一、mysql主从复制docker版</h2><p><strong>1、新建主服务器容器实例3307</strong></p>
+<h1 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h1><h1 id="Docker复杂安装详说"><a href="#Docker复杂安装详说" class="headerlink" title="Docker复杂安装详说"></a>Docker复杂安装详说</h1><h2 id="一、mysql主从复制docker版"><a href="#一、mysql主从复制docker版" class="headerlink" title="一、mysql主从复制docker版"></a>一、mysql主从复制docker版</h2><p><strong>1、新建主服务器容器实例3307</strong></p>
 <p>docker run -p 3307:3306 –name mysql-master \</p>
 <p>-v /mydata/mysql-master/log:/var/log/mysql \</p>
 <p>-v /mydata/mysql-master/data:/var/lib/mysql \</p>
@@ -576,9 +576,9 @@
 <p>从机使用库-查看记录，ok</p>
 <p>主：<img src="/2022/02/07/Docker/image-20220212211841298.png" alt="image-20220212211841298"></p>
 <p>从：<img src="/2022/02/07/Docker/image-20220212211915431.png" alt="image-20220212211915431"></p>
-<h2 id="二、分布式存储"><a href="#二、分布式存储" class="headerlink" title="二、分布式存储"></a>二、分布式存储</h2><p>面试题：1~2亿条数据需要缓存，请问如何设计这个存储案例</p>
+<h2 id="二、安装redis集群-分布式存储"><a href="#二、安装redis集群-分布式存储" class="headerlink" title="二、安装redis集群    分布式存储"></a>二、安装redis集群    分布式存储</h2><p>面试题：1~2亿条数据需要缓存，请问如何设计这个存储案例</p>
 <p>回答：单机单台100%不可能，肯定是分布式存储，用redis如何落地？</p>
-<p>上述问题阿里P6~P7工程案例和场景设计类必考题目，一般业界有3种解决方案</p>
+<p>上述问题阿里P6~P7工程案例和场景设计类必考题目，一般业界有3种解决方案2.1-2.3</p>
 <h3 id="2-1-哈希取余算法分区"><a href="#2-1-哈希取余算法分区" class="headerlink" title="2.1 哈希取余算法分区"></a>2.1 哈希取余算法分区</h3><p><strong>哈希取余</strong>为第一种</p>
 <p>2亿条记录就是2亿个k,v，我们单机不行必须要分布式多机，假设有3台机器构成一个集群，用户每次读写操作都是根据公式：</p>
 <p>hash(key) % N个机器台数，计算出哈希值，用来决定数据映射到哪一个节点上。</p>
@@ -609,6 +609,195 @@
 <p>加入和删除节点只影响哈希环中顺时针方向的相邻的节点，对其他节点无影响。 </p>
 <p>缺点 </p>
 <p>数据的分布和节点的位置有关，因为这些节点不是均匀的分布在哈希环上的，所以数据在进行存储时达不到均匀分布的效果。</p>
+<h3 id="2-3-哈希槽分区"><a href="#2-3-哈希槽分区" class="headerlink" title="2.3 哈希槽分区"></a>2.3 哈希槽分区</h3><p>1 为什么出现</p>
+<p><img src="/2022/02/07/Docker/B092D6BA-CBC8-458C-9C6B-68E4357948E9.png" alt="img"></p>
+<p>哈希槽实质就是一个数组，数组[0,2^14 -1]形成hash slot空间。</p>
+<p>2 能干什么</p>
+<p>解决均匀分配的问题，在数据和节点之间又加入了一层，把这层称为哈希槽（slot），用于管理数据和节点之间的关系，现在就相当于节点上放的是槽，槽里放的是数据。</p>
+<p><img src="/2022/02/07/Docker/18117874-0250-475E-98C5-A72363165352.png" alt="img"></p>
+<p>槽解决的是粒度问题，相当于把粒度变大了，这样便于数据移动。</p>
+<p>哈希解决的是映射问题，使用key的哈希值来计算所在的槽，便于数据分配。</p>
+<p>3 多少个hash槽</p>
+<p>一个集群只能有16384个槽，编号0-16383（0-2^14-1）。这些槽会分配给集群中的所有主节点，分配策略没有要求。可以指定哪些编号的槽分配给哪个主节点。集群会记录节点和槽的对应关系。解决了节点和槽的关系后，接下来就需要对key求哈希值，然后对16384取余，余数是几key就落入对应的槽里。slot = CRC16(key) % 16384。以槽为单位移动数据，因为槽的数目是固定的，处理起来比较容易，这样数据移动问题就解决了。</p>
+<p>4、哈希槽计算</p>
+<p>Redis 集群中内置了 16384 个哈希槽，redis 会根据节点数量大致均等的将哈希槽映射到不同的节点。当需要在 Redis 集群中放置一个 key-value时，redis 先对 key 使用 crc16 算法算出一个结果，然后把结果对 16384 求余数，这样每个 key 都会对应一个编号在 0-16383 之间的哈希槽，也就是映射到某个节点上。如下代码，key之A 、B在Node2， key之C落在Node3上</p>
+<p><img src="/2022/02/07/Docker/33F503D4-31B6-4E84-AF77-4406C24D49CD.png" alt="img"><img src="/2022/02/07/Docker/E5C62422-B400-45C4-9088-948C85F5E106.png" alt="img"></p>
+<h3 id="2-4-3主3从Redis集群配置"><a href="#2-4-3主3从Redis集群配置" class="headerlink" title="2.4  3主3从Redis集群配置"></a>2.4  3主3从Redis集群配置</h3><p><img src="/2022/02/07/Docker/image-20220213152623633.png" alt="image-20220213152623633"></p>
+<p>(1)关闭防火墙+启动docker后台服务:systemctl start docker</p>
+<p>(2)新建6个docker容器redis实例</p>
+<p>docker run -d –name redis-node-1 –net host –privileged=true -v /data/redis/share/redis-node-1:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6381</p>
+<p>docker run -d –name redis-node-2 –net host –privileged=true -v /data/redis/share/redis-node-2:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6382</p>
+<p>docker run -d –name redis-node-3 –net host –privileged=true -v /data/redis/share/redis-node-3:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6383</p>
+<p>docker run -d –name redis-node-4 –net host –privileged=true -v /data/redis/share/redis-node-4:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6384</p>
+<p>docker run -d –name redis-node-5 –net host –privileged=true -v /data/redis/share/redis-node-5:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6385</p>
+<p>docker run -d –name redis-node-6 –net host –privileged=true -v /data/redis/share/redis-node-6:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6386</p>
+<p><img src="/2022/02/07/Docker/image-20220213154041382.png" alt="image-20220213154041382"></p>
+<p><img src="/2022/02/07/Docker/image-20220213154225145.png" alt="image-20220213154225145"></p>
+<p>(3)进入容器redis-node-1并为6台机器构建集群关系</p>
+<p>进入容器:docker exec -it redis-node-1 /bin/bash</p>
+<p>构建主从关系:</p>
+<p>//注意，进入docker容器后才能执行一下命令，且注意自己的真实IP地址</p>
+<p>redis-cli –cluster create 192.168.197.134:6381 192.168.197.134:6382 192.168.197.134:6383 192.168.197.134:6384 192.168.197.134:6385 192.168.197.134:6386 –cluster-replicas 1</p>
+<p>–cluster-replicas 1 表示为每个master创建一个slave节点</p>
+<p><img src="/2022/02/07/Docker/D4277273-2FFA-43F0-A785-73E231EF730F.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/064A4706-871A-485A-81FA-6DAF751D4210.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/598CCFE2-4BA6-4F2D-9CBC-1813141DBFEC.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/E2DD876A-1E4C-4F88-8330-3C45B1A7A403.png" alt="img"></p>
+<p>(4)链接进入6381作为切入点，查看集群状态</p>
+<p>链接进入6381作为切入点，查看节点状态:<img src="/2022/02/07/Docker/D78382B9-AA7F-4C7E-8B52-FF9C83E08ECC.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/C6C5B559-5618-4CFF-9BFB-07931D24BE7A.png" alt="img"></p>
+<p>cluster info：查看集群信息              cluster nodes：查看集群节点</p>
+<h3 id="2-5-主从容错切换迁移案例"><a href="#2-5-主从容错切换迁移案例" class="headerlink" title="2.5 主从容错切换迁移案例"></a>2.5 主从容错切换迁移案例</h3><p>一、数据读写存储</p>
+<p>(1)启动6机构成的集群并通过exec进入</p>
+<p>(2)对6381新增两个key           set k1 v1</p>
+<p>(3)防止路由失效加参数-c并新增两个key</p>
+<p><img src="/2022/02/07/Docker/image-20220213163655007.png" alt="image-20220213163655007"></p>
+<p>(4)查看集群信息</p>
+<p><img src="/2022/02/07/Docker/image-20220213163743429.png" alt="image-20220213163743429"></p>
+<p>二、容错切换迁移</p>
+<p><img src="/2022/02/07/Docker/image-20220213171227145.png" alt="image-20220213171227145"></p>
+<p>(1)主6381和从机切换，先停止主机6381:   6381主机停了，对应的真实从机上位,   6381作为1号主机分配的从机以实际情况为准，具体是几号机器就是几号</p>
+<p>(2)再次查看集群信息<img src="/2022/02/07/Docker/image-20220213163932204.png" alt="image-20220213163932204"></p>
+<p>(3)先还原之前的3主3从</p>
+<p><img src="/2022/02/07/Docker/image-20220213164022236.png" alt="image-20220213164022236"></p>
+<p>让6381上位</p>
+<p>/1:先启6381:docker start redis-node-1</p>
+<p><img src="/2022/02/07/Docker/image-20220213164121784.png" alt="image-20220213164121784"></p>
+<p>/2:再停6385: docker stop redis-node-5</p>
+<p><img src="/2022/02/07/Docker/image-20220213164200714.png" alt="image-20220213164200714"></p>
+<p>/3:再启6385: docker start redis-node-5</p>
+<p><img src="/2022/02/07/Docker/image-20220213164237414.png" alt="image-20220213164237414"></p>
+<p>主从机器分配情况以实际情况为准</p>
+<p>(4)查看集群状态:  redis-cli –cluster check 自己IP:6381</p>
+<p><img src="/2022/02/07/Docker/image-20220213164354754.png" alt="image-20220213164354754"></p>
+<h3 id="2-6-主从扩容案例"><a href="#2-6-主从扩容案例" class="headerlink" title="2.6 主从扩容案例"></a>2.6 主从扩容案例</h3><p><img src="/2022/02/07/Docker/image-20220213204606462.png" alt="image-20220213204606462"></p>
+<p>(1)新建6387、6388两个节点+新建后启动+查看是否8节点</p>
+<p>docker run -d –name redis-node-7 –net host –privileged=true -v /data/redis/share/redis-node-7:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6387</p>
+<p>docker run -d –name redis-node-8 –net host –privileged=true -v /data/redis/share/redis-node-8:/data redis:6.0.8 –cluster-enabled yes –appendonly yes –port 6388</p>
+<p>docker ps</p>
+<p>(2)进入6387容器实例内部: docker exec -it redis-node-7 /bin/bash</p>
+<p>(3)将新增的6387节点(空槽号)作为master节点加入原集群</p>
+<p>将新增的6387作为master节点加入集群</p>
+<p>redis-cli –cluster add-node 192.168.197.134:6387 192.168.197.134:6381</p>
+<p>6387 就是将要作为master新增节点</p>
+<p>6381 就是原来集群节点里面的领路人，相当于6387拜拜6381的码头从而找到组织加入集群</p>
+<p><img src="/2022/02/07/Docker/49E80A0B-C3FD-49D9-9409-9D0C82FC463C.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/4D75E348-BAC0-429A-9C98-5BFAD81114CA.png" alt="img"></p>
+<p>(4)检查集群情况第1次：redis-cli –cluster check 真实ip地址:6381</p>
+<p><img src="/2022/02/07/Docker/image-20220213201909022.png" alt="image-20220213201909022"></p>
+<p>(5)重新分派槽号:  </p>
+<p>命令:redis-cli –cluster reshard IP地址:端口号</p>
+<p>redis-cli –cluster reshard 192.168.197.134:6381</p>
+<p><img src="/2022/02/07/Docker/09AA7C35-AFB1-4309-AB04-295DEA79878B.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/C5A96F2D-713D-4C9C-A860-994A9BA0A326.png" alt="img"></p>
+<p>(6)检查集群情况第2次<img src="/2022/02/07/Docker/image-20220213202227384.png" alt="image-20220213202227384"></p>
+<p>槽号分派说明<img src="/2022/02/07/Docker/image-20220213202303503.png" alt="image-20220213202303503"></p>
+<p>(7)为主节点6387分配从节点6388</p>
+<p>命令：redis-cli –cluster add-node ip:新slave端口 ip:新master端口 –cluster-slave –cluster-master-id 新主机节点ID</p>
+<p>redis-cli –cluster add-node 192.168.197.134:6388 192.168.197.134:6387 –cluster-slave –cluster-master-id 99eeb627c6118063f80d5114ee1529164c13f94e——-这个是6387的编号，按照自己实际情况</p>
+<p><img src="/2022/02/07/Docker/14642150-7924-4203-B431-0F7BBC4F433C.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/C400F205-278F-40DE-9C47-5F1380C14714.png" alt="img"></p>
+<p>(8)检查集群情况第3次</p>
+<p>redis-cli –cluster check 192.168.111.147:6382</p>
+<p><img src="/2022/02/07/Docker/C830B96B-8670-44C9-8AED-41D069FCEA8E.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/6869CBA5-1DFA-4792-9742-B3E0FAE9CA2C.png" alt="img"></p>
+<h3 id="2-7-主从缩容案例"><a href="#2-7-主从缩容案例" class="headerlink" title="2.7 主从缩容案例"></a>2.7 主从缩容案例</h3><p><img src="/2022/02/07/Docker/image-20220213221352424.png" alt="image-20220213221352424"></p>
+<p>(1)目的：6387和6388下线</p>
+<p>(2)检查集群情况1获得6388的节点ID<img src="/2022/02/07/Docker/image-20220213202817038.png" alt="image-20220213202817038"></p>
+<p>(3)将6388删除, 从集群中将4号从节点6388删除</p>
+<p>命令：redis-cli –cluster del-node ip:从机端口 从机6388节点ID</p>
+<p>redis-cli –cluster del-node 192.168.197.134:6388 1014e96beb9138d683695cc0d3c44112c26bf88e</p>
+<p><img src="/2022/02/07/Docker/EFD07548-B595-4D36-B2F0-C078CD305CE9.png" alt="img"></p>
+<p>redis-cli –cluster check 192.168.197.134:6382</p>
+<p>检查一下发现，6388被删除了，只剩下7台机器了。</p>
+<p><img src="/2022/02/07/Docker/545BBAAE-6FD7-4220-872F-E26D4B0161DF.png" alt="img"></p>
+<p>(4)将6387的槽号清空，重新分配，本例将清出来的槽号都给6381</p>
+<p>redis-cli –cluster reshard 192.168.197.134:6381</p>
+<p>以6381作为突破口，对整个集群进行hash槽位的分配</p>
+<p><img src="/2022/02/07/Docker/402BE5DE-5825-4546-ADB5-582CA7E65ABF.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/B7D51FAD-7143-47AC-88AA-0154A423D550.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/0064A3C2-5DFC-4972-868C-48E78EBA659F.png" alt="img"></p>
+<p>(5)检查集群情况第二次</p>
+<p>redis-cli –cluster check 192.168.111.147:6381</p>
+<p>4096个槽位都指给6381，它变成了8192个槽位，相当于全部都给6381了，不然要输入3次，一锅端</p>
+<p><img src="/2022/02/07/Docker/293AE6BF-7F23-42A8-BBC5-CE5F511DCC5F.png" alt="img"></p>
+<p>(6)将6387删除</p>
+<p>命令：redis-cli –cluster del-node ip:端口 6387节点ID</p>
+<p>redis-cli –cluster del-node 192.168.197.134:6387 99eeb627c6118063f80d5114ee1529164c13f94e<img src="/2022/02/07/Docker/ADEFCFBE-A68C-4B19-A2A3-C9502FF86C66.png" alt="img"></p>
+<p>(7)检查集群情况第三次</p>
+<p>redis-cli –cluster check 192.168.111.147:6381</p>
+<p><img src="/2022/02/07/Docker/F92B21F5-B528-46E6-A6B1-80273382DC06.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/image-20220213224610872.png" alt="image-20220213224610872"></p>
+<h1 id="DockerFile解析"><a href="#DockerFile解析" class="headerlink" title="DockerFile解析"></a>DockerFile解析</h1><p>Dockerfile是用来构建Docker镜像的文本文件，是由一条条构建镜像所需的指令和参数构成的脚本。<img src="/2022/02/07/Docker/image-20220213225311309.png" alt="image-20220213225311309"></p>
+<p>官网: <a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></p>
+<p>构建三步骤:  1、编写Dockerfile文件  2、docker build命令构建镜像  3、docker run依镜像运行容器实例</p>
+<h2 id="一、DockerFile构建过程解析"><a href="#一、DockerFile构建过程解析" class="headerlink" title="一、DockerFile构建过程解析"></a>一、DockerFile构建过程解析</h2><h3 id="1-1-Dockerfile内容基础知识"><a href="#1-1-Dockerfile内容基础知识" class="headerlink" title="1.1 Dockerfile内容基础知识"></a>1.1 Dockerfile内容基础知识</h3><p>1：每条保留字指令都必须为大写字母且后面要跟随至少一个参数</p>
+<p>2：指令按照从上到下，顺序执行</p>
+<p>3：#表示注释</p>
+<p>4：每条指令都会创建一个新的镜像层并对镜像进行提交</p>
+<h3 id="1-2-Docker执行Dockerfile的大致流程"><a href="#1-2-Docker执行Dockerfile的大致流程" class="headerlink" title="1.2 Docker执行Dockerfile的大致流程"></a>1.2 Docker执行Dockerfile的大致流程</h3><p>（1）docker从基础镜像运行一个容器</p>
+<p>（2）执行一条指令并对容器作出修改</p>
+<p>（3）执行类似docker commit的操作提交一个新的镜像层</p>
+<p>（4）docker再基于刚提交的镜像运行一个新容器</p>
+<p>（5）执行dockerfile中的下一条指令直到所有指令都执行完成</p>
+<h3 id="1-3-总结"><a href="#1-3-总结" class="headerlink" title="1.3 总结"></a>1.3 总结</h3><p>从应用软件的角度来看，Dockerfile、Docker镜像与Docker容器分别代表软件的三个不同阶段，</p>
+<p>*  Dockerfile是软件的原材料</p>
+<p>*  Docker镜像是软件的交付品</p>
+<p>*  Docker容器则可以认为是软件镜像的运行态，也即依照镜像运行的容器实例</p>
+<p>Dockerfile面向开发，Docker镜像成为交付标准，Docker容器则涉及部署与运维，三者缺一不可，合力充当Docker体系的基石。</p>
+<p><img src="/2022/02/07/Docker/0962520D-D4D9-4AC1-9DBE-CF23B510D16D.png" alt="img"></p>
+<p>1 Dockerfile，需要定义一个Dockerfile，Dockerfile定义了进程需要的一切东西。Dockerfile涉及的内容包括执行代码或者是文件、环境变量、依赖包、运行时环境、动态链接库、操作系统的发行版、服务进程和内核进程(当应用进程需要和系统服务和内核进程打交道，这时需要考虑如何设计namespace的权限控制)等等;</p>
+<p>2 Docker镜像，在用Dockerfile定义一个文件之后，docker build时会产生一个Docker镜像，当运行 Docker镜像时会真正开始提供服务;</p>
+<p>3 Docker容器，容器是直接提供服务的。</p>
+<h2 id="二、DockerFile常用保留字指令"><a href="#二、DockerFile常用保留字指令" class="headerlink" title="二、DockerFile常用保留字指令"></a>二、DockerFile常用保留字指令</h2><p>参考tomcat8的dockerfile入门：<a target="_blank" rel="noopener" href="https://github.com/docker-library/tomcat">https://github.com/docker-library/tomcat</a></p>
+<h3 id="2-1-FROM"><a href="#2-1-FROM" class="headerlink" title="2.1 FROM"></a>2.1 FROM</h3><p>基础镜像，当前新镜像是基于哪个镜像的，指定一个已经存在的镜像作为模板，第一条必须是from</p>
+<h3 id="2-2-MAINTAINER"><a href="#2-2-MAINTAINER" class="headerlink" title="2.2 MAINTAINER"></a>2.2 MAINTAINER</h3><p>镜像维护者的姓名和邮箱地址</p>
+<h3 id="2-3-RUN"><a href="#2-3-RUN" class="headerlink" title="2.3 RUN"></a>2.3 RUN</h3><p>1、容器构建时需要运行的命令</p>
+<p>2、两种格式</p>
+<p>shell格式：<img src="/2022/02/07/Docker/BD62EE5C-A8A9-48EE-9A1D-739466C36AD0.png" alt="img">RUN yum -y install vim</p>
+<p>exec格式: <img src="/2022/02/07/Docker/695B7E7D-AEFE-4571-8FDD-825D52A6FE16.png" alt="img"></p>
+<p>3、RUN是在 docker build时运行</p>
+<h3 id="2-4-EXPOSE"><a href="#2-4-EXPOSE" class="headerlink" title="2.4 EXPOSE"></a>2.4 EXPOSE</h3><p>当前容器对外暴露出的端口</p>
+<h3 id="2-5-WORKDIR"><a href="#2-5-WORKDIR" class="headerlink" title="2.5 WORKDIR"></a>2.5 WORKDIR</h3><p>指定在创建容器后，终端默认登陆的进来工作目录，一个落脚点</p>
+<h3 id="2-6-USER"><a href="#2-6-USER" class="headerlink" title="2.6 USER"></a>2.6 USER</h3><p>指定该镜像以什么样的用户去执行，如果都不指定，默认是root</p>
+<h3 id="2-7-ENV"><a href="#2-7-ENV" class="headerlink" title="2.7 ENV"></a>2.7 ENV</h3><p>用来在构建镜像过程中设置环境变量</p>
+<p>ENV MY_PATH /usr/mytest</p>
+<p>这个环境变量可以在后续的任何RUN指令中使用，这就如同在命令前面指定了环境变量前缀一样；也可以在其它指令中直接使用这些环境变量，比如：WORKDIR $MY_PATH</p>
+<h3 id="2-8-ADD"><a href="#2-8-ADD" class="headerlink" title="2.8 ADD"></a>2.8 ADD</h3><p>将宿主机目录下的文件拷贝进镜像且会自动处理URL和解压tar压缩包</p>
+<h3 id="2-9-COPY"><a href="#2-9-COPY" class="headerlink" title="2.9 COPY"></a>2.9 COPY</h3><p>类似ADD，拷贝文件和目录到镜像中。</p>
+<p>将从构建上下文目录中 &lt;源路径&gt; 的文件/目录复制到新的一层的镜像内的 &lt;目标路径&gt; 位置</p>
+<p>1、COPY src dest</p>
+<p>2、COPY [“src”, “dest”]</p>
+<p>3、&lt;src源路径&gt;：源文件或者源目录</p>
+<p>4、&lt;dest目标路径&gt;：容器内的指定路径，该路径不用事先建好，路径不存在的话，会自动创建。</p>
+<h3 id="2-10-VOLUME"><a href="#2-10-VOLUME" class="headerlink" title="2.10 VOLUME"></a>2.10 VOLUME</h3><p>容器数据卷，用于数据保存和持久化工作</p>
+<h3 id="2-11-CMD"><a href="#2-11-CMD" class="headerlink" title="2.11 CMD"></a>2.11 CMD</h3><p>1、指定容器启动后的要干的事情</p>
+<p>2、注意</p>
+<p>Dockerfile 中可以有多个 CMD 指令，但只有最后一个生效，CMD 会被 docker run 之后的参数替换</p>
+<p>参考官网Tomcat的dockerfile演示讲解，官网最后一行命令：<img src="/2022/02/07/Docker/image-20220213232409847.png" alt="image-20220213232409847"></p>
+<p>我们演示自己的覆盖操作<img src="/2022/02/07/Docker/image-20220213232438554.png" alt="image-20220213232438554"></p>
+<p>3、它和前面RUN命令的区别</p>
+<p>CMD是在docker run 时运行。</p>
+<p>RUN是在 docker build时运行。</p>
+<h3 id="2-12-ENTRYPOINT"><a href="#2-12-ENTRYPOINT" class="headerlink" title="2.12 ENTRYPOINT"></a>2.12 ENTRYPOINT</h3><p>1、也是用来指定一个容器启动时要运行的命令</p>
+<p>2、类似于 CMD 指令，但是ENTRYPOINT不会被docker run后面的命令覆盖，而且这些命令行参数会被当作参数送给 ENTRYPOINT 指令指定的程序</p>
+<p>3、命令格式和案例说明</p>
+<p>命令格式：<img src="/2022/02/07/Docker/2BF7CF2C-2128-4DA3-85C4-D6C47DCB524B.png" alt="img"></p>
+<p>ENTRYPOINT可以和CMD一起用，一般是变参才会使用 CMD ，这里的 CMD 等于是在给 ENTRYPOINT 传参。</p>
+<p>当指定了ENTRYPOINT后，CMD的含义就发生了变化，不再是直接运行其命令而是将CMD的内容作为参数传递给ENTRYPOINT指令，他两个组合会变成<img src="/2022/02/07/Docker/8A3A769A-89F1-4501-9A95-844ECCC7E0E5.png" alt="img"></p>
+<p>案例如下：假设已通过 Dockerfile 构建了 nginx:test 镜像：</p>
+<p><img src="/2022/02/07/Docker/F0BBFBD9-7E89-4798-8243-8FAA539F8CB7.png" alt="img"></p>
+<p>是否传参        按照dockerfile编写执行         传参运行</p>
+<p>Docker命令</p>
+<p>docker run nginx:test</p>
+<p>docker run nginx:test -c /etc/nginx/new.conf</p>
+<p>衍生出的实际命令</p>
+<p>nginx -c /etc/nginx/nginx.conf</p>
+<p>nginx -c /etc/nginx/new.conf</p>
+<p>4、优点</p>
+<p>在执行docker run的时候可以指定 ENTRYPOINT 运行所需的参数。</p>
+<p>注意：如果 Dockerfile 中如果存在多个 ENTRYPOINT 指令，仅最后一个生效。</p>
+<h3 id="2-13-总结"><a href="#2-13-总结" class="headerlink" title="2.13 总结"></a>2.13 总结</h3><p><img src="/2022/02/07/Docker/6328AEDF-4652-46A8-8FB9-97522A60CD78.png" alt="img"></p>
 
       
     </div>
@@ -1707,13 +1896,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">28k</span>
+    <span title="Symbols count total">35k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">26 mins.</span>
+    <span title="Reading time total">32 mins.</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
