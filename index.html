@@ -220,7 +220,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-13 23:31:57" itemprop="dateModified" datetime="2022-02-13T23:31:57+08:00">2022-02-13</time>
+      <time title="Modified: 2022-02-16 17:04:56" itemprop="dateModified" datetime="2022-02-16T17:04:56+08:00">2022-02-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,14 +239,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>15k</span>
+      <span>44k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>13 mins.</span>
+      <span>40 mins.</span>
     </span>
 </div>
 
@@ -754,11 +754,12 @@
 <h3 id="2-2-MAINTAINER"><a href="#2-2-MAINTAINER" class="headerlink" title="2.2 MAINTAINER"></a>2.2 MAINTAINER</h3><p>镜像维护者的姓名和邮箱地址</p>
 <h3 id="2-3-RUN"><a href="#2-3-RUN" class="headerlink" title="2.3 RUN"></a>2.3 RUN</h3><p>1、容器构建时需要运行的命令</p>
 <p>2、两种格式</p>
-<p>shell格式：<img src="/2022/02/07/Docker/BD62EE5C-A8A9-48EE-9A1D-739466C36AD0.png" alt="img">RUN yum -y install vim</p>
+<p>shell格式：<img src="/2022/02/07/Docker/BD62EE5C-A8A9-48EE-9A1D-739466C36AD0.png" alt="img">RUN  RUN yum -y install vim</p>
 <p>exec格式: <img src="/2022/02/07/Docker/695B7E7D-AEFE-4571-8FDD-825D52A6FE16.png" alt="img"></p>
 <p>3、RUN是在 docker build时运行</p>
 <h3 id="2-4-EXPOSE"><a href="#2-4-EXPOSE" class="headerlink" title="2.4 EXPOSE"></a>2.4 EXPOSE</h3><p>当前容器对外暴露出的端口</p>
 <h3 id="2-5-WORKDIR"><a href="#2-5-WORKDIR" class="headerlink" title="2.5 WORKDIR"></a>2.5 WORKDIR</h3><p>指定在创建容器后，终端默认登陆的进来工作目录，一个落脚点</p>
+<p><img src="/2022/02/07/Docker/image-20220214201424587.png" alt="image-20220214201424587"></p>
 <h3 id="2-6-USER"><a href="#2-6-USER" class="headerlink" title="2.6 USER"></a>2.6 USER</h3><p>指定该镜像以什么样的用户去执行，如果都不指定，默认是root</p>
 <h3 id="2-7-ENV"><a href="#2-7-ENV" class="headerlink" title="2.7 ENV"></a>2.7 ENV</h3><p>用来在构建镜像过程中设置环境变量</p>
 <p>ENV MY_PATH /usr/mytest</p>
@@ -772,6 +773,7 @@
 <p>4、&lt;dest目标路径&gt;：容器内的指定路径，该路径不用事先建好，路径不存在的话，会自动创建。</p>
 <h3 id="2-10-VOLUME"><a href="#2-10-VOLUME" class="headerlink" title="2.10 VOLUME"></a>2.10 VOLUME</h3><p>容器数据卷，用于数据保存和持久化工作</p>
 <h3 id="2-11-CMD"><a href="#2-11-CMD" class="headerlink" title="2.11 CMD"></a>2.11 CMD</h3><p>1、指定容器启动后的要干的事情</p>
+<p><img src="/2022/02/07/Docker/image-20220214202426660.png" alt="image-20220214202426660"></p>
 <p>2、注意</p>
 <p>Dockerfile 中可以有多个 CMD 指令，但只有最后一个生效，CMD 会被 docker run 之后的参数替换</p>
 <p>参考官网Tomcat的dockerfile演示讲解，官网最后一行命令：<img src="/2022/02/07/Docker/image-20220213232409847.png" alt="image-20220213232409847"></p>
@@ -787,17 +789,821 @@
 <p>当指定了ENTRYPOINT后，CMD的含义就发生了变化，不再是直接运行其命令而是将CMD的内容作为参数传递给ENTRYPOINT指令，他两个组合会变成<img src="/2022/02/07/Docker/8A3A769A-89F1-4501-9A95-844ECCC7E0E5.png" alt="img"></p>
 <p>案例如下：假设已通过 Dockerfile 构建了 nginx:test 镜像：</p>
 <p><img src="/2022/02/07/Docker/F0BBFBD9-7E89-4798-8243-8FAA539F8CB7.png" alt="img"></p>
-<p>是否传参        按照dockerfile编写执行         传参运行</p>
-<p>Docker命令</p>
-<p>docker run nginx:test</p>
-<p>docker run nginx:test -c /etc/nginx/new.conf</p>
-<p>衍生出的实际命令</p>
-<p>nginx -c /etc/nginx/nginx.conf</p>
-<p>nginx -c /etc/nginx/new.conf</p>
+<p><img src="/2022/02/07/Docker/image-20220214203607188.png" alt="image-20220214203607188"></p>
 <p>4、优点</p>
 <p>在执行docker run的时候可以指定 ENTRYPOINT 运行所需的参数。</p>
 <p>注意：如果 Dockerfile 中如果存在多个 ENTRYPOINT 指令，仅最后一个生效。</p>
 <h3 id="2-13-总结"><a href="#2-13-总结" class="headerlink" title="2.13 总结"></a>2.13 总结</h3><p><img src="/2022/02/07/Docker/6328AEDF-4652-46A8-8FB9-97522A60CD78.png" alt="img"></p>
+<h2 id="三、案例"><a href="#三、案例" class="headerlink" title="三、案例"></a>三、案例</h2><h3 id="3-1-自定义镜像mycentosjava8"><a href="#3-1-自定义镜像mycentosjava8" class="headerlink" title="3.1 自定义镜像mycentosjava8"></a>3.1 自定义镜像mycentosjava8</h3><p>1、要求</p>
+<p>Centos7镜像具备vim+ifconfig+jdk8</p>
+<p>JDK的下载镜像地址：官网<img src="/2022/02/07/Docker/image-20220214204047717.png" alt="image-20220214204047717"></p>
+<p><a target="_blank" rel="noopener" href="https://mirrors.yangxingzhen.com/jdk/">https://mirrors.yangxingzhen.com/jdk/</a></p>
+<p>2、编写</p>
+<p>准备编写Dockerfile文件        大写字母D</p>
+<p><img src="/2022/02/07/Docker/3EEF5253-25C4-4036-ACA3-199661EB9E94.png" alt="img"></p>
+<p>FROM centos</p>
+<p>MAINTAINER zzyy</p>
+<p>ENV MYPATH /usr/local</p>
+<p>WORKDIR $MYPATH</p>
+<p>#安装vim编辑器</p>
+<p>RUN yum -y install vim</p>
+<p>#安装ifconfig命令查看网络IP</p>
+<p>RUN yum -y install net-tools</p>
+<p>#安装java8及lib库</p>
+<p>RUN yum -y install glibc.i686</p>
+<p>RUN mkdir /usr/local/java</p>
+<p>#ADD 是相对路径jar,把jdk-8u171-linux-x64.tar.gz添加到容器中,安装包必须要和Dockerfile文件在同一位置</p>
+<p>ADD jdk-8u171-linux-x64.tar.gz /usr/local/java/</p>
+<p>#配置java环境变量</p>
+<p>ENV JAVA_HOME /usr/local/java/jdk1.8.0_171</p>
+<p>ENV JRE_HOME $JAVA_HOME/jre</p>
+<p>ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH</p>
+<p>ENV PATH $JAVA_HOME/bin:$PATH</p>
+<p>EXPOSE 80</p>
+<p>CMD echo $MYPATH</p>
+<p>CMD echo “success————–ok”</p>
+<p>CMD /bin/bash</p>
+<p>3、构建</p>
+<p>docker build -t 新镜像名字:TAG .</p>
+<p>docker build -t centosjava8:1.5 .</p>
+<p><img src="/2022/02/07/Docker/D06DC180-A211-42A2-8883-86B8C72EC79A.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/7ED27FB3-17CB-4BB4-B196-41C928E5B462.png" alt="img"></p>
+<p><strong>注意，上面TAG后面有个空格，有个点</strong></p>
+<p>4、运行：docker run -it 新镜像名字:TAG </p>
+<p> docker run -it centosjava8:1.5 /bin/bash</p>
+<p><img src="/2022/02/07/Docker/EC715951-590C-43D6-AEA9-D3D04F21B8C4.png" alt="img"></p>
+<p>5、再体会下UnionFS（联合文件系统）</p>
+<h3 id="3-2-虚悬镜像"><a href="#3-2-虚悬镜像" class="headerlink" title="3.2 虚悬镜像"></a>3.2 虚悬镜像</h3><p>1、是什么</p>
+<p>仓库名、标签都是<none>的镜像，俗称dangling image</none></p>
+<p>Dockerfile写一个：</p>
+<p>（1） vim Dockerfile</p>
+<p>from ubuntu</p>
+<p>CMD echo ‘action is success’</p>
+<p>（2 ）docker build .</p>
+<p><img src="/2022/02/07/Docker/9C94DECE-3033-4715-9581-1D39016CCCFC.png" alt="img"></p>
+<p>2、查看</p>
+<p>docker image ls -f dangling=true</p>
+<p><img src="/2022/02/07/Docker/A5291C4A-5398-4B5D-BA82-F67BDCF63EC5.png" alt="img"></p>
+<p>3、删除 </p>
+<p>docker image prune</p>
+<p>虚悬镜像已经失去存在价值，可以删除</p>
+<p><img src="/2022/02/07/Docker/CFA34255-FDB7-42F3-AE12-88D521D52C0F.png" alt="img"></p>
+<h3 id="3-3-家庭作业-自定义镜像myubuntu"><a href="#3-3-家庭作业-自定义镜像myubuntu" class="headerlink" title="3.3 家庭作业-自定义镜像myubuntu"></a>3.3 家庭作业-自定义镜像myubuntu</h3><p>1、编写</p>
+<p>准备编写DockerFile文件</p>
+<p><img src="/2022/02/07/Docker/381411A6-4A65-4E9A-A530-14C963B75378.png" alt="img"></p>
+<p>FROM ubuntu</p>
+<p>MAINTAINER zzyy</p>
+<p>ENV MYPATH /usr/local</p>
+<p>WORKDIR $MYPATH</p>
+<p>RUN apt-get update</p>
+<p>RUN apt-get install net-tools</p>
+<p>RUN apt-get install -y vim</p>
+<p>#RUN apt-get install -y iproute2</p>
+<p>#RUN apt-get install -y inetutils-ping</p>
+<p>EXPOSE 80</p>
+<p>CMD echo $MYPATH</p>
+<p>CMD echo “install inconfig cmd into ubuntu success————–ok”</p>
+<p>CMD /bin/bash</p>
+<p>2、构建</p>
+<p>docker build -t 新镜像名字:TAG .</p>
+<p>3、运行</p>
+<p>docker run -it 新镜像名字:TAG </p>
+<h1 id="Docker微服务实战"><a href="#Docker微服务实战" class="headerlink" title="Docker微服务实战"></a>Docker微服务实战</h1><h2 id="一、通过IDEA新建一个普通微服务模块"><a href="#一、通过IDEA新建一个普通微服务模块" class="headerlink" title="一、通过IDEA新建一个普通微服务模块"></a>一、通过IDEA新建一个普通微服务模块</h2><h3 id="1-1-建Module"><a href="#1-1-建Module" class="headerlink" title="1.1 建Module"></a>1.1 建Module</h3><p>docker_boot</p>
+<p><img src="/2022/02/07/Docker/image-20220214215934460.png" alt="image-20220214215934460"></p>
+<h3 id="1-2-改POM"><a href="#1-2-改POM" class="headerlink" title="1.2 改POM"></a>1.2 改POM</h3><?xml version="1.0" encoding="UTF-8"?>
+<p><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"><br>    <modelVersion>4.0.0</modelVersion><br>    <parent><br>        <groupId>org.springframework.boot</groupId><br>        <artifactId>spring-boot-starter-parent</artifactId><br>        <version>2.5.6</version><br>        <relativePath><br>    </relativePath></parent></project></p>
+<pre><code>&lt;groupId&gt;com.atguigu.docker&lt;/groupId&gt;
+&lt;artifactId&gt;docker_boot&lt;/artifactId&gt;
+&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+
+&lt;properties&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+    &lt;junit.version&gt;4.12&lt;/junit.version&gt;
+    &lt;log4j.version&gt;1.2.17&lt;/log4j.version&gt;
+    &lt;lombok.version&gt;1.16.18&lt;/lombok.version&gt;
+    &lt;mysql.version&gt;5.1.47&lt;/mysql.version&gt;
+    &lt;druid.version&gt;1.1.16&lt;/druid.version&gt;
+    &lt;mapper.version&gt;4.1.5&lt;/mapper.version&gt;
+    &lt;mybatis.spring.boot.version&gt;1.3.0&lt;/mybatis.spring.boot.version&gt;
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+    &lt;!--SpringBoot通用依赖模块--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!--test--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.1.0&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+
+<h3 id="1-3-写YML"><a href="#1-3-写YML" class="headerlink" title="1.3 写YML"></a>1.3 写YML</h3><p>server.port=6001</p>
+<h3 id="1-4-主启动"><a href="#1-4-主启动" class="headerlink" title="1.4 主启动"></a>1.4 主启动</h3><p><img src="/2022/02/07/Docker/image-20220214214333463.png" alt="image-20220214214333463"></p>
+<h3 id="1-5-业务类"><a href="#1-5-业务类" class="headerlink" title="1.5 业务类"></a>1.5 业务类</h3><p><img src="/2022/02/07/Docker/image-20220214214307334.png" alt="image-20220214214307334"></p>
+<h2 id="二、通过dockerfile发布微服务部署到docker容器"><a href="#二、通过dockerfile发布微服务部署到docker容器" class="headerlink" title="二、通过dockerfile发布微服务部署到docker容器"></a>二、通过dockerfile发布微服务部署到docker容器</h2><h3 id="2-1-IDEA工具里面搞定微服务jar包"><a href="#2-1-IDEA工具里面搞定微服务jar包" class="headerlink" title="2.1 IDEA工具里面搞定微服务jar包"></a>2.1 IDEA工具里面搞定微服务jar包</h3><p><img src="/2022/02/07/Docker/image-20220214214526449.png" alt="image-20220214214526449"></p>
+<h3 id="2-2-编写Dockerfile"><a href="#2-2-编写Dockerfile" class="headerlink" title="2.2 编写Dockerfile"></a>2.2 编写Dockerfile</h3><p>1、Dockerfile内容:</p>
+<p># 基础镜像使用java</p>
+<p>FROM java:8</p>
+<p># 作者</p>
+<p>MAINTAINER zzyy</p>
+<p># VOLUME 指定临时文件目录为/tmp，在主机/var/lib/docker目录下创建了一个临时文件并链接到容器的/tmp</p>
+<p>VOLUME /tmp</p>
+<p># 将jar包添加到容器中并更名为zzyy_docker.jar</p>
+<p>ADD docker_boot-0.0.1-SNAPSHOT.jar zzyy_docker.jar</p>
+<p># 运行jar包</p>
+<p>RUN bash -c ‘touch /zzyy_docker.jar’</p>
+<p>ENTRYPOINT [“java”,”-jar”,”/zzyy_docker.jar”]</p>
+<p>#暴露6001端口作为微服务</p>
+<p>EXPOSE 6001</p>
+<p>2、将微服务jar包和Dockerfile文件上传到同一个目录下/mydocker</p>
+<p><img src="/2022/02/07/Docker/D9DA2D3B-44A0-4572-85A2-980416CA9C75.png" alt="img"></p>
+<p>docker build -t zzyy_docker:1.6 .</p>
+<h3 id="2-3-构建镜像"><a href="#2-3-构建镜像" class="headerlink" title="2.3 构建镜像"></a>2.3 构建镜像</h3><p><img src="/2022/02/07/Docker/52513024-9A73-4321-98DB-64C753ADB246.png" alt="img"></p>
+<p>docker build -t zzyy_docker:1.6 .</p>
+<p>打包成镜像文件</p>
+<h3 id="2-4-运行容器"><a href="#2-4-运行容器" class="headerlink" title="2.4 运行容器"></a>2.4 运行容器</h3><p>docker run -d -p 6001:6001 zzyy_docker:1.6</p>
+<p><img src="/2022/02/07/Docker/18397F6E-B9AF-43AC-91FE-8A6585212E91.png" alt="img"></p>
+<h3 id="2-5-访问测试"><a href="#2-5-访问测试" class="headerlink" title="2.5 访问测试"></a>2.5 访问测试</h3><p><img src="/2022/02/07/Docker/E49E1238-9A52-4160-89EB-DE3D6BE1C1F6.png" alt="img"></p>
+<h1 id="Docker网络"><a href="#Docker网络" class="headerlink" title="Docker网络"></a>Docker网络</h1><h2 id="一、是什么"><a href="#一、是什么" class="headerlink" title="一、是什么"></a>一、是什么</h2><h3 id="1-1-docker不启动，默认网络情况"><a href="#1-1-docker不启动，默认网络情况" class="headerlink" title="1.1 docker不启动，默认网络情况"></a>1.1 docker不启动，默认网络情况</h3><p><img src="/2022/02/07/Docker/29B449B5-D914-43D4-BFFB-8EE8C34FDE7E.png" alt="img"></p>
+<p>ens33     lo      </p>
+<p>virbr0:  在CentOS7的安装过程中如果有选择相关虚拟化的的服务安装系统后，启动网卡时会发现有一个以网桥连接的私网地址的virbr0网卡(virbr0网卡：它还有一个固定的默认IP地址192.168.122.1)，是做虚拟机网桥的使用的，其作用是为连接其上的虚机网卡提供 NAT访问外网的功能。</p>
+<p>我们之前学习Linux安装，勾选安装系统的时候附带了libvirt服务才会生成的一个东西，如果不需要可以直接将libvirtd服务卸载，</p>
+<p>yum remove libvirt-libs.x86_64</p>
+<h3 id="1-2-docker启动后，网络情况"><a href="#1-2-docker启动后，网络情况" class="headerlink" title="1.2 docker启动后，网络情况"></a>1.2 docker启动后，网络情况</h3><p>会产生一个名为docker0的虚拟网桥</p>
+<p><img src="/2022/02/07/Docker/265228C1-1058-4D2A-8913-49213AE14AC9.png" alt="img"></p>
+<p>查看docker网络模式命令</p>
+<p>默认创建3大网络模式</p>
+<p><img src="/2022/02/07/Docker/9947C257-7E0D-44F4-9F6A-B6E2D7269C7E.png" alt="img"></p>
+<h2 id="二、常用基本命令"><a href="#二、常用基本命令" class="headerlink" title="二、常用基本命令"></a>二、常用基本命令</h2><h3 id="2-1-All命令"><a href="#2-1-All命令" class="headerlink" title="2.1 All命令"></a>2.1 All命令</h3><p><img src="/2022/02/07/Docker/CBE2A55D-D620-4D22-B630-6AC0454B788D.png" alt="img"></p>
+<h3 id="2-2-查看网络"><a href="#2-2-查看网络" class="headerlink" title="2.2 查看网络"></a>2.2 查看网络</h3><p>docker network ls</p>
+<h3 id="2-3-查看网络源数据"><a href="#2-3-查看网络源数据" class="headerlink" title="2.3 查看网络源数据"></a>2.3 查看网络源数据</h3><p>docker network inspect  XXX网络名字</p>
+<h3 id="2-4-删除网络"><a href="#2-4-删除网络" class="headerlink" title="2.4 删除网络"></a>2.4 删除网络</h3><p>docker network rm XXX网络名字</p>
+<h3 id="2-5-案例"><a href="#2-5-案例" class="headerlink" title="2.5 案例"></a>2.5 案例</h3><p><img src="/2022/02/07/Docker/A0CDBD42-502B-4EAC-972D-82A1A8D2BAAB.png" alt="img"></p>
+<h2 id="三、能干嘛"><a href="#三、能干嘛" class="headerlink" title="三、能干嘛"></a>三、能干嘛</h2><p>容器间的互联和通信以及端口映射</p>
+<p>容器IP变动时候可以通过服务名直接网络通信而不受到影响</p>
+<h2 id="四、网络模式"><a href="#四、网络模式" class="headerlink" title="四、网络模式"></a>四、网络模式</h2><h3 id="4-1-总体介绍"><a href="#4-1-总体介绍" class="headerlink" title="4.1 总体介绍"></a>4.1 总体介绍</h3><p><img src="/2022/02/07/Docker/40F942BD-8B84-49A2-94DD-68B577D6C9DE.png" alt="img"></p>
+<p>bridge模式：使用–network  bridge指定，默认使用docker0</p>
+<p>host模式：使用–network host指定</p>
+<p>none模式：使用–network none指定</p>
+<p>container模式：使用–network container:NAME或者容器ID指定</p>
+<h3 id="4-2-容器实例内默认网络IP生产规则"><a href="#4-2-容器实例内默认网络IP生产规则" class="headerlink" title="4.2 容器实例内默认网络IP生产规则"></a>4.2 容器实例内默认网络IP生产规则</h3><p>说明:</p>
+<p>1 先启动两个ubuntu容器实例</p>
+<p><img src="/2022/02/07/Docker/7B5AEE43-A6A8-4204-9D69-6874C8B6B96D.png" alt="img"></p>
+<p>2 docker inspect 容器ID or 容器名字</p>
+<p><img src="/2022/02/07/Docker/82130325-1905-4ECE-85FE-A06CA0A7CE01.png" alt="img"></p>
+<p>3 关闭u2实例，新建u3，查看ip变化</p>
+<p><img src="/2022/02/07/Docker/5F3F3D67-5393-4917-874D-CF02A673BECB.png" alt="img"></p>
+<p>结论:</p>
+<p>docker容器内部的ip是有可能会发生改变的</p>
+<h3 id="4-3-案例说明"><a href="#4-3-案例说明" class="headerlink" title="4.3 案例说明"></a>4.3 案例说明</h3><p>tomcat里安装ip等命令 <img src="/2022/02/07/Docker/image-20220215212041593.png" alt="image-20220215212041593"></p>
+<p>(1)bridge</p>
+<p><strong>是什么:</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220214222434567.png" alt="image-20220214222434567"></p>
+<p><strong>案例:</strong></p>
+<p>说明:<img src="/2022/02/07/Docker/image-20220214222539140.png" alt="image-20220214222539140"></p>
+<p>代码:</p>
+<p>docker run -d -p 8081:8080   –name tomcat81 billygoo/tomcat8-jdk8</p>
+<p>docker run -d -p 8082:8080   –name tomcat82 billygoo/tomcat8-jdk8</p>
+<p>两两匹配验证:</p>
+<p><img src="/2022/02/07/Docker/image-20220214222712750.png" alt="image-20220214222712750"></p>
+<p>(2)host</p>
+<p><strong>是什么：直接使用宿主机的 IP 地址与外界进行通信，不再需要额外进行NAT 转换。</strong></p>
+<p><strong>案例</strong>：</p>
+<p>说明：<img src="/2022/02/07/Docker/image-20220214222910551.png" alt="image-20220214222910551"></p>
+<p>代码:</p>
+<p>警告:docker run -d -p 8083:8080 –network host –name tomcat83 billygoo/tomcat8-jdk8<img src="/2022/02/07/Docker/image-20220214223005037.png" alt="image-20220214223005037"></p>
+<p>正确:docker run -d                          –network host –name tomcat83 billygoo/tomcat8-jdk8</p>
+<p>无之前的配对显示了，看容器实例内部<img src="/2022/02/07/Docker/7BFB1C8C-7265-4A5D-AE3C-B1DF6CE652CF.png" alt="img"></p>
+<p>没有设置-p的端口映射了，如何访问启动的tomcat83？？</p>
+<p>http://宿主机IP:8080/           在CentOS里面用默认的火狐浏览器访问容器内的tomcat83看到访问成功，因为此时容器的IP借用主机的，所以容器共享宿主机网络IP，这样的好处是外部主机与容器可以直接通信。</p>
+<p>(3)none</p>
+<p><strong>是什么</strong>:在none模式下，并不为Docker容器进行任何网络配置。 </p>
+<p>也就是说，这个Docker容器没有网卡、IP、路由等信息，只有一个lo</p>
+<p>需要我们自己为Docker容器添加网卡、配置IP等。</p>
+<p>禁用网络功能，只有lo标识(就是127.0.0.1表示本地回环)</p>
+<p><strong>案例</strong></p>
+<p>docker run -d -p 8084:8080 –network none –name tomcat84 billygoo/tomcat8-jdk8</p>
+<p> 进入容器内部查看</p>
+<p><img src="/2022/02/07/Docker/324D8C18-FD77-4562-B2A8-7792CF1FE4B9.png" alt="img"></p>
+<p>在容器外部查看</p>
+<p><img src="/2022/02/07/Docker/88E7B364-DACF-4379-BA36-B15EF3895937.png" alt="img"></p>
+<p>(4)container</p>
+<p><strong>是什么</strong><img src="/2022/02/07/Docker/image-20220214223534477.png" alt="image-20220214223534477"></p>
+<p><strong>案例</strong> 错误了 ，看案例2</p>
+<p>docker run -d -p 8085:8080                                     –name tomcat85 billygoo/tomcat8-jdk8</p>
+<p>docker run -d -p 8086:8080 –network container:tomcat85 –name tomcat86 billygoo/tomcat8-jdk8</p>
+<p><img src="/2022/02/07/Docker/image-20220214223703005.png" alt="image-20220214223703005"></p>
+<p><strong>案例2</strong></p>
+<p>Alpine操作系统是一个面向安全的轻型 Linux发行版</p>
+<p>docker run -it                                                    –name alpine1  alpine /bin/sh</p>
+<p>docker run -it –network container:alpine1 –name alpine2  alpine /bin/sh</p>
+<p>运行结果，验证共用搭桥:<img src="/2022/02/07/Docker/46B3185D-DF05-4448-8FCE-33BEC9570B9A.png" alt="img"></p>
+<p>假如此时关闭alpine1，再看看alpine2:<img src="/2022/02/07/Docker/image-20220214223845914.png" alt="image-20220214223845914"></p>
+<p>(5)自定义网络</p>
+<p>过时的link<img src="/2022/02/07/Docker/image-20220214223935643.png" alt="image-20220214223935643"></p>
+<p><strong>案例</strong></p>
+<p><strong>/1:before</strong></p>
+<p>案例: docker run -d -p 8081:8080   –name tomcat81 billygoo/tomcat8-jdk8</p>
+<p>docker run -d -p 8082:8080   –name tomcat82 billygoo/tomcat8-jdk8</p>
+<p>上述成功启动并用docker exec进入各自容器实例内部</p>
+<p>问题: </p>
+<p>按照IP地址ping是OK的<img src="/2022/02/07/Docker/image-20220214224208772.png" alt="image-20220214224208772"></p>
+<p>按照服务名ping结果???<img src="/2022/02/07/Docker/image-20220214224233954.png" alt="image-20220214224233954"></p>
+<p><strong>/2: after</strong></p>
+<p><strong>案例:</strong> </p>
+<p>自定义桥接网络,自定义网络默认使用的是桥接网络bridge</p>
+<p>新建自定义网络<img src="/2022/02/07/Docker/70F32650-CB77-4616-BF26-17E8221D7EED.png" alt="img"></p>
+<p>新建容器加入上一步新建的自定义网络</p>
+<p>docker run -d -p 8081:8080 –network zzyy_network  –name tomcat81 billygoo/tomcat8-jdk8</p>
+<p>docker run -d -p 8082:8080 –network zzyy_network  –name tomcat82 billygoo/tomcat8-jdk8</p>
+<p>互相ping测试<img src="/2022/02/07/Docker/image-20220214224434694.png" alt="image-20220214224434694"></p>
+<p><strong>问题结论</strong></p>
+<p><img src="/2022/02/07/Docker/image-20220214224527286.png" alt="image-20220214224527286"></p>
+<h2 id="五、Docker平台架构图解"><a href="#五、Docker平台架构图解" class="headerlink" title="五、Docker平台架构图解"></a>五、Docker平台架构图解</h2><h3 id="5-1-整体说明"><a href="#5-1-整体说明" class="headerlink" title="5.1 整体说明"></a>5.1 整体说明</h3><p>从其架构和运行流程来看，Docker 是一个 C/S 模式的架构，后端是一个松耦合架构，众多模块各司其职。 </p>
+<p>Docker 运行的基本流程为：</p>
+<p>1 用户是使用 Docker Client 与 Docker Daemon 建立通信，并发送请求给后者。</p>
+<p>2 Docker Daemon 作为 Docker 架构中的主体部分，首先提供 Docker Server 的功能使其可以接受 Docker Client 的请求。</p>
+<p>3 Docker Engine 执行 Docker 内部的一系列工作，每一项工作都是以一个 Job 的形式的存在。</p>
+<p>4 Job 的运行过程中，当需要容器镜像时，则从 Docker Registry 中下载镜像，并通过镜像管理驱动 Graph driver将下载镜像以Graph的形式存储。</p>
+<p>5 当需要为 Docker 创建网络环境时，通过网络管理驱动 Network driver 创建并配置 Docker 容器网络环境。</p>
+<p>6 当需要限制 Docker 容器运行资源或执行用户指令等操作时，则通过 Execdriver 来完成。</p>
+<p>7 Libcontainer是一项独立的容器管理包，Network driver以及Exec driver都是通过Libcontainer来实现具体对容器进行的操作。</p>
+<h3 id="5-2-整体架构"><a href="#5-2-整体架构" class="headerlink" title="5.2 整体架构"></a>5.2 整体架构</h3><p><img src="/2022/02/07/Docker/4C6BA163-ACC9-43C0-B173-2859C58E79F4.png" alt="img"></p>
+<h1 id="Docker-compose容器编排"><a href="#Docker-compose容器编排" class="headerlink" title="Docker-compose容器编排"></a>Docker-compose容器编排</h1><h2 id="一、是什么-1"><a href="#一、是什么-1" class="headerlink" title="一、是什么"></a>一、是什么</h2><p>Compose 是 Docker 公司推出的一个工具软件，可以管理多个 Docker 容器组成一个应用。你需要定义一个 YAML 格式的配置文件docker-compose.yml，写好多个容器之间的调用关系。然后，只要一个命令，就能同时启动/关闭这些容器</p>
+<p>Docker-Compose是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。</p>
+<h2 id="二、能干嘛"><a href="#二、能干嘛" class="headerlink" title="二、能干嘛"></a>二、能干嘛</h2><p> docker建议我们每一个容器中只运行一个服务,因为docker容器本身占用资源极少,所以最好是将每个服务单独的分割开来但是这样我们又面临了一个问题？</p>
+<p>如果我需要同时部署好多个服务,难道要每个服务单独写Dockerfile然后在构建镜像,构建容器,这样累都累死了,所以docker官方给我们提供了docker-compose多服务部署的工具</p>
+<p>例如要实现一个Web微服务项目，除了Web服务容器本身，往往还需要再加上后端的数据库mysql服务容器，redis服务器，注册中心eureka，甚至还包括负载均衡容器等等。。。。。。</p>
+<p>Compose允许用户通过一个单独的docker-compose.yml模板文件（YAML 格式）来定义一组相关联的应用容器为一个项目（project）。</p>
+<p>可以很容易地用一个配置文件定义一个多容器的应用，然后使用一条指令安装这个应用的所有依赖，完成构建。Docker-Compose 解决了容器与容器之间如何管理编排的问题。</p>
+<h2 id="三、去哪下"><a href="#三、去哪下" class="headerlink" title="三、去哪下"></a>三、去哪下</h2><p>官网：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file/compose-file-v3/">https://docs.docker.com/compose/compose-file/compose-file-v3/</a></p>
+<p>官网下载：<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/install/">https://docs.docker.com/compose/install/</a></p>
+<p>安装步骤：</p>
+<p>curl -L “<a target="_blank" rel="noopener" href="https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$">https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$</a>(uname -s)-$(uname -m)” -o /usr/local/bin/docker-compose</p>
+<p>chmod +x /usr/local/bin/docker-compose</p>
+<p>docker-compose –version</p>
+<p><img src="/2022/02/07/Docker/49A7AB4D-4D03-4D0E-8E00-E9283996DDFC.png" alt="img"></p>
+<p>卸载步骤:<img src="/2022/02/07/Docker/18015F6C-029C-4236-9ACD-B0FC6B00DD76.png" alt="img"></p>
+<h2 id="四、Compose核心概念"><a href="#四、Compose核心概念" class="headerlink" title="四、Compose核心概念"></a>四、Compose核心概念</h2><p>一文件：docker-compose.yml</p>
+<p>两要素：</p>
+<p>（1）服务（service）：一个个应用容器实例，比如订单微服务、库存微服务、mysql容器、nginx容器或者redis容器</p>
+<p>（2）工程（project）：由一组关联的应用容器组成的一个完整业务单元，在 docker-compose.yml 文件中定义。</p>
+<h2 id="五、Compose使用的三个步骤"><a href="#五、Compose使用的三个步骤" class="headerlink" title="五、Compose使用的三个步骤"></a>五、Compose使用的三个步骤</h2><p>（1）编写Dockerfile定义各个微服务应用并构建出对应的镜像文件</p>
+<p>（2）使用 docker-compose.yml 定义一个完整业务单元，安排好整体应用中的各个容器服务。</p>
+<p>（3）最后，执行docker-compose up命令 来启动并运行整个应用程序，完成一键部署上线</p>
+<h2 id="六、Compose常用命令"><a href="#六、Compose常用命令" class="headerlink" title="六、Compose常用命令"></a>六、Compose常用命令</h2><p>Compose常用命令</p>
+<p>docker-compose -h              # 查看帮助</p>
+<p>docker-compose up              # 启动所有docker-compose服务</p>
+<p>docker-compose up -d             # 启动所有docker-compose服务并后台运行</p>
+<p>docker-compose down             # 停止并删除容器、网络、卷、镜像。</p>
+<p>docker-compose exec  yml里面的服务id         # 进入容器实例内部 docker-compose exec docker-compose.yml文件中写的服务id /bin/bash</p>
+<p>docker-compose ps            # 展示当前docker-compose编排过的运行的所有容器</p>
+<p>docker-compose top           # 展示当前docker-compose编排过的容器进程</p>
+<p>docker-compose logs  yml里面的服务id   # 查看容器输出日志</p>
+<p>docker-compose config   # 检查配置</p>
+<p>docker-compose config -q # 检查配置，有问题才有输出</p>
+<p>docker-compose restart  # 重启服务</p>
+<p>docker-compose start   # 启动服务</p>
+<p>docker-compose stop    # 停止服务</p>
+<h2 id="七、Compose编排微服务"><a href="#七、Compose编排微服务" class="headerlink" title="七、Compose编排微服务"></a>七、Compose编排微服务</h2><h3 id="7-1-改造升级微服务工程docker-boot"><a href="#7-1-改造升级微服务工程docker-boot" class="headerlink" title="7.1 改造升级微服务工程docker_boot"></a>7.1 改造升级微服务工程docker_boot</h3><h4 id="1、以前的基础版"><a href="#1、以前的基础版" class="headerlink" title="1、以前的基础版"></a>1、以前的基础版<img src="/2022/02/07/Docker/7E62502B-1FE2-4A1D-B816-D83DD8306897.png" alt="img"></h4><h4 id="2、SQL建表建库"><a href="#2、SQL建表建库" class="headerlink" title="2、SQL建表建库"></a>2、SQL建表建库</h4><p><img src="/2022/02/07/Docker/image-20220215224905669.png" alt="image-20220215224905669"></p>
+<h4 id="3、一键生成说明"><a href="#3、一键生成说明" class="headerlink" title="3、一键生成说明"></a>3、一键生成说明</h4><p><img src="/2022/02/07/Docker/image-20220216132141760.png" alt="image-20220216132141760"></p>
+<p>生成的配置文件</p>
+<p><img src="/2022/02/07/Docker/image-20220216132254045.png" alt="image-20220216132254045"></p>
+<p>一键生成工具,双击<img src="/2022/02/07/Docker/image-20220216132711755.png" alt="image-20220216132711755"></p>
+<p><img src="/2022/02/07/Docker/image-20220216132742677.png" alt="image-20220216132742677"></p>
+<p><img src="/2022/02/07/Docker/image-20220216132848441.png" alt="image-20220216132848441"></p>
+<h4 id="4、改POM"><a href="#4、改POM" class="headerlink" title="4、改POM"></a>4、改POM</h4><hr>
+<?xml version="1.0" encoding="UTF-8"?>
+<p><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"><br>    <modelVersion>4.0.0</modelVersion><br>    <parent><br>        <groupId>org.springframework.boot</groupId><br>        <artifactId>spring-boot-starter-parent</artifactId><br>        <version>2.5.6</version><br>        <!--<version>2.3.10.RELEASE</version>--><br>        <relativePath> <!-- lookup parent from repository --><br>    </relativePath></parent></project></p>
+<pre><code>&lt;groupId&gt;com.atguigu.docker&lt;/groupId&gt;
+&lt;artifactId&gt;docker_boot&lt;/artifactId&gt;
+&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+
+&lt;properties&gt;
+    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+    &lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+    &lt;junit.version&gt;4.12&lt;/junit.version&gt;
+    &lt;log4j.version&gt;1.2.17&lt;/log4j.version&gt;
+    &lt;lombok.version&gt;1.16.18&lt;/lombok.version&gt;
+    &lt;mysql.version&gt;5.1.47&lt;/mysql.version&gt;
+    &lt;druid.version&gt;1.1.16&lt;/druid.version&gt;
+    &lt;mapper.version&gt;4.1.5&lt;/mapper.version&gt;
+    &lt;mybatis.spring.boot.version&gt;1.3.0&lt;/mybatis.spring.boot.version&gt;
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+    &lt;!--guava Google 开源的 Guava 中自带的布隆过滤器--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.google.guava&lt;/groupId&gt;
+        &lt;artifactId&gt;guava&lt;/artifactId&gt;
+        &lt;version&gt;23.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- redisson --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.redisson&lt;/groupId&gt;
+        &lt;artifactId&gt;redisson&lt;/artifactId&gt;
+        &lt;version&gt;3.13.4&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--SpringBoot通用依赖模块--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!--swagger2--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+        &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+        &lt;version&gt;2.9.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+        &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+        &lt;version&gt;2.9.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--SpringBoot与Redis整合依赖--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!--springCache--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!--springCache连接池依赖包--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+        &lt;artifactId&gt;commons-pool2&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;!-- jedis --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;redis.clients&lt;/groupId&gt;
+        &lt;artifactId&gt;jedis&lt;/artifactId&gt;
+        &lt;version&gt;3.1.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--Mysql数据库驱动--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+        &lt;version&gt;5.1.47&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--SpringBoot集成druid连接池--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;druid-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;1.1.10&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+        &lt;artifactId&gt;druid&lt;/artifactId&gt;
+        &lt;version&gt;$&#123;druid.version&#125;&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--mybatis和springboot整合--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;$&#123;mybatis.spring.boot.version&#125;&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- 添加springboot对amqp的支持 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;commons-codec&lt;/groupId&gt;
+        &lt;artifactId&gt;commons-codec&lt;/artifactId&gt;
+        &lt;version&gt;1.10&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--通用基础配置junit/devtools/test/log4j/lombok/hutool--&gt;
+    &lt;!--hutool--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;cn.hutool&lt;/groupId&gt;
+        &lt;artifactId&gt;hutool-all&lt;/artifactId&gt;
+        &lt;version&gt;5.2.3&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;junit&lt;/groupId&gt;
+        &lt;artifactId&gt;junit&lt;/artifactId&gt;
+        &lt;version&gt;$&#123;junit.version&#125;&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;log4j&lt;/groupId&gt;
+        &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+        &lt;version&gt;$&#123;log4j.version&#125;&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+        &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+        &lt;version&gt;$&#123;lombok.version&#125;&lt;/version&gt;
+        &lt;optional&gt;true&lt;/optional&gt;
+    &lt;/dependency&gt;
+    &lt;!--persistence--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;javax.persistence&lt;/groupId&gt;
+        &lt;artifactId&gt;persistence-api&lt;/artifactId&gt;
+        &lt;version&gt;1.0.2&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!--通用Mapper--&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;tk.mybatis&lt;/groupId&gt;
+        &lt;artifactId&gt;mapper&lt;/artifactId&gt;
+        &lt;version&gt;$&#123;mapper.version&#125;&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.1.0&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+
+<hr>
+<h4 id="5、写YML"><a href="#5、写YML" class="headerlink" title="5、写YML"></a>5、写YML</h4><p><img src="/2022/02/07/Docker/image-20220215225203972.png" alt="image-20220215225203972"></p>
+<h4 id="6、主启动"><a href="#6、主启动" class="headerlink" title="6、主启动"></a>6、主启动</h4><p><img src="/2022/02/07/Docker/image-20220215225245733.png" alt="image-20220215225245733"></p>
+<h4 id="7、业务类"><a href="#7、业务类" class="headerlink" title="7、业务类"></a>7、业务类</h4><p>（1）config配置类</p>
+<ul>
+<li>RedisConfig</li>
+</ul>
+<hr>
+<p>package com.atguigu.docker.config;</p>
+<p>import lombok.extern.slf4j.Slf4j;<br>import org.springframework.context.annotation.Bean;<br>import org.springframework.context.annotation.Configuration;<br>import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;<br>import org.springframework.data.redis.core.RedisTemplate;<br>import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;<br>import org.springframework.data.redis.serializer.StringRedisSerializer;</p>
+<p>import java.io.Serializable;</p>
+<p><em>/</em>*<br> ** <em>@auther</em> *zzyy<br> ** <em>@create</em> *2021-10-27 17:19<br> */</p>
+<p><em>@Configuration<br>@Slf4j<br>public class RedisConfig<br>{<br><em>/</em></em><br>   ** <em>@param</em> *lettuceConnectionFactory<br>**** *@return</p>
+<hr>
+<p>   * redis序列化的工具配置类，下面这个请一定开启配置<br>* 127.0.0.1:6379&gt; keys *<br>   * 1) “ord:102” 序列化过<br>* 2) “\xac\xed\x00\x05t\x00\aord:102”  野生，没有序列化过<br>*/<br>*@Bean<br>public RedisTemplate redisTemplate(LettuceConnectionFactory lettuceConnectionFactory)<br>  {<br>    RedisTemplate redisTemplate = new RedisTemplate();</p>
+<p>​    redisTemplate.setConnectionFactory(lettuceConnectionFactory);<br>*//设置key序列化方式string<br>*redisTemplate.setKeySerializer(new StringRedisSerializer());<br>*//设置value的序列化方式json<br>*redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());</p>
+<p>​    redisTemplate.setHashKeySerializer(new StringRedisSerializer());<br>​    redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());</p>
+<p>​    redisTemplate.afterPropertiesSet();</p>
+<p>return redisTemplate;<br>  }</p>
+<p>}</p>
+<hr>
+<ul>
+<li>SwaggerConfig</li>
+</ul>
+<hr>
+<p>package com.atguigu.docker.config;</p>
+<p>import org.springframework.beans.factory.annotation.Value;<br>import org.springframework.context.annotation.Bean;<br>import org.springframework.context.annotation.Configuration;<br>import springfox.documentation.builders.ApiInfoBuilder;<br>import springfox.documentation.builders.PathSelectors;<br>import springfox.documentation.builders.RequestHandlerSelectors;<br>import springfox.documentation.service.ApiInfo;<br>import springfox.documentation.spi.DocumentationType;<br>import springfox.documentation.spring.web.plugins.Docket;<br>import springfox.documentation.swagger2.annotations.EnableSwagger2;</p>
+<p>import java.text.SimpleDateFormat;<br>import java.util.Date;</p>
+<p><em>/</em>*<br> ** <em>@auther</em> *zzyy<br> ** <em>@create</em> *2021-05-01 16:18<br> */<br>*@Configuration<br>@EnableSwagger2<br>public class SwaggerConfig<br>{<br>@Value(“${spring.swagger2.enabled}”)<br>private Boolean enabled;</p>
+<p>@Bean<br>public Docket createRestApi() {<br>return new Docket(DocumentationType.<em>SWAGGER_2</em>)<br>        .apiInfo(apiInfo())<br>        .enable(enabled)<br>        .select()<br>        .apis(RequestHandlerSelectors.<em>basePackage</em>(“com.atguigu.docker”)) *//你自己的package<br>*.paths(PathSelectors.<em>any</em>())<br>        .build();<br>  }</p>
+<p>public ApiInfo apiInfo() {<br>return new ApiInfoBuilder()<br>        .title(“尚硅谷Java大厂技术”+”\t”+new SimpleDateFormat(“yyyy-MM-dd”).format(new Date()))<br>        .description(“docker-compose”)<br>        .version(“1.0”)<br>        .termsOfServiceUrl(“<a target="_blank" rel="noopener" href="https://www.atguigu.com/&quot;">https://www.atguigu.com/&quot;</a>)<br>        .build();<br>  }<br>}</p>
+<hr>
+<p>（2）新建entity</p>
+<ul>
+<li>User</li>
+</ul>
+<hr>
+<p>package com.atguigu.docker.entities;</p>
+<p>import javax.persistence.Column;<br>import javax.persistence.GeneratedValue;<br>import javax.persistence.Id;<br>import javax.persistence.Table;<br>import java.util.Date;</p>
+<p>@Table(name = “t_user”)<br>public class User<br>{<br>@Id<br>  @GeneratedValue(generator = “JDBC”)<br>private Integer id;</p>
+<p><em>/</em>*<br>   * 用户名<br>*/<br>*private String username;</p>
+<p><em>/</em>*<br>   * 密码<br>*/<br>*private String password;</p>
+<p><em>/</em>*<br>   * 性别 0=女 1=男<br>*/<br>*private Byte sex;</p>
+<p><em>/</em>*<br>   * 删除标志，默认0不删除，1删除<br>*/<br>*private Byte deleted;</p>
+<p><em>/</em>*<br>   * 更新时间<br>*/<br>*@Column(name = “update_time”)<br>private Date updateTime;</p>
+<p><em>/</em>*<br>   * 创建时间<br>*/<br>*@Column(name = “create_time”)<br>private Date createTime;</p>
+<p><em>/</em>*<br>   ** <em>@return</em> *id<br>   */<br>*public Integer getId() {<br>return id;<br>  }</p>
+<p><em>/</em>*<br>   ** <em>@param</em> *id<br>***/<br>*public void setId(Integer id) {<br>this.id = id;<br>  }</p>
+<p><em>/</em>*<br>   * 获取用户名<br>*<br>   ** <em>@return</em> *username - 用户名<br>*/<br>*public String getUsername() {<br>return username;<br>  }</p>
+<p><em>/</em>*<br>   * 设置用户名<br>*<br>   ** <em>@param</em> <em>username</em> *用户名<br>*/<br>*public void setUsername(String username) {<br>this.username = username;<br>  }</p>
+<p><em>/</em>*<br>   * 获取密码<br>*<br>   ** <em>@return</em> *password - 密码<br>*/<br>*public String getPassword() {<br>return password;<br>  }</p>
+<p><em>/</em>*<br>   * 设置密码<br>*<br>   ** <em>@param</em> <em>password</em> *密码<br>*/<br>*public void setPassword(String password) {<br>this.password = password;<br>  }</p>
+<p><em>/</em>*<br>   * 获取性别 0=女 1=男<br>*<br>   ** <em>@return</em> *sex - 性别 0=女 1=男<br>*/<br>*public Byte getSex() {<br>return sex;<br>  }</p>
+<p><em>/</em>*<br>   * 设置性别 0=女 1=男<br>*<br>   ** <em>@param</em> <em>sex</em> *性别 0=女 1=男<br>*/<br>*public void setSex(Byte sex) {<br>this.sex = sex;<br>  }</p>
+<p><em>/</em>*<br>   * 获取删除标志，默认0不删除，1删除<br>*<br>   ** <em>@return</em> *deleted - 删除标志，默认0不删除，1删除<br>*/<br>*public Byte getDeleted() {<br>return deleted;<br>  }</p>
+<p><em>/</em>*<br>   * 设置删除标志，默认0不删除，1删除<br>*<br>   ** <em>@param</em> <em>deleted</em> *删除标志，默认0不删除，1删除<br>*/<br>*public void setDeleted(Byte deleted) {<br>this.deleted = deleted;<br>  }</p>
+<p><em>/</em>*<br>   * 获取更新时间<br>*<br>   ** <em>@return</em> *update_time - 更新时间<br>*/<br>*public Date getUpdateTime() {<br>return updateTime;<br>  }</p>
+<p><em>/</em>*<br>   * 设置更新时间<br>*<br>   ** <em>@param</em> <em>updateTime</em> *更新时间<br>*/<br>*public void setUpdateTime(Date updateTime) {<br>this.updateTime = updateTime;<br>  }</p>
+<p><em>/</em>*<br>   * 获取创建时间<br>*<br>   ** <em>@return</em> *create_time - 创建时间<br>*/<br>*public Date getCreateTime() {<br>return createTime;<br>  }</p>
+<p><em>/</em>*<br>   * 设置创建时间<br>*<br>   ** <em>@param</em> <em>createTime</em> *创建时间<br>*/<br>*public void setCreateTime(Date createTime) {<br>this.createTime = createTime;<br>  }<br>}</p>
+<hr>
+<ul>
+<li>UserDTO</li>
+</ul>
+<hr>
+<p>package com.atguigu.docker.entities;</p>
+<p>import io.swagger.annotations.ApiModel;<br>import io.swagger.annotations.ApiModelProperty;<br>import lombok.AllArgsConstructor;<br>import lombok.Data;<br>import lombok.NoArgsConstructor;</p>
+<p>import java.io.Serializable;<br>import java.util.Date;</p>
+<p>@NoArgsConstructor<br>@AllArgsConstructor<br>@Data<br>@ApiModel(value = “用户信息”)<br>public class UserDTO implements Serializable<br>{<br>@ApiModelProperty(value = “用户ID”)<br>private Integer id;</p>
+<p>@ApiModelProperty(value = “用户名”)<br>private String username;</p>
+<p>@ApiModelProperty(value = “密码”)<br>private String password;</p>
+<p>@ApiModelProperty(value = “性别 0=女 1=男 “)<br>private Byte sex;</p>
+<p>@ApiModelProperty(value = “删除标志，默认0不删除，1删除”)<br>private Byte deleted;</p>
+<p>@ApiModelProperty(value = “更新时间”)<br>private Date updateTime;</p>
+<p>@ApiModelProperty(value = “创建时间”)<br>private Date createTime;</p>
+<p><em>/</em>*<br>   ** <em>@return</em> *id<br>   */<br>*public Integer getId() {<br>return id;<br>  }</p>
+<p><em>/</em>*<br>   ** <em>@param</em> *id<br>***/<br>*public void setId(Integer id) {<br>this.id = id;<br>  }</p>
+<p><em>/</em>*<br>   * 获取用户名<br>*<br>   ** <em>@return</em> *username - 用户名<br>*/<br>*public String getUsername() {<br>return username;<br>  }</p>
+<p><em>/</em>*<br>   * 设置用户名<br>*<br>   ** <em>@param</em> <em>username</em> *用户名<br>*/<br>*public void setUsername(String username) {<br>this.username = username;<br>  }</p>
+<p><em>/</em>*<br>   * 获取密码<br>*<br>   ** <em>@return</em> *password - 密码<br>*/<br>*public String getPassword() {<br>return password;<br>  }</p>
+<p><em>/</em>*<br>   * 设置密码<br>*<br>   ** <em>@param</em> <em>password</em> *密码<br>*/<br>*public void setPassword(String password) {<br>this.password = password;<br>  }</p>
+<p><em>/</em>*<br>   * 获取性别 0=女 1=男<br>*<br>   ** <em>@return</em> *sex - 性别 0=女 1=男<br>*/<br>*public Byte getSex() {<br>return sex;<br>  }</p>
+<p><em>/</em>*<br>   * 设置性别 0=女 1=男<br>*<br>   ** <em>@param</em> <em>sex</em> *性别 0=女 1=男<br>*/<br>*public void setSex(Byte sex) {<br>this.sex = sex;<br>  }</p>
+<p><em>/</em>*<br>   * 获取删除标志，默认0不删除，1删除<br>*<br>   ** <em>@return</em> *deleted - 删除标志，默认0不删除，1删除<br>*/<br>*public Byte getDeleted() {<br>return deleted;<br>  }</p>
+<p><em>/</em>*<br>   * 设置删除标志，默认0不删除，1删除<br>*<br>   ** <em>@param</em> <em>deleted</em> *删除标志，默认0不删除，1删除<br>*/<br>*public void setDeleted(Byte deleted) {<br>this.deleted = deleted;<br>  }</p>
+<p><em>/</em>*<br>   * 获取更新时间<br>*<br>   ** <em>@return</em> *update_time - 更新时间<br>*/<br>*public Date getUpdateTime() {<br>return updateTime;<br>  }</p>
+<p><em>/</em>*<br>   * 设置更新时间<br>*<br>   ** <em>@param</em> <em>updateTime</em> *更新时间<br>*/<br>*public void setUpdateTime(Date updateTime) {<br>this.updateTime = updateTime;<br>  }</p>
+<p><em>/</em>*<br>   * 获取创建时间<br>*<br>   ** <em>@return</em> *create_time - 创建时间<br>*/<br>*public Date getCreateTime() {<br>return createTime;<br>  }</p>
+<p><em>/</em>*<br>   * 设置创建时间<br>*<br>   ** <em>@param</em> <em>createTime</em> *创建时间<br>*/<br>*public void setCreateTime(Date createTime) {<br>this.createTime = createTime;<br>  }</p>
+<p>@Override<br>public String toString() {<br>return “User{“ +<br>“id=” + id +<br>“, username=’” + username + ‘&#39;‘ +<br>“, password=’” + password + ‘&#39;‘ +<br>“, sex=” + sex +<br>‘}’;<br>  }<br>}</p>
+<hr>
+<p>（3）新建mapper</p>
+<ul>
+<li>新建接口UserMapper </li>
+</ul>
+<p>package com.atguigu.docker.mapper;</p>
+<p>import com.atguigu.docker.entities.User;<br>import tk.mybatis.mapper.common.Mapper;</p>
+<p>public interface UserMapper extends Mapper {<br>}</p>
+<ul>
+<li>src\main\resources路径下新建mapper文件夹并新增UserMapper.xml</li>
+</ul>
+<p><img src="/2022/02/07/Docker/image-20220215225810476.png" alt="image-20220215225810476"></p>
+<p>（4）新建service</p>
+<hr>
+<p>package com.atguigu.docker.service;</p>
+<p>import com.atguigu.docker.entities.User;<br>import com.atguigu.docker.mapper.UserMapper;<br>import lombok.extern.slf4j.Slf4j;<br>import org.slf4j.Logger;<br>import org.slf4j.LoggerFactory;<br>import org.springframework.beans.factory.annotation.Autowired;<br>import org.springframework.data.redis.core.RedisTemplate;<br>import org.springframework.data.redis.core.ValueOperations;<br>import org.springframework.stereotype.Service;<br>import org.springframework.web.bind.annotation.PathVariable;</p>
+<p>import javax.annotation.Resource;<br>import java.util.concurrent.TimeUnit;</p>
+<p><em>/</em>*<br> ** <em>@auther</em> *zzyy<br> ** <em>@create</em> *2021-05-01 14:58<br> */<br>*@Service<br>@Slf4j<br>public class UserService {</p>
+<p>public static final String <em>CACHE_KEY_USER</em> = “user:”;</p>
+<p>@Resource<br>private UserMapper userMapper;<br>@Resource<br>private RedisTemplate redisTemplate;</p>
+<p><em>/</em>*<br>   * addUser<br>   ** <em>@param</em> *user<br>***/<br>*public void addUser(User user)<br>  {<br>*//1 先插入mysql并成功<br>*int i = userMapper.insertSelective(user);</p>
+<p>if(i &gt; 0)<br>    {<br>*//2 需要再次查询一下mysql将数据捞回来并ok<br>*user = userMapper.selectByPrimaryKey(user.getId());<br>*//3 将捞出来的user存进redis，完成新增功能的数据一致性。<br>*String key = <em>CACHE_KEY_USER</em>+user.getId();<br>redisTemplate.opsForValue().set(key,user);<br>    }<br>  }</p>
+<p><em>/</em>*<br>   * findUserById<br>   ** <em>@param</em> *id<br>**** *@return<br>***/<br>*public User findUserById(Integer id)<br>  {<br>    User user = null;<br>    String key = <em>CACHE_KEY_USER</em>+id;</p>
+<p>*//1 先从redis里面查询，如果有直接返回结果，如果没有再去查询mysql<br>*user = (User) redisTemplate.opsForValue().get(key);</p>
+<p>if(user == null)<br>    {<br>*//2 redis里面无，继续查询mysql<br>*user = userMapper.selectByPrimaryKey(id);<br>if(user == null)<br>      {<br>*//3.1 redis+mysql 都无数据<br>//你具体细化，防止多次穿透，我们规定，记录下导致穿透的这个key回写redis<br>*return user;<br>      }else{<br>*//3.2 mysql有，需要将数据写回redis，保证下一次的缓存命中率<br>*redisTemplate.opsForValue().set(key,user);<br>      }<br>    }<br>return user;<br>  }<br>}</p>
+<hr>
+<p>（5）新建controller</p>
+<hr>
+<p>package com.atguigu.docker.controller;</p>
+<p>import cn.hutool.core.util.IdUtil;<br>import cn.hutool.core.util.ReferenceUtil;<br>import com.atguigu.docker.entities.User;<br>import com.atguigu.docker.entities.UserDTO;<br>import com.atguigu.docker.service.UserService;<br>import io.swagger.annotations.Api;<br>import io.swagger.annotations.ApiOperation;<br>import io.swagger.models.auth.In;<br>import lombok.extern.slf4j.Slf4j;<br>import org.springframework.beans.BeanUtils;<br>import org.springframework.beans.factory.annotation.Autowired;<br>import org.springframework.web.bind.annotation.*;</p>
+<p>import javax.annotation.Resource;<br>import java.util.Random;</p>
+<p><em>/</em>*<br> ** <em>@auther</em> *zzyy<br> ** <em>@create</em> *2021-05-01 15:02<br> */<br>*@Api(description = “用户User接口”)<br>@RestController<br>@Slf4j<br>public class UserController<br>{<br>@Resource<br>private UserService userService;</p>
+<p>@ApiOperation(“数据库新增3条记录”)<br>@RequestMapping(value = “/user/add”,method = RequestMethod.<em>POST</em>)<br>public void addUser()<br>  {<br>for (int i = 1; i 3; i++) {<br>      User user = new User();</p>
+<p>​      user.setUsername(“zzyy”+i);<br>​      user.setPassword(IdUtil.<em>simpleUUID</em>().substring(0,6));<br>​      user.setSex((byte) new Random().nextInt(2));</p>
+<p>userService.addUser(user);<br>    }<br>  }</p>
+<p>@ApiOperation(“删除1条记录”)<br>@RequestMapping(value = “/user/delete/{id}”,method = RequestMethod.<em>POST</em>)<br>public void deleteUser(@PathVariable Integer id)<br>  {<br>userService.deleteUser(id);<br>  }</p>
+<p>@ApiOperation(“修改1条记录”)<br>@RequestMapping(value = “/user/update”,method = RequestMethod.<em>POST</em>)<br>public void updateUser(@RequestBody UserDTO userDTO)<br>  {<br>    User user = new User();<br>    BeanUtils.<em>copyProperties</em>(userDTO,user);<br>userService.updateUser(user);<br>  }</p>
+<p>@ApiOperation(“查询1条记录”)<br>@RequestMapping(value = “/user/find/{id}”,method = RequestMethod.<em>GET</em>)<br>public User findUserById(@PathVariable Integer id)<br>  {<br>return userService.findUserById2(id);<br>  }<br>}</p>
+<hr>
+<h4 id="8、mvn-package命令将微服务形成新的jar包，并上传到Linux服务器-mydocker目录下"><a href="#8、mvn-package命令将微服务形成新的jar包，并上传到Linux服务器-mydocker目录下" class="headerlink" title="8、mvn package命令将微服务形成新的jar包，并上传到Linux服务器/mydocker目录下"></a>8、mvn package命令将微服务形成新的jar包，并上传到Linux服务器/mydocker目录下</h4><h4 id="9、编写Dockerfile"><a href="#9、编写Dockerfile" class="headerlink" title="9、编写Dockerfile"></a>9、编写Dockerfile</h4><hr>
+<p># 基础镜像使用java</p>
+<p>FROM java:8</p>
+<p># 作者</p>
+<p>MAINTAINER zzyy</p>
+<p># VOLUME 指定临时文件目录为/tmp，在主机/var/lib/docker目录下创建了一个临时文件并链接到容器的/tmp</p>
+<p>VOLUME /tmp</p>
+<p># 将jar包添加到容器中并更名为zzyy_docker.jar</p>
+<p>ADD docker_boot-0.0.1-SNAPSHOT.jar zzyy_docker.jar</p>
+<p># 运行jar包</p>
+<p>RUN bash -c ‘touch /zzyy_docker.jar’</p>
+<p>ENTRYPOINT [“java”,”-jar”,”/zzyy_docker.jar”]</p>
+<p>#暴露6001端口作为微服务</p>
+<p>EXPOSE 6001</p>
+<hr>
+<h4 id="10、构建镜像"><a href="#10、构建镜像" class="headerlink" title="10、构建镜像"></a>10、构建镜像</h4><p>docker build -t zzyy_docker:1.6 .</p>
+<h3 id="7-2-不用Compose"><a href="#7-2-不用Compose" class="headerlink" title="7.2 不用Compose"></a>7.2 不用Compose</h3><p>1、单独的mysql容器实例</p>
+<p>（1）新建mysql容器实例</p>
+<p>docker run -p 3306:3306 –name mysql57 –privileged=true -v /zzyyuse/mysql/conf:/etc/mysql/conf.d -v /zzyyuse/mysql/logs:/logs -v /zzyyuse/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7</p>
+<p>（2）进入mysql容器实例并新建库db2021+新建表t_user</p>
+<p><img src="/2022/02/07/Docker/image-20220215230544737.png" alt="image-20220215230544737"></p>
+<p>2、单独的redis容器实例</p>
+<p>docker run -p 6379:6379 –name redis608 –privileged=true -v /app/redis/redis.conf:/etc/redis/redis.conf -v /app/redis/data:/data -d redis:6.0.8 redis-server /etc/redis/redis.conf</p>
+<p>3、微服务工程</p>
+<p>docker run -d -p 6001:6001 zzyy_docker:1.6</p>
+<p>4、上面三个容器实例依次顺序启动成功</p>
+<p><img src="/2022/02/07/Docker/2F82140E-D775-406D-968A-BD14259C1072.png" alt="img"></p>
+<h3 id="7-3-swagger测试"><a href="#7-3-swagger测试" class="headerlink" title="7.3 swagger测试"></a>7.3 swagger测试</h3><p><a href="http://localhost:你的微服务端口/swagger-ui.html#/">http://localhost:你的微服务端口/swagger-ui.html#/</a></p>
+<h3 id="7-4-上面成功了，有哪些问题"><a href="#7-4-上面成功了，有哪些问题" class="headerlink" title="7.4 上面成功了，有哪些问题"></a>7.4 上面成功了，有哪些问题</h3><p>1、先后顺序要求固定，先mysql+redis才能微服务访问成功</p>
+<p>2、多个run命令……</p>
+<p>3、容器间的启停或宕机，有可能导致IP地址对应的容器实例变化，映射出错，要么生产IP写死(可以但是不推荐)，要么通过服务调用</p>
+<h3 id="7-5-使用Compose"><a href="#7-5-使用Compose" class="headerlink" title="7.5 使用Compose"></a>7.5 使用Compose</h3><h4 id="1、服务编排，一套带走，安排"><a href="#1、服务编排，一套带走，安排" class="headerlink" title="1、服务编排，一套带走，安排"></a>1、服务编排，一套带走，安排</h4><h4 id="2、编写docker-compose-yml文件"><a href="#2、编写docker-compose-yml文件" class="headerlink" title="2、编写docker-compose.yml文件"></a>2、编写docker-compose.yml文件</h4><p>version: “3”</p>
+<p>services:</p>
+<p> microService:</p>
+<p>  image: zzyy_docker:1.6</p>
+<p>  container_name: ms01</p>
+<p>  ports:</p>
+<p>   - “6001:6001”</p>
+<p>  volumes:</p>
+<p>   - /app/microService:/data</p>
+<p>  networks: </p>
+<p>   - atguigu_net </p>
+<p>  depends_on: </p>
+<p>   - redis</p>
+<p>   - mysql</p>
+<p> redis:</p>
+<p>  image: redis:6.0.8</p>
+<p>  ports:</p>
+<p>   - “6379:6379”</p>
+<p>  volumes:</p>
+<p>   - /app/redis/redis.conf:/etc/redis/redis.conf</p>
+<p>   - /app/redis/data:/data</p>
+<p>  networks: </p>
+<p>   - atguigu_net</p>
+<p>  command: redis-server /etc/redis/redis.conf</p>
+<p> mysql:</p>
+<p>  image: mysql:5.7</p>
+<p>  environment:</p>
+<p>   MYSQL_ROOT_PASSWORD: ‘123456’</p>
+<p>   MYSQL_ALLOW_EMPTY_PASSWORD: ‘no’</p>
+<p>   MYSQL_DATABASE: ‘db2021’</p>
+<p>   MYSQL_USER: ‘zzyy’</p>
+<p>   MYSQL_PASSWORD: ‘zzyy123’</p>
+<p>  ports:</p>
+<p>​    - “3306:3306”</p>
+<p>  volumes:</p>
+<p>​    - /app/mysql/db:/var/lib/mysql</p>
+<p>​    - /app/mysql/conf/my.cnf:/etc/my.cnf</p>
+<p>​    - /app/mysql/init:/docker-entrypoint-initdb.d</p>
+<p>  networks:</p>
+<p>   - atguigu_net</p>
+<p>  command: –default-authentication-plugin=mysql_native_password #解决外部无法访问</p>
+<p>networks: </p>
+<p>  atguigu_net: </p>
+<h4 id="3、第二次修改微服务工程docker-boot"><a href="#3、第二次修改微服务工程docker-boot" class="headerlink" title="3、第二次修改微服务工程docker_boot"></a>3、第二次修改微服务工程docker_boot</h4><p>（1）写YML</p>
+<p>server.port=6001</p>
+<p>*# ========================alibaba.druid相关配置=====================<br>spring.datasource.type=com.alibaba.druid.pool.DruidDataSource<br>spring.datasource.driver-class-name=com.mysql.jdbc.Driver<br>#spring.datasource.url=jdbc:mysql://192.168.111.169:3306/db2021?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false<br>spring.datasource.url=jdbc:mysql://mysql:3306/db2021?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false<br>spring.datasource.username=root<br>spring.datasource.password=123456<br>spring.datasource.druid.test-while-idle=false</p>
+<p>*# ========================redis相关配置=====================<br>spring.redis.database=0<br>#spring.redis.host=192.168.111.169<br>spring.redis.host=redis<br>spring.redis.port=6379<br>spring.redis.password=<br>spring.redis.lettuce.pool.max-active=8<br>spring.redis.lettuce.pool.max-wait=-1ms<br>spring.redis.lettuce.pool.max-idle=8<br>spring.redis.lettuce.pool.min-idle=0</p>
+<p>*# ========================mybatis相关配置===================<br><em>mybatis.mapper-locations=classpath:mapper/</em>.xml<br>mybatis.type-aliases-package=com.atguigu.docker.entities</p>
+<p>*# ========================swagger=====================<br>spring.swagger2.enabled=true</p>
+<p>通过服务名访问，IP无关</p>
+<p>（2）mvn package命令将微服务形成新的jar包，并上传到Linux服务器/mydocker目录下</p>
+<p><img src="/2022/02/07/Docker/image-20220216153134603.png" alt="image-20220216153134603"></p>
+<p>（3）编写Dockerfile</p>
+<p># 基础镜像使用java</p>
+<p>FROM java:8</p>
+<p># 作者</p>
+<p>MAINTAINER zzyy</p>
+<p># VOLUME 指定临时文件目录为/tmp，在主机/var/lib/docker目录下创建了一个临时文件并链接到容器的/tmp</p>
+<p>VOLUME /tmp</p>
+<p># 将jar包添加到容器中并更名为zzyy_docker.jar</p>
+<p>ADD docker_boot-0.0.1-SNAPSHOT.jar zzyy_docker.jar</p>
+<p># 运行jar包</p>
+<p>RUN bash -c ‘touch /zzyy_docker.jar’</p>
+<p>ENTRYPOINT [“java”,”-jar”,”/zzyy_docker.jar”]</p>
+<p>#暴露6001端口作为微服务</p>
+<p>EXPOSE 6001</p>
+<p>（4）构建镜像</p>
+<p>docker build -t zzyy_docker:1.6 .</p>
+<h4 id="4、执行-docker-compose-up或者执行-docker-compose-up-d"><a href="#4、执行-docker-compose-up或者执行-docker-compose-up-d" class="headerlink" title="4、执行 docker-compose up或者执行 docker-compose up -d"></a>4、执行 docker-compose up或者执行 docker-compose up -d</h4><p><img src="/2022/02/07/Docker/325458C0-39EA-4502-A578-2F02ACBE2236.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/A1683C3E-803B-4A39-99D4-0089D955D548.png" alt="img"></p>
+<h4 id="5、进入mysql容器实例并新建库db2021-新建表t-user"><a href="#5、进入mysql容器实例并新建库db2021-新建表t-user" class="headerlink" title="5、进入mysql容器实例并新建库db2021+新建表t_user"></a>5、进入mysql容器实例并新建库db2021+新建表t_user</h4><p><img src="/2022/02/07/Docker/image-20220216143400622.png" alt="image-20220216143400622"></p>
+<h4 id="6、测试通过"><a href="#6、测试通过" class="headerlink" title="6、测试通过"></a>6、测试通过</h4><h4 id="7、Compose常用命令"><a href="#7、Compose常用命令" class="headerlink" title="7、Compose常用命令"></a>7、Compose常用命令</h4><p><img src="/2022/02/07/Docker/image-20220216143545052.png" alt="image-20220216143545052"></p>
+<h4 id="8、关停"><a href="#8、关停" class="headerlink" title="8、关停"></a>8、关停</h4><p><img src="/2022/02/07/Docker/029E8B80-9B86-45C6-92EC-CBAE98904370.png" alt="img"></p>
+<h1 id="Docker轻量级可视化工具Portainer"><a href="#Docker轻量级可视化工具Portainer" class="headerlink" title="Docker轻量级可视化工具Portainer"></a>Docker轻量级可视化工具Portainer</h1><h2 id="一、是什么-2"><a href="#一、是什么-2" class="headerlink" title="一、是什么"></a>一、是什么</h2><p>Portainer 是一款轻量级的应用，它提供了图形化界面，用于方便地管理Docker环境，包括单机环境和集群环境。</p>
+<h2 id="二、-安装"><a href="#二、-安装" class="headerlink" title="二、 安装"></a>二、 安装</h2><p>官网：<a target="_blank" rel="noopener" href="https://www.portainer.io/">https://www.portainer.io/</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.portainer.io/v/ce-2.9/start/install/server/docker/linux">https://docs.portainer.io/v/ce-2.9/start/install/server/docker/linux</a></p>
+<p>步骤：</p>
+<p>（1）docker命令安装</p>
+<p>docker run -d -p 8000:8000 -p 9000:9000 –name portainer     –restart=always     -v /var/run/docker.sock:/var/run/docker.sock     -v portainer_data:/data     portainer/portainer</p>
+<p><img src="/2022/02/07/Docker/98FEB15A-17A4-4F46-948D-8154B8A66E69.png" alt="img"></p>
+<p>（2）第一次登录需创建admin，访问地址：xxx.xxx.xxx.xxx:9000</p>
+<p>用户名，直接用默认admin          密码记得8位，随便你写</p>
+<p><img src="/2022/02/07/Docker/A5396F23-9438-4033-95F7-F6F14690CEA7.png" alt="img"></p>
+<p>（3）设置admin用户和密码后首次登陆</p>
+<p><img src="/2022/02/07/Docker/1311EDE4-69B2-4E05-83AD-6DBD174A1737.png" alt="img"></p>
+<p>（4）选择local选项卡后本地docker详细信息展示</p>
+<p><img src="/2022/02/07/Docker/82DF4268-418C-4D6C-BA2F-4EAEC3ED3D3C.png" alt="img"></p>
+<p>（5）上一步的图形展示，能想得起对应命令吗？</p>
+<p><img src="/2022/02/07/Docker/image-20220216144105781.png" alt="image-20220216144105781"></p>
+<p>先后顺序要求固定，先mysql+redis才能微服务访问成功</p>
+<h2 id="三、登陆并演示介绍常用操作case"><a href="#三、登陆并演示介绍常用操作case" class="headerlink" title="三、登陆并演示介绍常用操作case"></a>三、登陆并演示介绍常用操作case</h2><h1 id="Docker容器监控之CAdvisor-InfluxDB-Granfana"><a href="#Docker容器监控之CAdvisor-InfluxDB-Granfana" class="headerlink" title="Docker容器监控之CAdvisor+InfluxDB+Granfana"></a>Docker容器监控之CAdvisor+InfluxDB+Granfana</h1><h2 id="一、原生命令"><a href="#一、原生命令" class="headerlink" title="一、原生命令"></a>一、原生命令</h2><h3 id="1-1-操作"><a href="#1-1-操作" class="headerlink" title="1.1 操作"></a>1.1 操作</h3><p><img src="/2022/02/07/Docker/CD767C7D-DB64-49DE-B8B4-C4EB57C26371.png" alt="img"></p>
+<p>docker stats命令的结果</p>
+<p><img src="/2022/02/07/Docker/BE611B19-D215-4960-A0E8-A21172507D6A.png" alt="img"></p>
+<h3 id="1-2-问题"><a href="#1-2-问题" class="headerlink" title="1.2 问题"></a>1.2 问题</h3><p>通过docker stats命令可以很方便的看到当前宿主机上所有容器的CPU,内存以及网络流量等数据，一般小公司够用了。。。。</p>
+<p>但是，docker stats统计结果只能是当前宿主机的全部容器，数据资料是实时的，没有地方存储、没有健康指标过线预警等功能</p>
+<h2 id="二、是什么：容器监控3剑客"><a href="#二、是什么：容器监控3剑客" class="headerlink" title="二、是什么：容器监控3剑客"></a>二、是什么：容器监控3剑客</h2><h3 id="2-1-一句话"><a href="#2-1-一句话" class="headerlink" title="2.1 一句话"></a>2.1 一句话</h3><p><img src="/2022/02/07/Docker/7DBFA29B-75B5-47A8-9770-BC0059B220B0.png" alt="img"></p>
+<p>CAdvisor监控收集+InfluxDB存储数据+Granfana展示图表</p>
+<h3 id="2-2-CAdvisor"><a href="#2-2-CAdvisor" class="headerlink" title="2.2 CAdvisor"></a>2.2 CAdvisor</h3><p><img src="/2022/02/07/Docker/C6EC48B1-C109-4ECB-87C9-C055C33D582F.png" alt="img"></p>
+<h3 id="2-3-InfluxDB"><a href="#2-3-InfluxDB" class="headerlink" title="2.3 InfluxDB"></a>2.3 InfluxDB</h3><p><img src="/2022/02/07/Docker/image-20220216144458068.png" alt="image-20220216144458068"></p>
+<h3 id="2-4-Granfana"><a href="#2-4-Granfana" class="headerlink" title="2.4 Granfana"></a>2.4 Granfana</h3><p><img src="/2022/02/07/Docker/image-20220216144524693.png" alt="image-20220216144524693"></p>
+<h3 id="2-5-总结"><a href="#2-5-总结" class="headerlink" title="2.5 总结"></a>2.5 总结</h3><p><img src="/2022/02/07/Docker/E0527817-7302-413C-836C-2264856C8CD4.png" alt="img"></p>
+<h2 id="三、compose容器编排，一套带走"><a href="#三、compose容器编排，一套带走" class="headerlink" title="三、compose容器编排，一套带走"></a>三、compose容器编排，一套带走</h2><h3 id="3-1-新建目录"><a href="#3-1-新建目录" class="headerlink" title="3.1 新建目录"></a>3.1 新建目录</h3><p><img src="/2022/02/07/Docker/DB91D88F-C94E-4E57-8FBE-8DBD8B32B7AA.png" alt="img"></p>
+<h3 id="3-2-新建3件套组合的docker-compose-yml"><a href="#3-2-新建3件套组合的docker-compose-yml" class="headerlink" title="3.2 新建3件套组合的docker-compose.yml"></a>3.2 新建3件套组合的docker-compose.yml</h3><p>version: ‘3.1’</p>
+<p>volumes:</p>
+<p> grafana_data: {}</p>
+<p>services:</p>
+<p> influxdb:</p>
+<p> image: tutum/influxdb:0.9</p>
+<p> restart: always</p>
+<p> environment:</p>
+<p>  - PRE_CREATE_DB=cadvisor</p>
+<p> ports:</p>
+<p>  - “8083:8083”</p>
+<p>  - “8086:8086”</p>
+<p> volumes:</p>
+<p>  - ./data/influxdb:/data</p>
+<p> cadvisor:</p>
+<p> image: google/cadvisor</p>
+<p> links:</p>
+<p>  - influxdb:influxsrv</p>
+<p> command: -storage_driver=influxdb -storage_driver_db=cadvisor -storage_driver_host=influxsrv:8086</p>
+<p> restart: always</p>
+<p> ports:</p>
+<p>  - “8080:8080”</p>
+<p> volumes:</p>
+<p>  - /:/rootfs:ro</p>
+<p>  - /var/run:/var/run:rw</p>
+<p>  - /sys:/sys:ro</p>
+<p>  - /var/lib/docker/:/var/lib/docker:ro</p>
+<p> grafana:</p>
+<p> user: “104”</p>
+<p> image: grafana/grafana</p>
+<p> user: “104”</p>
+<p> restart: always</p>
+<p> links:</p>
+<p>  - influxdb:influxsrv</p>
+<p> ports:</p>
+<p>  - “3000:3000”</p>
+<p> volumes:</p>
+<p>  - grafana_data:/var/lib/grafana</p>
+<p> environment:</p>
+<p>  - HTTP_USER=admin</p>
+<p>  - HTTP_PASS=admin</p>
+<p>  - INFLUXDB_HOST=influxsrv</p>
+<p>  - INFLUXDB_PORT=8086</p>
+<p>  - INFLUXDB_NAME=cadvisor</p>
+<p>  - INFLUXDB_USER=root</p>
+<p>  - INFLUXDB_PASS=root</p>
+<h3 id="3-3-启动docker-compose文件"><a href="#3-3-启动docker-compose文件" class="headerlink" title="3.3 启动docker-compose文件"></a>3.3 启动docker-compose文件</h3><p>docker-compose up</p>
+<p><img src="/2022/02/07/Docker/E5386A5F-8A80-408A-B439-FCB0C411C96C.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/F31C878A-BF1C-44C9-BBD2-9E4D7CF08E3C.png" alt="img"></p>
+<h3 id="3-4-查看三个服务容器是否启动"><a href="#3-4-查看三个服务容器是否启动" class="headerlink" title="3.4 查看三个服务容器是否启动"></a>3.4 查看三个服务容器是否启动</h3><p><img src="/2022/02/07/Docker/image-20220216144945621.png" alt="image-20220216144945621"></p>
+<h3 id="3-5-测试"><a href="#3-5-测试" class="headerlink" title="3.5 测试"></a>3.5 测试</h3><h4 id="1、浏览cAdvisor收集服务，http-ip-8080"><a href="#1、浏览cAdvisor收集服务，http-ip-8080" class="headerlink" title="1、浏览cAdvisor收集服务，http://ip:8080/"></a>1、浏览cAdvisor收集服务，<a target="_blank" rel="noopener" href="http://ip:8080/">http://ip:8080/</a></h4><p>第一次访问慢，请稍等</p>
+<p>cadvisor也有基础的图形展现功能，这里主要用它来作数据采集</p>
+<p><img src="/2022/02/07/Docker/image-20220216163856900.png" alt="image-20220216163856900"></p>
+<h4 id="2、浏览influxdb存储服务，http-ip-8083"><a href="#2、浏览influxdb存储服务，http-ip-8083" class="headerlink" title="2、浏览influxdb存储服务，http://ip:8083/"></a>2、浏览influxdb存储服务，<a target="_blank" rel="noopener" href="http://ip:8083/">http://ip:8083/</a></h4><h4 id="3、浏览grafana展现服务，http-ip-3000"><a href="#3、浏览grafana展现服务，http-ip-3000" class="headerlink" title="3、浏览grafana展现服务，http://ip:3000"></a>3、浏览grafana展现服务，<a target="_blank" rel="noopener" href="http://ip:3000/">http://ip:3000</a></h4><p>(1)ip+3000端口的方式访问,默认帐户密码（admin/admin）</p>
+<p><img src="/2022/02/07/Docker/629D8A49-F954-4FD4-AD46-8AA25F726A4C.png" alt="img"></p>
+<p>(2)配置步骤</p>
+<p>/1:配置数据源</p>
+<p><img src="/2022/02/07/Docker/image-20220216145249317.png" alt="image-20220216145249317"></p>
+<p>/2:选择influxdb数据源</p>
+<p><img src="/2022/02/07/Docker/A995CCE9-D9D6-49DB-9888-183639FDD187.png" alt="img"></p>
+<p>/3:配置细节</p>
+<p><img src="/2022/02/07/Docker/55F3DD00-50CB-4B9B-B400-EDDDBF5CB54D.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/image-20220216145422117.png" alt="image-20220216145422117"></p>
+<p>/4: 配置面板panel</p>
+<p><img src="/2022/02/07/Docker/3F48E847-3ABE-475D-B218-AEE1AEEFD35D.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/1E82A732-8C99-4BCB-B2A4-EFC79FDFF944.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/9508B36C-C4ED-48D3-A5C2-C0646BED706C.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/B8030C0F-FB03-42BD-9D5E-1820CC7A32D0.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/CA6B1ED1-D6C3-4EAF-92CA-DBF979892C39.png" alt="img"></p>
+<p><img src="/2022/02/07/Docker/2B8AFDAE-73D4-410E-BF77-FE1E93166B9A.png" alt="img"></p>
+<p>到这里cAdvisor+InfluxDB+Grafana容器监控系统就部署完成了</p>
+<h1 id="终章の总结"><a href="#终章の总结" class="headerlink" title="终章の总结"></a>终章の总结</h1><p>知识回顾简单串讲和总结</p>
+<p><img src="/2022/02/07/Docker/DD3BA8F3-6209-42CB-A755-20A672AEA05E.png" alt="img"></p>
 
       
     </div>
@@ -1190,7 +1996,7 @@
 <p>npm install hexo-deployer-git –save</p>
 <p> 3.输入cd ~/.ssh,如果出现入下图情况，说明不存在.ssh</p>
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134422521.png" alt="image-20220120134422521"></p>
-<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#120;&#120;&#120;&#x78;&#x78;&#120;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;">&#x78;&#120;&#120;&#120;&#x78;&#x78;&#120;&#x40;&#x71;&#x71;&#46;&#x63;&#111;&#x6d;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
+<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#120;&#120;&#x78;&#x78;&#x78;&#120;&#x40;&#113;&#x71;&#x2e;&#x63;&#x6f;&#x6d;">&#x78;&#120;&#120;&#x78;&#x78;&#x78;&#120;&#x40;&#113;&#x71;&#x2e;&#x63;&#x6f;&#x6d;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
 <img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134448931.png" alt="image-20220120134448931" style="zoom:80%;">
 
 <p>4.输入eval “$(ssh-agent -s)”，添加密钥到ssh-agent</p>
@@ -1200,7 +2006,7 @@
 
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134641323.png" alt="image-20220120134641323"></p>
 <p>填写key<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134719640.png" alt="image-20220120134719640"></p>
-<p>6.输入ssh -T <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#99;&#111;&#x6d;">&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#x68;&#117;&#98;&#46;&#99;&#111;&#x6d;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
+<p>6.输入ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#109;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
 <p>7.设置你的账号信息<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134805292.png" alt="image-20220120134805292"></p>
 <p>name和email后写自己的即可</p>
 <p>8.部署到github  hexo d     使用用户名.github.io 即可访问自己博客 </p>
@@ -1896,13 +2702,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">35k</span>
+    <span title="Symbols count total">64k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">32 mins.</span>
+    <span title="Reading time total">58 mins.</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
