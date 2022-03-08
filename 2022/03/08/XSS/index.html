@@ -61,7 +61,7 @@
 <meta property="og:image" content="http://example.com/2022/03/08/XSS/image-20220308174815882.png">
 <meta property="og:image" content="http://example.com/2022/03/08/XSS/image-20220308175056839.png">
 <meta property="article:published_time" content="2022-03-08T09:02:01.000Z">
-<meta property="article:modified_time" content="2022-03-08T09:51:53.051Z">
+<meta property="article:modified_time" content="2022-03-08T15:32:58.943Z">
 <meta property="article:author" content="CJ">
 <meta property="article:tag" content="STUDY">
 <meta name="twitter:card" content="summary">
@@ -168,7 +168,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -253,7 +253,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2022-03-08 17:02:01 / Modified: 17:51:53" itemprop="dateCreated datePublished" datetime="2022-03-08T17:02:01+08:00">2022-03-08</time>
+      <time title="Created: 2022-03-08 17:02:01 / Modified: 23:32:58" itemprop="dateCreated datePublished" datetime="2022-03-08T17:02:01+08:00">2022-03-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -297,7 +297,10 @@
 <h3 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h3><p>存储型XSS与反射型XSS的区别主要在于提交的XSS代码是否会存储在服务端，下次请求该网页时是否需要再次提交XSS代码。存储型XSS的典型应用有留言板、在线聊天室、邮件服务等，攻击者提交包含XSS代码的留言后，服务端会将其存储于数据库中，其他用户访问网页查看留言时，服务端将从数据库中查询已有留言并将留言内容输出在HTTP响应中，由浏览器对包含恶意代码的响应进行解析执行。原型如下:</p>
 <p><img src="/2022/03/08/XSS/image-20220308171218524.png" alt="image-20220308171218524"></p>
 <p><img src="/2022/03/08/XSS/image-20220308171235127.png" alt="image-20220308171235127"></p>
-<p>攻击者提交留言<script>alert(/xss/)</script>后，服务端存储留言，其他用户访问网页时执行恶意代码，如图3-2所示。</p>
+<p>攻击者提交留言</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>后，服务端存储留言，其他用户访问网页时执行恶意代码，如图3-2所示。</p>
 <p><img src="/2022/03/08/XSS/image-20220308171338735.png" alt="image-20220308171338735"></p>
 <h3 id="DOM-XSS"><a href="#DOM-XSS" class="headerlink" title="DOM XSS"></a>DOM XSS</h3><p>DOM XSS与反射型XSS、存储型XSS的主要区别在于DOM XSS的XSS代码不需要服务端解析响应的直接参与，触发XSS的是浏览器端的DOM解析。原型如下:<img src="/2022/03/08/XSS/image-20220308171441508.png" alt="image-20220308171441508"></p>
 <p><img src="/2022/03/08/XSS/image-20220308171545059.png" alt="image-20220308171545059"></p>
@@ -351,7 +354,9 @@
 <p>·特定的byte会破坏紧随其后的文字。</p>
 <p>·特定的byte会被忽略。</p>
 <p><img src="/2022/03/08/XSS/image-20220308175056839.png" alt="image-20220308175056839"></p>
-<h3 id="长度限制"><a href="#长度限制" class="headerlink" title="长度限制"></a>长度限制</h3><p>部分输入点会限制输入字符的数量，这时就需要使XSS代码尽量短小精悍，可使用如下方式:<br>window.name<br>location.*</p>
+<h3 id="长度限制"><a href="#长度限制" class="headerlink" title="长度限制"></a>长度限制</h3><p>部分输入点会限制输入字符的数量，这时就需要使XSS代码尽量短小精悍，可使用如下方式:</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">window</span>.name</span><br><span class="line"><span class="keyword">location</span>.*</span><br></pre></td></tr></table></figure>
+
 <p>window.name和location.*都可以通过将代码放置在别处以减小输<br>入点代码量，如:</p>
 
     </div>
@@ -408,13 +413,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">106k</span>
+    <span title="Symbols count total">111k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:36</span>
+    <span title="Reading time total">1:40</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
