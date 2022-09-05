@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="0x01 intval()函数  注意： 这个函数在它的第二个参数是0和不放置参数的时候在科学计数法中有细微的区别 第二个参数设置0的时候，只要读到字符就会停止，不管他是不是科学计数法 第二个参数没设置的时候就不一样,他会正规的按照科学计数法 preg_match()函数一个漏洞 无法处理数组,通常是传一个数组进去，这样就会报错，从而返回false $_GET[a]可以传数组a strpos():">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP特性">
+<meta property="og:url" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="0x01 intval()函数  注意： 这个函数在它的第二个参数是0和不放置参数的时候在科学计数法中有细微的区别 第二个参数设置0的时候，只要读到字符就会停止，不管他是不是科学计数法 第二个参数没设置的时候就不一样,他会正规的按照科学计数法 preg_match()函数一个漏洞 无法处理数组,通常是传一个数组进去，这样就会报错，从而返回false $_GET[a]可以传数组a strpos():">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220228230324623.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220228224931541.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220302215012765.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220302215038148.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220302215050812.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303140344464.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303144548495.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303154034609.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303211428579.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303222053020.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303222601095.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303223932257.png">
+<meta property="og:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220304174929829.png">
+<meta property="article:published_time" content="2022-02-28T14:45:57.000Z">
+<meta property="article:modified_time" content="2022-03-05T08:07:57.084Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220228230324623.png">
+
+
+<link rel="canonical" href="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/","path":"2022/02/28/PHP特性/","title":"PHP特性"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PHP特性 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-intval-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">0x01 intval()函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D"><span class="nav-number">2.</span> <span class="nav-text">0x02 正则匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-MD5"><span class="nav-number">3.</span> <span class="nav-text">0x03 MD5</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B8%B8%E8%A7%84%E7%9A%840e%E7%BB%95%E8%BF%87"><span class="nav-number">3.1.</span> <span class="nav-text">1. 常规的0e绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87"><span class="nav-number">3.2.</span> <span class="nav-text">2. 数组绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%BA%E7%B1%BB%E5%9E%8B%E7%BB%95%E8%BF%87-md5%E7%A2%B0%E6%92%9E"><span class="nav-number">3.3.</span> <span class="nav-text">3. 强类型绕过-md5碰撞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-a-md5-a"><span class="nav-number">3.4.</span> <span class="nav-text">4. $a&#x3D;&#x3D;md5($a)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-md5-%E4%B8%8ESQL%E6%B3%A8%E5%85%A5"><span class="nav-number">3.5.</span> <span class="nav-text">5. md5 与SQL注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-%E4%B8%89%E7%9B%AE%E8%BF%90%E7%AE%97%E7%AC%A6-%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96"><span class="nav-number">4.</span> <span class="nav-text">0x04 三目运算符+变量覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-in-array"><span class="nav-number">5.</span> <span class="nav-text">0x05 in_array()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-is-numeric"><span class="nav-number">6.</span> <span class="nav-text">0x06 is_numeric()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07call-user-func"><span class="nav-number">7.</span> <span class="nav-text">0x07call_user_func</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08-sha1"><span class="nav-number">8.</span> <span class="nav-text">0x08 sha1()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09-%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96"><span class="nav-number">9.</span> <span class="nav-text">0x09 变量覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x10-parse-str"><span class="nav-number">10.</span> <span class="nav-text">0x10 parse_str()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x11ereg"><span class="nav-number">11.</span> <span class="nav-text">0x11ereg()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x12-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%B1%BB"><span class="nav-number">12.</span> <span class="nav-text">0x12 异常处理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ReflectionClass-%E6%89%93%E5%8D%B0%E7%B1%BB%E7%BB%93%E6%9E%9C"><span class="nav-number">12.1.</span> <span class="nav-text">ReflectionClass 打印类结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x13-FilesystemIterator%E7%B1%BB"><span class="nav-number">13.</span> <span class="nav-text">0x13 FilesystemIterator类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x14-trim%E5%87%BD%E6%95%B0%E7%BB%95%E8%BF%87-is-numeric%E7%BB%95%E8%BF%87"><span class="nav-number">14.</span> <span class="nav-text">0x14 trim函数绕过+is_numeric绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x15-SERVER-%E2%80%98argv%E2%80%99"><span class="nav-number">15.</span> <span class="nav-text">0x15 $_SERVER[‘argv’]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x16-gettext%E6%89%A9%E5%B1%95"><span class="nav-number">16.</span> <span class="nav-text">0x16 gettext扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x17-stripos"><span class="nav-number">17.</span> <span class="nav-text">0x17 stripos()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x18%E6%AD%A3%E5%88%99%E6%BA%A2%E5%87%BA%EF%BC%8C%E5%9B%9E%E6%BA%AF%E6%AC%A1%E6%95%B0%E7%BB%95%E8%BF%87"><span class="nav-number">18.</span> <span class="nav-text">0x18正则溢出，回溯次数绕过</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/28/PHP%E7%89%B9%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHP特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-28 22:45:57" itemprop="dateCreated datePublished" datetime="2022-02-28T22:45:57+08:00">2022-02-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-03-05 16:07:57" itemprop="dateModified" datetime="2022-03-05T16:07:57+08:00">2022-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="0x01-intval-函数"><a href="#0x01-intval-函数" class="headerlink" title="0x01 intval()函数"></a>0x01 intval()函数</h2><p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220228230324623.png" alt="image-20220228230324623"></p>
+<p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220228224931541.png" alt="image-20220228224931541"></p>
+<p><strong>注意：</strong></p>
+<p>这个函数在它的第二个参数是0和不放置参数的时候在科学计数法中有细微的区别</p>
+<p>第二个参数设置0的时候，只要读到字符就会停止，不管他是不是科学计数法</p>
+<p>第二个参数没设置的时候就不一样,他会正规的按照科学计数法</p>
+<p>preg_match()函数一个漏洞 无法处理数组,通常是传一个数组进去，这样就会报错，从而返回false</p>
+<p>$_GET[a]可以传数组a</p>
+<p>strpos():查找字符串在另一字符串中第一次出现的位置（区分大小写）。</p>
+<p>strpos(<em>string,find,start</em>)</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>string</em></td>
+<td>必需。规定被搜索的字符串。</td>
+</tr>
+<tr>
+<td><em>find</em></td>
+<td>必需。规定要查找的字符。</td>
+</tr>
+<tr>
+<td><em>start</em></td>
+<td>可选。规定开始搜索的位置。</td>
+</tr>
+</tbody></table>
+<h2 id="0x02-正则匹配"><a href="#0x02-正则匹配" class="headerlink" title="0x02 正则匹配"></a>0x02 正则匹配</h2><table>
+<thead>
+<tr>
+<th align="left">修饰符：</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">i</td>
+<td>ignore - 不区分大小写</td>
+<td>将匹配设置为不区分大小写，搜索时不区分大小写: A 和 a 没有区别。</td>
+</tr>
+<tr>
+<td align="left">m</td>
+<td>multi line - 多行匹配</td>
+<td>使边界字符 ^ 和 $ 匹配每一行的开头和结尾，记住是多行，而不是整个字符串的开头和结尾。所有行只要有一行匹配到了就返回1</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>^</td>
+<td>匹配输入字符串的开始位置。如果设置了 RegExp 对象的 Multiline 属性，^ 也匹配 ‘\n’ 或 ‘\r’ 之后的位置。</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配输入字符串的结束位置。如果设置了RegExp 对象的 Multiline 属性，$ 也匹配 ‘\n’ 或 ‘\r’ 之前的位置。</td>
+</tr>
+</tbody></table>
+<p>在默认状态下，一个字符串无论是否换行只有一个开始^和结尾$，如果采用多行匹配(加了m)，那么每一行都有一个^和结尾$。</p>
+<p>^php      意思为以php开头<br> php$      意思是以php结尾</p>
+<p> ^php$     意思是以php开头并以php结尾</p>
+<h2 id="0x03-MD5"><a href="#0x03-MD5" class="headerlink" title="0x03 MD5"></a>0x03 MD5</h2><h3 id="1-常规的0e绕过"><a href="#1-常规的0e绕过" class="headerlink" title="1. 常规的0e绕过"></a>1. 常规的0e绕过</h3><ul>
+<li>QNKCDZO</li>
+<li>240610708</li>
+<li>s878926199a</li>
+<li>s155964671a</li>
+<li>s214587387a</li>
+<li>s214587387a</li>
+</ul>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这些字符串的 <span class="built_in">md5</span> 值都是 <span class="number">0</span>e 开头，在 php 弱类型比较中判断为相等</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数组绕过"><a href="#2-数组绕过" class="headerlink" title="2. 数组绕过"></a>2. <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%95%B0%E7%BB%84&spm=1001.2101.3001.7020">数组</a>绕过</h3><p>如下代码</p>
+<p>var_dump(md5($_GET[‘a’]) == md5($_GET[‘b’]))</p>
+<p>传入：a[]=a&amp;b[]=b </p>
+<p>虽然会报错，但是判断为真</p>
+<p>MD5一个数组返回了null，null==null，也是强相等的，成功绕过</p>
+<h3 id="3-强类型绕过-md5碰撞"><a href="#3-强类型绕过-md5碰撞" class="headerlink" title="3. 强类型绕过-md5碰撞"></a>3. 强类型绕过-md5碰撞</h3><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>((<span class="built_in">string</span>)$_POST[<span class="string">&#x27;a&#x27;</span>] !== (<span class="built_in">string</span>)$_POST[<span class="string">&#x27;b&#x27;</span>] &amp;&amp; md5($_POST[<span class="string">&#x27;a&#x27;</span>]) === md5($_POST[<span class="string">&#x27;b&#x27;</span>]))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>payload如下：</p>
+<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a<span class="operator">=</span><span class="variable">%4</span>d<span class="variable">%c9</span><span class="variable">%68</span><span class="variable">%ff</span><span class="variable">%0</span>e<span class="variable">%e3</span><span class="variable">%5</span><span class="keyword">c</span><span class="variable">%20</span><span class="variable">%95</span><span class="variable">%72</span><span class="variable">%d4</span><span class="variable">%77</span><span class="variable">%7</span>b<span class="variable">%72</span><span class="variable">%15</span><span class="variable">%87</span><span class="variable">%d3</span><span class="variable">%6</span>f<span class="variable">%a7</span><span class="variable">%b2</span><span class="variable">%1</span>b<span class="variable">%dc</span><span class="variable">%56</span><span class="variable">%b7</span><span class="variable">%4</span>a<span class="variable">%3</span>d<span class="variable">%c0</span><span class="variable">%78</span><span class="variable">%3</span>e<span class="variable">%7</span>b<span class="variable">%95</span><span class="variable">%18</span><span class="variable">%af</span><span class="variable">%bf</span><span class="variable">%a2</span><span class="variable">%00</span><span class="variable">%a8</span><span class="variable">%28</span><span class="variable">%4</span>b<span class="variable">%f3</span><span class="variable">%6</span>e<span class="variable">%8</span>e<span class="variable">%4</span>b<span class="variable">%55</span><span class="variable">%b3</span><span class="variable">%5</span>f<span class="variable">%42</span><span class="variable">%75</span><span class="variable">%93</span><span class="variable">%d8</span><span class="variable">%49</span><span class="variable">%67</span><span class="variable">%6</span>d<span class="variable">%a0</span><span class="variable">%d1</span><span class="variable">%55</span><span class="variable">%5</span>d<span class="variable">%83</span><span class="variable">%60</span><span class="variable">%fb</span><span class="variable">%5</span>f<span class="variable">%07</span><span class="variable">%fe</span><span class="variable">%a2</span></span><br><span class="line">&amp;b<span class="operator">=</span><span class="variable">%4</span>d<span class="variable">%c9</span><span class="variable">%68</span><span class="variable">%ff</span><span class="variable">%0</span>e<span class="variable">%e3</span><span class="variable">%5</span><span class="keyword">c</span><span class="variable">%20</span><span class="variable">%95</span><span class="variable">%72</span><span class="variable">%d4</span><span class="variable">%77</span><span class="variable">%7</span>b<span class="variable">%72</span><span class="variable">%15</span><span class="variable">%87</span><span class="variable">%d3</span><span class="variable">%6</span>f<span class="variable">%a7</span><span class="variable">%b2</span><span class="variable">%1</span>b<span class="variable">%dc</span><span class="variable">%56</span><span class="variable">%b7</span><span class="variable">%4</span>a<span class="variable">%3</span>d<span class="variable">%c0</span><span class="variable">%78</span><span class="variable">%3</span>e<span class="variable">%7</span>b<span class="variable">%95</span><span class="variable">%18</span><span class="variable">%af</span><span class="variable">%bf</span><span class="variable">%a2</span><span class="variable">%02</span><span class="variable">%a8</span><span class="variable">%28</span><span class="variable">%4</span>b<span class="variable">%f3</span><span class="variable">%6</span>e<span class="variable">%8</span>e<span class="variable">%4</span>b<span class="variable">%55</span><span class="variable">%b3</span><span class="variable">%5</span>f<span class="variable">%42</span><span class="variable">%75</span><span class="variable">%93</span><span class="variable">%d8</span><span class="variable">%49</span><span class="variable">%67</span><span class="variable">%6</span>d<span class="variable">%a0</span><span class="variable">%d1</span><span class="variable">%d5</span><span class="variable">%5</span>d<span class="variable">%83</span><span class="variable">%60</span><span class="variable">%fb</span><span class="variable">%5</span>f<span class="variable">%07</span><span class="variable">%fe</span><span class="variable">%a2</span></span><br></pre></td></tr></table></figure>
+
+<p>a与b区别：%00与%02</p>
+<p>进行url解码后的MD5值相等</p>
+<p>MD5(urldecode(a))===MD5(urldecode(b))</p>
+<p>收录一些MD5值相等的字符串</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$Param1=<span class="string">&quot;\x4d\xc9\x68\xff\x0e\xe3\x5c\x20\x95\x72\xd4\x77\x7b\x72\x15\x87\xd3\x6f\xa7\xb2\x1b\xdc\x56\xb7\x4a\x3d\xc0\x78\x3e\x7b\x95\x18\xaf\xbf\xa2\x00\xa8\x28\x4b\xf3\x6e\x8e\x4b\x55\xb3\x5f\x42\x75\x93\xd8\x49\x67\x6d\xa0\xd1\x55\x5d\x83\x60\xfb\x5f\x07\xfe\xa2&quot;</span><span class="comment">;</span></span><br><span class="line">$Param2=<span class="string">&quot;\x4d\xc9\x68\xff\x0e\xe3\x5c\x20\x95\x72\xd4\x77\x7b\x72\x15\x87\xd3\x6f\xa7\xb2\x1b\xdc\x56\xb7\x4a\x3d\xc0\x78\x3e\x7b\x95\x18\xaf\xbf\xa2\x02\xa8\x28\x4b\xf3\x6e\x8e\x4b\x55\xb3\x5f\x42\x75\x93\xd8\x49\x67\x6d\xa0\xd1\xd5\x5d\x83\x60\xfb\x5f\x07\xfe\xa2&quot;</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$data</span>1=<span class="string">&quot;\xd1\x31\xdd\x02\xc5\xe6\xee\xc4\x69\x3d\x9a\x06\x98\xaf\xf9\x5c\x2f\xca\xb5\x07\x12\x46\x7e\xab\x40\x04\x58\x3e\xb8\xfb\x7f\x89\x55\xad\x34\x06\x09\xf4\xb3\x02\x83\xe4\x88\x83\x25\xf1\x41\x5a\x08\x51\x25\xe8\xf7\xcd\xc9\x9f\xd9\x1d\xbd\x72\x80\x37\x3c\x5b\xd8\x82\x3e\x31\x56\x34\x8f\x5b\xae\x6d\xac\xd4\x36\xc9\x19\xc6\xdd\x53\xe2\x34\x87\xda\x03\xfd\x02\x39\x63\x06\xd2\x48\xcd\xa0\xe9\x9f\x33\x42\x0f\x57\x7e\xe8\xce\x54\xb6\x70\x80\x28\x0d\x1e\xc6\x98\x21\xbc\xb6\xa8\x83\x93\x96\xf9\x65\xab\x6f\xf7\x2a\x70&quot;</span>;</span><br><span class="line"><span class="symbol">$data</span>2=<span class="string">&quot;\xd1\x31\xdd\x02\xc5\xe6\xee\xc4\x69\x3d\x9a\x06\x98\xaf\xf9\x5c\x2f\xca\xb5\x87\x12\x46\x7e\xab\x40\x04\x58\x3e\xb8\xfb\x7f\x89\x55\xad\x34\x06\x09\xf4\xb3\x02\x83\xe4\x88\x83\x25\x71\x41\x5a\x08\x51\x25\xe8\xf7\xcd\xc9\x9f\xd9\x1d\xbd\xf2\x80\x37\x3c\x5b\xd8\x82\x3e\x31\x56\x34\x8f\x5b\xae\x6d\xac\xd4\x36\xc9\x19\xc6\xdd\x53\xe2\xb4\x87\xda\x03\xfd\x02\x39\x63\x06\xd2\x48\xcd\xa0\xe9\x9f\x33\x42\x0f\x57\x7e\xe8\xce\x54\xb6\x70\x80\xa8\x0d\x1e\xc6\x98\x21\xbc\xb6\xa8\x83\x93\x96\xf9\x65\x2b\x6f\xf7\x2a\x70&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-a-md5-a"><a href="#4-a-md5-a" class="headerlink" title="4. $a==md5($a)"></a>4. $a==md5($a)</h3><p><code>0e215962017</code> 的 MD5 值也是由 <strong>0e</strong> 开头，在PHP 弱类型比较中相等</p>
+<h3 id="5-md5-与SQL注入"><a href="#5-md5-与SQL注入" class="headerlink" title="5. md5 与SQL注入"></a>5. md5 与SQL注入</h3><p>当 md5 函数的第二个参数为 true 时，返回为 字符串</p>
+<p>一个特殊的 md5 值：ffifdyop<br><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220302215012765.png" alt="image-20220302215012765"><br>$a !== $b &amp;&amp; md5($a) === md5($b) &amp;&amp; sha1($a) === sha1($b)</p>
+<p>利用 Exception 类中的 __toString() 方法返回的字符串相同，返回值只有第一个参数和行号可变，所以只要保持第一个参数相同且在同一行实例化，就能保证 a、b 作为字符串使用的时候相等，但是如果第二个参数（int）不同，他们作为对象比较时就不相等，可以满足上面的条件</p>
+<p>php5：<br>php5 中不能直接执行变量 a、b，继续看 php7<br><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220302215038148.png" alt="image-20220302215038148"></p>
+<p>php7：<br>php7 正常执行<br><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220302215050812.png" alt="image-20220302215050812"><br>php5中可以看作执行如下文件</p>
+<?php
+    exception 'Exception' with message 'phpinfo(); 
+?>
+
+<p>显然不是一个合法的 php 文件</p>
+<p>继续看 php7</p>
+<?php
+    Exception:
+        phpinfo();
+      //goto Exception;
+
+?>
+
+<p>为了便于理解，我加了一个 goto 的注释，也就是说 Exception 被当作了标签，是合乎 php 语法的，可以被正常运行</p>
+<h2 id="0x04-三目运算符-变量覆盖"><a href="#0x04-三目运算符-变量覆盖" class="headerlink" title="0x04 三目运算符+变量覆盖"></a>0x04 三目运算符+变量覆盖</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">include</span>(<span class="string">&quot;flag.php&quot;</span>); </span><br><span class="line"><span class="variable">$_GET</span>?<span class="variable">$_GET</span>=&amp;<span class="variable">$_POST</span>:<span class="string">&#x27;flag&#x27;</span>; </span><br><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;flag&#x27;</span>]==<span class="string">&#x27;flag&#x27;</span>?<span class="variable">$_GET</span>=&amp;<span class="variable">$_COOKIE</span>:<span class="string">&#x27;flag&#x27;</span>; </span><br><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;flag&#x27;</span>]==<span class="string">&#x27;flag&#x27;</span>?<span class="variable">$_GET</span>=&amp;<span class="variable">$_SERVER</span>:<span class="string">&#x27;flag&#x27;</span>; </span><br><span class="line">highlight_file(<span class="variable">$_GET</span>[<span class="string">&#x27;HTTP_FLAG&#x27;</span>]==<span class="string">&#x27;flag&#x27;</span>?<span class="variable">$flag</span>:<span class="keyword">__FILE__</span>); </span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>&amp;是引用符号，意思是：不同的名字访问同一个变量内容。php的引用是在变量或者函数、对象等前面加上&amp;符号，PHP 的引用允许你用两个变量来指向同一个内容<br><strong>$_GET?$_GET=&amp;$_POST:’flag’</strong>;意思：如果有GET方法传参，就将GET方法改为POST方法</p>
+<p>highlight_file($_GET[‘HTTP_FLAG’]==’flag’?$flag:<strong>FILE</strong>)意思：如果有通过GET方法传参’HTTP_FLAG=flag’，就highlight_file($flag)。否则highlight_file(<strong>FILE</strong>)</p>
+<p>中间的代码没有作用，因为我们不提交 flag 参数</p>
+<p>$_GET?$_GET=&amp;$_POST:’flag’;  //只要有输入的get参数就将get方法改变为post方法(修改了get方法的地址)<br>那么看最后要求$_GET[‘HTTP_FLAG’]==’flag’?$flag:__FILE__那么我们就可以直接随意get传参一个，然后post传参HTTP_FLAG=flag即可获得flag.</p>
+<p>根据第一条可知，如果get传了一个值，那么就可以用post覆盖get中的值。<br>中间两行意义不大。<br>最后一行是,如果get传了一个HTTP_FLAG=flag就输出flag否则显示index.php源码。<br>所以我们get随便传一个，然后post传 HTTP_FLAG=flag即可<br>payload get：1=1 post：HTTP_FLAG=flag</p>
+<h2 id="0x05-in-array"><a href="#0x05-in-array" class="headerlink" title="0x05 in_array()"></a>0x05 in_array()</h2><p>in_array() 函数搜索数组中是否存在指定的值。</p>
+<p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303140344464.png" alt="image-20220303140344464"></p>
+<p>漏洞例子：</p>
+<p> $array=[0,1,2,’3’];<br>  var_dump(in_array(‘a’, $array));            //bool(true)<br>  var_dump(in_array(‘1a’, $array));            //bool(true)<br>  var_dump(in_array(‘1’, $array, true));    //bool(false)</p>
+<p>可以理解为，当type == false时，使用==进行比较；当type == true时，使用===进行比较。</p>
+<h2 id="0x06-is-numeric"><a href="#0x06-is-numeric" class="headerlink" title="0x06 is_numeric()"></a>0x06 is_numeric()</h2><p>如果指定的变量是数字和数字字符串则返回 TRUE，否则返回 FALSE，注意浮点型返回空值，即 FALSE。</p>
+<p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303144548495.png" alt="image-20220303144548495"></p>
+<p>优先级：</p>
+<p>&amp;&amp;与||的优先级高于= ，=的优先级高于and与or</p>
+<p>反射类的具体使用方法可参考php官网文档,简单来说反射类就是存放了类里的所有东西。<br>最简单的方法直接输出这个类即可，也就是构造出 echo new ReflectionClass(‘ctfshow’);</p>
+<h2 id="0x07call-user-func"><a href="#0x07call-user-func" class="headerlink" title="0x07call_user_func"></a>0x07call_user_func</h2><p><strong>回调函数</strong></p>
+<p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303154034609.png" alt="image-20220303154034609"></p>
+<h2 id="0x08-sha1"><a href="#0x08-sha1" class="headerlink" title="0x08 sha1()"></a>0x08 sha1()</h2><p><strong>PHP在处理哈希字符串时，会利用”!=”或”==”来对哈希值进行比较，它把每一个以”0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以”0E”开头的，那么PHP将会认为他们相同，都是0。</strong></p>
+<p>常见的payload有</p>
+<pre><code>    QNKCDZO
+    240610708
+    s878926199a
+    s155964671a
+    s214587387a
+    s214587387a
+     sha1(str)
+    sha1(&#39;aaroZmOk&#39;)  
+    sha1(&#39;aaK1STfY&#39;)
+    sha1(&#39;aaO8zKZF&#39;)
+    sha1(&#39;aa3OFF9m&#39;)
+</code></pre>
+<p>同时MD5不能处理数组，若有以下判断则可用数组绕过</p>
+<p>sha1加密数组的时候会无法处理导致<code>sha1($_GET[&#39;uname&#39;])</code>和<code>sha1($_POST[&#39;passwd&#39;])</code>的返回值都为null这就绕过了强相等</p>
+<h2 id="0x09-变量覆盖"><a href="#0x09-变量覆盖" class="headerlink" title="0x09 变量覆盖"></a>0x09 变量覆盖</h2><p>die($error)</p>
+<p>die($error);漏洞 输出相当于echo一样</p>
+<p>例如下面的函数或者语法使用不当时就会出现漏洞。</p>
+<ul>
+<li><p><code>$$</code></p>
+</li>
+<li><p><code>extract()</code>    从数组中将变量导入到当前的符号表。</p>
+</li>
+<li><p><code>parse_str()</code>  把查询字符串解析到变量中</p>
+</li>
+<li><p><code>mb_parse_str</code> 解析 GET/POST/COOKIE 数据并设置全局变量</p>
+</li>
+<li><p><code>import_request_variables()</code> 将 GET／POST／Cookie 变量导入到全局作用域中,只要利用了这个函数，就可以直接对里面的变量进行赋值。</p>
+</li>
+<li><p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303211428579.png" alt="image-20220303211428579"></p>
+</li>
+<li><p><code>register_globals</code> 注册为全局变量</p>
+</li>
+</ul>
+<p>$</p>
+<p>原理</p>
+<p>$$产生的漏洞主要是因为foreach遍历数组的值，然后将获取的数组键名作为变量，数组中的值作为变量的值。</p>
+<p>在这先简单介绍一下foreach和$$。</p>
+<p>foreach循环只适用于数组，并用于遍历数组中的每个键/值对。</p>
+<pre><code>&lt;?php 
+$colors = array(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;,&quot;yellow&quot;); 
+ 
+foreach ($colors as $value) &#123;
+   echo &quot;$value \n&quot;;
+&#125;
+?&gt;
+输出：red
+ green
+ blue
+ yellow 
+</code></pre>
+<p>$$这里举个栗子</p>
+<p>在PHP中，$var表示一个名为var的普通变量，它存储字符串、整数、浮点等任何值。而$$var是一个引用变量，用于存储$var的值。</p>
+<p>在我看来就是套娃。</p>
+<pre><code>&lt;?php
+$var = &quot;ee&quot;;
+$$var = &quot;eeknight&quot;;
+echo $var ;
+echo &quot;\n&quot;;
+echo $$var;
+echo &quot;\n&quot;;
+echo &quot;$ee&quot;;
+?&gt;
+输出：ee
+     eeknight
+  eeknight
+</code></pre>
+<p>为什么echo “$a = $a; $b = $b; $c = $c”;这里要加上\呢</p>
+<p>解：这些斜杠的的意思就是，让后面的变量失去意义。那么写的是什么就是什么。</p>
+<p>parse_str()</p>
+<p>php.ini文件中的magic_quotes_gpc设置影响该函数的输出。如果已启用，那么在parse_str()解析之前，变量会被 addslashes() 转换。</p>
+<p>import_request_variables()</p>
+<p>该函数在最新版本的 PHP 中已经不支持。</p>
+<p>支持的版本：PHP 4 &gt;= 4.1.0, PHP 5 &lt; 5.4.0。</p>
+<p>register_globals</p>
+<p>register_globals从php5.3.0起废弃，并从php5.4.0时移除。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38154820/article/details/115154181">https://blog.csdn.net/qq_38154820/article/details/115154181</a></p>
+<h2 id="0x10-parse-str"><a href="#0x10-parse-str" class="headerlink" title="0x10 parse_str()"></a>0x10 parse_str()</h2><p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303222053020.png" alt="image-20220303222053020"></p>
+<p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303222601095.png" alt="image-20220303222601095"></p>
+<h2 id="0x11ereg"><a href="#0x11ereg" class="headerlink" title="0x11ereg()"></a>0x11ereg()</h2><p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220303223932257.png" alt="image-20220303223932257"></p>
+<p>strrev() 字符串反转<br> intval() 获取变量的整数值<br> %00是字符串的结束标识符，可以截断，%00正则截断，正则表达式只会匹配%00之前的内容，后面的被截断掉，可以通过正则表达式检测</p>
+<h2 id="0x12-异常处理类"><a href="#0x12-异常处理类" class="headerlink" title="0x12 异常处理类"></a>0x12 异常处理类</h2><p>PHP 中提供了内置的异常处理类——Exception，该类中常用的成员函数如下所示：</p>
+<ul>
+<li>getMessage()：返回异常的消息内容；</li>
+<li>getCode()：以数字形式返回异常代码；</li>
+<li>getFile()：返回发生异常的文件名；</li>
+<li>getLine()：返回发生错误的代码行号；</li>
+<li>getTrace()：返回 backtrace() 数组；</li>
+<li>getTraceAsString()：返回已格式化成字符串的、由函数 getTrace() 函数所产生的信息；</li>
+<li>__toString()：产生异常的字符串信息，它可以重载。注意，该函数最前部是两个下划线。</li>
+</ul>
+<p>下面代码是 Exception 类的完整代码，从这个类的定义可以看出哪些属性和方法（成员函数）在用户派生的子类中是可以访问和继承的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Exception</span> &#123;</span><br><span class="line">    <span class="comment">/* 属性 */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">string</span> <span class="variable">$message</span> ;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> <span class="variable">$code</span> ;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">string</span> <span class="variable">$file</span> ;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> <span class="variable">$line</span> ;</span><br><span class="line">    <span class="comment">/* 方法 */</span></span><br><span class="line">    <span class="keyword">public</span> __construct ([ <span class="keyword">string</span> <span class="variable">$message</span> = <span class="string">&quot;&quot;</span> [, <span class="keyword">int</span> <span class="variable">$code</span> = <span class="number">0</span> [, <span class="built_in">Throwable</span> <span class="variable">$previous</span> = <span class="literal">NULL</span> ]]] )</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getMessage ( <span class="keyword">void</span> ) : <span class="keyword">string</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getPrevious ( <span class="keyword">void</span> ) : <span class="built_in">Throwable</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getCode ( <span class="keyword">void</span> ) : <span class="keyword">int</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getFile ( <span class="keyword">void</span> ) : <span class="keyword">string</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getLine ( <span class="keyword">void</span> ) : <span class="keyword">int</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getTrace ( <span class="keyword">void</span> ) : <span class="keyword">array</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">public</span> getTraceAsString ( <span class="keyword">void</span> ) : <span class="keyword">string</span></span><br><span class="line">    <span class="keyword">public</span> __toString ( <span class="keyword">void</span> ) : <span class="keyword">string</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">private</span> __clone ( <span class="keyword">void</span> ) : <span class="keyword">void</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 PHP 中想要捕获程序中的异常，需要使用 try catch 语句和 throw 关键字来实现。try catch 语句和流程控制语句类似，所以可以通过 try catch 语句来实现一种另类的条件选择结构，而 throw 关键字则可以抛出一个异常。try catch 语句的语法格式如下：</p>
+<p>try{<br>  // 可能出现异常或错误的代码，比如文件操作、数据库操作等<br>}catch(Exception $e){  // $e 为一个异常类的对象<br>  // 输出错误信息<br>}</p>
+<p>需要进行异常处理的代码都必须放入 try 代码块内，以便捕获可能存在的异常。每一个 try 至少要有一个与之对应的 catch。使用多个 catch 可以捕获不同的类所产生的异常。</p>
+<p>当 try 代码块不再抛出异常或者找不到 catch 能匹配所抛出的异常时，PHP 代码就会在跳转到最后一个 catch 的后面继续执行。</p>
+<p>在 PHP 代码中所产生的异常可以被 throw 语句抛出并被 catch 语句捕获。当然，PHP 允许在 catch 代码块内再次抛出（throw）异常。</p>
+<p>当一个异常被抛出时，其后的代码不会再继续执行，而 PHP 就会尝试继续查找第一个能与之匹配的 catch。如果一个异常没有被捕获，而且又没用使用 set_exception_handler() 作相应的处理的话，将会产生一个严重的错误，并且输出 UncaughtException…（未捕获异常）的提示信息。</p>
+<p>【示例】使用 try catch 和 throw 捕获程序中的异常。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>    <span class="keyword">try</span>&#123;        <span class="variable">$err</span> = <span class="string">&#x27;抛出异常信息，并跳出 try 语句块&#x27;</span>;        <span class="keyword">if</span>(is_dir(<span class="string">&#x27;./test&#x27;</span>))&#123;            <span class="keyword">echo</span> <span class="string">&#x27;这里是一些可能会发生异常的代码&#x27;</span>;        &#125;<span class="keyword">else</span>&#123;            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="variable">$err</span>, <span class="number">12345</span>);   <span class="comment">// 抛出异常        &#125;        echo &#x27;上面抛出异常的话，这行代码将不会执行，转而执行 catch 中的代码。&lt;br&gt;&#x27;;    &#125;catch(Exception $e)&#123;        echo &#x27;捕获异常：&#x27;.$e-&gt;getMessage().&#x27;&lt;br&gt;错误代码：&#x27;.$e-&gt;getCode().&#x27;&lt;br&gt;&#x27;;    &#125;    echo &#x27;继续执行 try catch 语句之外的代码&#x27;;<span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<p>捕获异常：抛出异常信息，并跳出 try 语句块<br>错误代码：12345<br>继续执行 try catch 语句之外的代码</p>
+<p>示例代码中，在 try 语句块中试着判断当前目录下是否存在名为 test 的目录，如果不存在这个目录，那么就会执行第 7 行的代码，通过关键字 throw 抛出异常。这个异常是一个 Exception 类的对象，通过 new 关键字生成，并且用错误信息 $err 和错误代码 12345 初始化该对象，以便后面 catch 该异常时（代码第 11 行），可以获取这些信息。</p>
+<p>一旦抛出异常，那么 try 语句块中剩下的代码就不再继续执行，程序流程转至相应的 catch 语句块执行，最终通过 Exception 对象调用其成员函数输出错误信息和代码。</p>
+<p><strong>PHP 创建自己的异常类</strong></p>
+<p>在各种语言里，对异常和错误的定义不同。在 PHP 里遇到任何错误都会抛出一个错误，很少会主动抛出异常，不像 Java 语言那样会预先定义好各种异常类，当程序执行到异常处的代码时会主动抛出。</p>
+<p>PHP 的异常处理机制并不完善，在 PHP 中想处理不可预料的异常是办不到的，必须事先定义一些异常，将各种可能出现的异常进行 if…else 判断，手动抛出异常，所以在 PHP 里经常会使用到我们自己创建的异常类。</p>
+<p>下面定义两个异常类，都继承自 Exception 基类。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">emailException</span> <span class="keyword">extends</span> <span class="title">Exception</span></span>&#123;    function __toString()&#123;        <span class="keyword">return</span> <span class="string">&quot;&lt;b&gt;email is null&lt;/b&gt;file:&quot;</span>.$<span class="keyword">this</span>-&gt;getFile().&#x27;,line:&#x27;. $<span class="keyword">this</span>-&gt;getLine();    &#125;&#125;<span class="class"><span class="keyword">class</span> <span class="title">nameException</span> <span class="keyword">extends</span> <span class="title">Exception</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在实际业务中可根据不同需求抛出不同异常，业务代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reg</span>(<span class="params"><span class="variable">$reg</span></span>) </span>&#123;    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$reg</span>[<span class="string">&#x27;email&#x27;</span>])) &#123;        <span class="keyword">throw</span> <span class="keyword">new</span> emailException(<span class="string">&quot;emaill is null&quot;</span>, <span class="number">1</span>);    &#125;    <span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="variable">$reg</span>[<span class="string">&#x27;name&#x27;</span>])) &#123;        <span class="keyword">throw</span> <span class="keyword">new</span> nameException(<span class="string">&quot;name is null&quot;</span>, <span class="number">2</span>);     &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在执行业务代码时，需要使用 if 语句判断异常会发生的地方，然后手动抛出异常，将不同的异常分发给不同的异常类处理，如下所示：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;    <span class="variable">$reg</span> = <span class="keyword">array</span>(<span class="string">&#x27;phone&#x27;</span>=&gt;<span class="string">&#x27;1888888888&#x27;</span>);    reg(<span class="variable">$reg</span>);&#125; <span class="keyword">catch</span>(emailException <span class="variable">$e</span>) &#123;    <span class="keyword">echo</span> <span class="variable">$e</span>;&#125; <span class="keyword">catch</span>(nameException <span class="variable">$e</span>) &#123;    <span class="keyword">echo</span> <span class="string">&#x27;error msg:&#x27;</span> .<span class="variable">$e</span>-&gt;getMessage().<span class="string">&#x27;error code:&#x27;</span>.<span class="variable">$e</span>-&gt;getCode();&#125; <span class="keyword">finally</span> &#123;    <span class="keyword">echo</span> <span class="string">&#x27; finally&#x27;</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段程序根据不同的情况捕获不同的异常，如果第一个 catch 捕获了异常，即使程序中仍然存在其他异常，也会跳过其他的 catch 代码块，但是不管程序中是否出现异常，最终 finally 中的语句都会执行。</p>
+<p>执行以上程序的结果为：  </p>
+<p><strong>email is null</strong> file:/Library/WebServer/Documents/book/try.php,line:39 finally</p>
+<h3 id="ReflectionClass-打印类结果"><a href="#ReflectionClass-打印类结果" class="headerlink" title="ReflectionClass 打印类结果"></a>ReflectionClass 打印类结果</h3><p>Exception<br> 通过异常处理类Exception(system(‘cmd’))可以运行指定代码，并且能返回运行的结果（如果存在返回），Exception括号里不加分号！！</p>
+<p>echo new Exception();</p>
+<p>echo new ReflectionClass();</p>
+<h2 id="0x13-FilesystemIterator类"><a href="#0x13-FilesystemIterator类" class="headerlink" title="0x13 FilesystemIterator类"></a>0x13 FilesystemIterator类</h2><p>php内置类 利用 FilesystemIterator 获取指定目录下的所有文件</p>
+<p>getcwd()函数 获取当前工作目录 返回当前工作目录</p>
+<p>FilesystemIterator就是一个读取目录下文件名的，如果参数能给一个/就能读取当前目录所有文件，这里符号都不能用了，这里php中的getcwd()可以帮我们替代/,获取路径后直接访问得到flag</p>
+<h2 id="0x14-trim函数绕过-is-numeric绕过"><a href="#0x14-trim函数绕过-is-numeric绕过" class="headerlink" title="0x14 trim函数绕过+is_numeric绕过"></a>0x14 trim函数绕过+is_numeric绕过</h2><p>trim函数介绍：移除字符串两侧的空白字符或其他预定义字符。</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">语法</span><br><span class="line">trim(<span class="type">string</span>,charlist)</span><br><span class="line"></span><br><span class="line">参数	描述</span><br><span class="line"><span class="type">string</span>	        必需。规定要检查的字符串。</span><br><span class="line">charlist	    可选。规定从字符串中删除哪些字符。如果省略该参数，则移除下列所有字符：</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;\0&quot;</span>       - NULL</span><br><span class="line"><span class="string">&quot;<span class="subst">\t</span>&quot;</span>       - 制表符</span><br><span class="line"><span class="string">&quot;<span class="subst">\n</span>&quot;</span>       - 换行</span><br><span class="line"><span class="string">&quot;\x0B&quot;</span>     - 垂直制表符</span><br><span class="line"><span class="string">&quot;\r&quot;</span>       - 回车</span><br><span class="line"><span class="string">&quot; &quot;</span>        - 空格</span><br></pre></td></tr></table></figure>
+
+<p>通过羽师傅脚本跑出%0c(换页符可用),可绕过弱类型比较和trim()</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt;=<span class="number">128</span> ; <span class="variable">$i</span>++) &#123; </span><br><span class="line">    <span class="variable">$x</span>=chr(<span class="variable">$i</span>).<span class="string">&#x27;36&#x27;</span>;</span><br><span class="line">   <span class="keyword">if</span>(trim(<span class="variable">$x</span>)!==<span class="string">&#x27;36&#x27;</span> &amp;&amp;  is_numeric(<span class="variable">$x</span>))&#123;</span><br><span class="line">        <span class="keyword">echo</span> urlencode(chr(<span class="variable">$i</span>)).<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//%0C (换页符)</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/28/PHP%E7%89%B9%E6%80%A7/image-20220304174929829.png" alt="image-20220304174929829"></p>
+<h2 id="0x15-SERVER-‘argv’"><a href="#0x15-SERVER-‘argv’" class="headerlink" title="0x15 $_SERVER[‘argv’]"></a>0x15 $_SERVER[‘argv’]</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>、cli模式（命令行）下</span><br><span class="line">	第一个参数$_SERVER<span class="selector-attr">[<span class="string">&#x27;argv&#x27;</span>]</span><span class="selector-attr">[0]</span>是脚本名，其余的是传递给脚本的参数</span><br><span class="line"><span class="number">2</span>、web网页模式下</span><br><span class="line">在web页模式下必须在php.ini开启register_argc_argv配置项</span><br><span class="line">设置register_argc_argv = On(默认是Off)，重启服务，$_SERVER<span class="selector-attr">[‘argv’]</span>才会有效果</span><br><span class="line">这时候的$_SERVER<span class="selector-attr">[‘argv’]</span><span class="selector-attr">[0]</span> = $_SERVER<span class="selector-attr">[‘QUERY_STRING’]</span></span><br><span class="line"><span class="variable">$argv</span>,<span class="variable">$argc</span>在web模式下不适用</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>$a[0]即$_SERVER[‘argv’][0]= $_SERVER<a href="%E8%8E%B7%E5%8F%96url%E4%B8%AD?%E5%90%8E%E7%9A%84%E9%83%A8%E5%88%86">‘QUERY_STRING’</a>，这时我们要做的是通过eval(“$c”.”;”);为$flag赋值flag_give_me，即：<br>eval(eval($flag=flag_give_me).; ),将flag赋值后即可通过if判断输出flag<br>$_SERVER</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&quot;QUERY_STRING&quot;</span>]  获取查询 语句，实例中可知，获取的是?后面的值</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&quot;REQUEST_URI&quot;</span>]   获取 http:<span class="regexp">//</span>localhost 后面的值，包括/</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&quot;SCRIPT_NAME&quot;</span>]   获取当前脚本的路径，如：index.php</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&quot;PHP_SELF&quot;</span>]      当前正在执行脚本的文件名</span><br><span class="line">http:<span class="regexp">//</span>localhost<span class="regexp">/aaa/i</span>ndex.php?p=<span class="number">222</span>&amp;q=<span class="number">333</span></span><br><span class="line">结果：</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&#x27;QUERY_STRING&#x27;</span>] = <span class="string">&quot;p=222&amp;q=333&quot;</span>;</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&#x27;REQUEST_URI&#x27;</span>]  = <span class="string">&quot;/aaa/index.php?p=222&amp;q=333&quot;</span>;</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&#x27;SCRIPT_NAME&#x27;</span>]  = <span class="string">&quot;/aaa/index.php&quot;</span>;</span><br><span class="line"><span class="variable">$_SERVER</span>[<span class="string">&#x27;PHP_SELF&#x27;</span>]     = <span class="string">&quot;/aaa/index.php&quot;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>eval()</strong></p>
+<p><code>eval()</code> 是一个语句，将字符串当做PHP 代码来执行。</p>
+<p><strong>assert()</strong></p>
+<p><code>assert</code> 是一个函数，将字符串当做PHP 代码来执行。</p>
+<h2 id="0x16-gettext扩展"><a href="#0x16-gettext扩展" class="headerlink" title="0x16 gettext扩展"></a>0x16 <strong>gettext扩展</strong></h2><p>小知识点： _()是一个函数</p>
+<p>_()==gettext() 是gettext()的拓展函数，开启text扩展。需要php扩展目录下有php_gettext.dll</p>
+<p><strong>gettext扩展</strong></p>
+<p>gettext函数会使用提供的字符串作为键值去查找当前设置语言对应的翻译版本，如果没有找到则返回原始的字符串gettext(“phpinfo”)等同于phpinfo()<br> 在开启该拓展后”_ “等效于 gettext()<br>所以call_user_func(’_’,‘phpinfo’) 返回的就是phpinfo</p>
+<p>get_defined_vars()函数</p>
+<p>get_defined_vars — 返回由所有已定义变量所组成的数组，这些变量包括环境变量、服务器变量和用户定义的变量。 这样可以获得 $flag</p>
+<p>payload: ?f1=_&amp;f2=get_defined_vars</p>
+<p>即：<br>var_dump(call_user_func(call_user_func($f1,$f2)));<br>var_dump(call_user_func(call_user_func(_,’get_defined_vars’)));<br>var_dump(call_user_func(get_defined_vars));</p>
+<h2 id="0x17-stripos"><a href="#0x17-stripos" class="headerlink" title="0x17 stripos()"></a>0x17 stripos()</h2><p>stripos() 函数查找字符串在另一字符串中第一次出现的位置（不区分大小写） </p>
+<h2 id="0x18正则溢出，回溯次数绕过"><a href="#0x18正则溢出，回溯次数绕过" class="headerlink" title="0x18正则溢出，回溯次数绕过"></a>0x18正则溢出，回溯次数绕过</h2><p>在PHP的pcre扩展中, 提供了俩个设置项.</p>
+<p>1 pcre.backtrack_limit //最大回溯数<br>2 pcre.recursion_limit //最大嵌套数</p>
+<p>默认的backtarck_limit是100000(10万).<br>现在要弄清这个问题的原因, 关键就是什么是”回溯”.<br>这个正则, 使用非贪婪模式, 非贪婪模式匹配原理简单来说是, 在可配也可不配的情况下, 优先不匹配. 记录备选状态, 并将匹配控制交给正则表达式的下一个匹配字符, 当之后的匹配失败的时候, 再溯, 进行匹配.</p>
+<p>举个例子:<br>源字符串: aaab正则: .<em>?<br>匹配过程开始的时候, “.</em>?”首先取得匹配控制权, 因为是非贪婪模式, 所以优先不匹配, 将匹配控制交给下一个匹配字符”b”, “b”在源字符串位置1匹配失败(“a”), 于是回溯, 将匹配控制交回给”.<em>?”, 这个时候, “.</em>?”匹配一个字符”a”, 并再次将控制权交给”b”, 如此反复, 最终得到匹配结果, 这个过程中一共发生了3次回溯.</p>
+<p>最后，还是要说一下</p>
+<p>1、在PHP 5.2以后, 提供了:int preg_last_error ( void )Returns the error code of the last PCRE regex execution.<br>我们应该经常检查这个函数的返回值, 当不为零的时候说明上一个正则函数出错, 特别的对于文章的例子, 出错返回(PREG_BACKTRACK_LIMIT_ERROR)<br>2、非贪婪模式导致太多回溯, 必然会有一些性能问题, 适当的该写下正则, 是可以避免这个问题的. 尤其在做大数据量的文本处理的时候, 如果正则设计不慎, 很容易导致深度嵌套, 另外考虑到性能, 还是建议能用字符串处理尽量使用字符串处理代替.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/" rel="prev" title="CTF命令执行总结">
+                  <i class="fa fa-chevron-left"></i> CTF命令执行总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/04/sql%E6%B3%A8%E5%85%A5/" rel="next" title="sql注入">
+                  sql注入 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

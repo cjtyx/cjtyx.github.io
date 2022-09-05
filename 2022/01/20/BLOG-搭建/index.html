@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="搭建BLOG一.GitHub+hexo搭建步骤：1.注册一个GitHub账号2.创建仓库填写用户名.github.io 切记用户名必须和左边一致  3.启用GitHub pages点击settings进入设置，往下拉找到“GitHub Pages”  4.下载git和node.js安装好git后桌面上任意位置右键点击出现 git gui here和git bash here则说明好了 5.安装he">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BLOG 搭建">
+<meta property="og:url" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="搭建BLOG一.GitHub+hexo搭建步骤：1.注册一个GitHub账号2.创建仓库填写用户名.github.io 切记用户名必须和左边一致  3.启用GitHub pages点击settings进入设置，往下拉找到“GitHub Pages”  4.下载git和node.js安装好git后桌面上任意位置右键点击出现 git gui here和git bash here则说明好了 5.安装he">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120132957284.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133040787.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133135324.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133348877.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133407860.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133437099.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133553089.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133715008.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133847542.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134422521.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134448931.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134516067.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134609994.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134625999.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134641323.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134719640.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134805292.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120135847416.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/IMG_9078.PNG">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120142631520.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120143808333.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120143828396.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120143933764.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144048706.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144414346.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144623459.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144713663.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144831666.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144849472.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144919261.png">
+<meta property="og:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144951520.png">
+<meta property="article:published_time" content="2022-01-20T09:42:18.000Z">
+<meta property="article:modified_time" content="2022-01-26T15:06:05.523Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120132957284.png">
+
+
+<link rel="canonical" href="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/","path":"2022/01/20/BLOG-搭建/","title":"BLOG 搭建"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>BLOG 搭建 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%AD%E5%BB%BABLOG"><span class="nav-number">1.</span> <span class="nav-text">搭建BLOG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-GitHub-hexo%E6%90%AD%E5%BB%BA"><span class="nav-number">1.1.</span> <span class="nav-text">一.GitHub+hexo搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AAGitHub%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.注册一个GitHub账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">2.创建仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%90%AF%E7%94%A8GitHub-pages"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">3.启用GitHub pages</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%B8%8B%E8%BD%BDgit%E5%92%8Cnode-js"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">4.下载git和node.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E5%AE%89%E8%A3%85hexo%EF%BC%8C%E5%8F%8A%E5%85%B6%E7%BB%84%E4%BB%B6"><span class="nav-number">1.1.1.5.</span> <span class="nav-text">5.安装hexo，及其组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E9%83%A8%E7%BD%B2%E5%88%B0GitHub"><span class="nav-number">1.1.1.6.</span> <span class="nav-text">6.部署到GitHub</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.1.7.</span> <span class="nav-text">7.问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E6%9C%8D%E5%8A%A1%E5%99%A8-WordPress"><span class="nav-number">1.2.</span> <span class="nav-text">二. 服务器+WordPress</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4%EF%BC%9A-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B4%AD%E4%B9%B0%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A5%E5%8F%8A%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">1.购买云服务器以及宝塔面板安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%8B%E8%BD%BDWordPress%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.下载WordPress安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%9C%A8%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E6%B7%BB%E5%8A%A0%E7%AB%99%E7%82%B9"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">3.在宝塔面板添加站点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85WordPress"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">4.在线安装WordPress</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">5.问题</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BLOG 搭建
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-01-20 17:42:18" itemprop="dateCreated datePublished" datetime="2022-01-20T17:42:18+08:00">2022-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-01-26 23:06:05" itemprop="dateModified" datetime="2022-01-26T23:06:05+08:00">2022-01-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>2 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="搭建BLOG"><a href="#搭建BLOG" class="headerlink" title="搭建BLOG"></a>搭建BLOG</h1><h2 id="一-GitHub-hexo搭建"><a href="#一-GitHub-hexo搭建" class="headerlink" title="一.GitHub+hexo搭建"></a>一.GitHub+hexo搭建</h2><h3 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h3><h4 id="1-注册一个GitHub账号"><a href="#1-注册一个GitHub账号" class="headerlink" title="1.注册一个GitHub账号"></a>1.注册一个GitHub账号</h4><h4 id="2-创建仓库"><a href="#2-创建仓库" class="headerlink" title="2.创建仓库"></a>2.创建仓库<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120132957284.png" alt="image-20220120132957284"></h4><p>填写用户名.github.io 切记用户名必须和左边一致</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133040787.png" alt="image-20220120133040787"></p>
+<h4 id="3-启用GitHub-pages"><a href="#3-启用GitHub-pages" class="headerlink" title="3.启用GitHub pages"></a>3.启用GitHub pages</h4><p>点击settings进入设置，往下拉找到“GitHub Pages”</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133135324.png" alt="image-20220120133135324"></p>
+<h4 id="4-下载git和node-js"><a href="#4-下载git和node-js" class="headerlink" title="4.下载git和node.js"></a>4.下载git和node.js</h4><p>安装好git后桌面上任意位置右键点击出现 git gui here和git bash here则说明好了</p>
+<h4 id="5-安装hexo，及其组件"><a href="#5-安装hexo，及其组件" class="headerlink" title="5.安装hexo，及其组件"></a>5.安装hexo，及其组件</h4><p>自选一个地方创建文件夹hexo，在此文件夹下右击鼠标，选择“Git Bash here”</p>
+<p>输入 npm install -g hexo进行安装</p>
+<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133348877.png" alt="image-20220120133348877" style="zoom:67%;">
+
+<p>使用 hexo -v ,出现下面界面说明安装成功</p>
+<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133407860.png" alt="image-20220120133407860" style="zoom:67%;">
+
+<p>然后hexo init 初始化,最后的“Start blogging with Hexo！”就说明成功了</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133437099.png" alt="image-20220120133437099"></p>
+<p>输入 npm install,安装所需组件</p>
+<p>输入 hexo g <img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133553089.png" alt="image-20220120133553089" style="zoom:67%;"></p>
+<p>输入hexo s，启动本地服务器，通过访问 <a href="http://localhost:4000，体验hexo">http://localhost:4000，体验hexo</a> ，<strong>不过应该访问127.0.0.1:4000 才能正确访问到页面</strong></p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133715008.png" alt="image-20220120133715008"></p>
+<h4 id="6-部署到GitHub"><a href="#6-部署到GitHub" class="headerlink" title="6.部署到GitHub"></a>6.部署到GitHub</h4><p>1.打开你所创建的文件，找到_config.yml文件,添加如下代码（用记事本或code打开）</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120133847542.png" alt="image-20220120133847542"></p>
+<p>repo：为仓库地址，branch：分支</p>
+<p> <strong>这儿有个特别容易出错的点，就是branch 分支，教程上branch都为master，但是GitHub更新了一些，导致如果branch为master就部署不上去，应该为branch： main  ，还有一点：冒号为英文冒号，且冒号后必须有空格</strong></p>
+<p>2.安装一个扩展</p>
+<p>npm install hexo-deployer-git –save</p>
+<p> 3.输入cd ~/.ssh,如果出现入下图情况，说明不存在.ssh</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134422521.png" alt="image-20220120134422521"></p>
+<p> 解决方法：输入 $ ssh-keygen -t rsa -C “<a href="mailto:&#x78;&#x78;&#120;&#x78;&#120;&#x78;&#120;&#64;&#113;&#113;&#x2e;&#99;&#111;&#109;">&#x78;&#x78;&#120;&#x78;&#120;&#x78;&#120;&#64;&#113;&#113;&#x2e;&#99;&#111;&#109;</a>“(自己邮箱) 再次如下图进行操作，出现相同文件说明成功</p>
+<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134448931.png" alt="image-20220120134448931" style="zoom:80%;">
+
+<p>4.输入eval “$(ssh-agent -s)”，添加密钥到ssh-agent</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134516067.png" alt="image-20220120134516067"></p>
+<p>5.添加SSH Key到Github，点击“settings”<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134609994.png" alt="image-20220120134609994" style="zoom:80%;"></p>
+<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134625999.png" alt="image-20220120134625999" style="zoom:67%;">
+
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134641323.png" alt="image-20220120134641323"></p>
+<p>填写key<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134719640.png" alt="image-20220120134719640"></p>
+<p>6.输入ssh -T <a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#116;&#x68;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;</a>，测试添加ssh是否成功。如果看到Hi后面是你的用户名，就说明成功了（有一个会让你输入 yes）</p>
+<p>7.设置你的账号信息<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120134805292.png" alt="image-20220120134805292"></p>
+<p>name和email后写自己的即可</p>
+<p>8.部署到github  hexo d     使用用户名.github.io 即可访问自己博客 </p>
+<p>9.传文件：将文件放到source/_posts 文件夹下，再部署就行</p>
+<h4 id="7-问题"><a href="#7-问题" class="headerlink" title="7.问题"></a>7.问题</h4><p>_config.yml文件的配置：branch： main</p>
+<p>hexo d 容易出现报错，可能是网络原因，可等等再试；可以输入git config –global http.sslVerify “false” 再试试</p>
+<p>部署或者美化一般用 hexo clean   hexo g  (hexo s)  hexo d</p>
+<p>美化要在配置文件_config.yml修改，以及themes里主题下的_config.yml文件里修改</p>
+<p>更换主题：1.下载主题文件放在themes文件下，修改配置文件下_config.yml的theme：改为主题文件的名字，再部署</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120135847416.png" alt="image-20220120135847416"></p>
+<h2 id="二-服务器-WordPress"><a href="#二-服务器-WordPress" class="headerlink" title="二. 服务器+WordPress"></a>二. 服务器+WordPress</h2><h3 id="步骤：-1"><a href="#步骤：-1" class="headerlink" title="步骤："></a>步骤：</h3><h4 id="1-购买云服务器以及宝塔面板安装"><a href="#1-购买云服务器以及宝塔面板安装" class="headerlink" title="1.购买云服务器以及宝塔面板安装"></a>1.购买云服务器以及宝塔面板安装</h4><p>云服务器安装centos，之前装过Ubuntu系统但是部署WordPress时出现了各种目前我无法解决的问题，重装centos系统后就格外顺利</p>
+<p>用户名，密码可修改</p>
+<p>使用ssh软件工具（Xshell）远程连接云服务器，使用公网IP，默认用户名root</p>
+<p>输入宝塔面板安装命令</p>
+<p>centos安装脚本：yum install -y wget &amp;&amp; wget -O install.sh <a target="_blank" rel="noopener" href="http://download.bt.cn/install/install.sh">http://download.bt.cn/install/install.sh</a> &amp;&amp; sh install.sh</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/IMG_9078.PNG" alt="IMG_9078"></p>
+<p>显示了宝塔后台地址和账号密码，均可在宝塔面板里修改，冒号后面为安全入口，也可修改</p>
+<p>如果不能访问面板</p>
+<p>在服务器中放行8888端口</p>
+<p>然后访问宝塔面板，修改账号密码，绑定宝塔面板账号，完成实名认证，安装LNMP网站环境<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120142631520.png" alt="image-20220120142631520"></p>
+<h4 id="2-下载WordPress安装包"><a href="#2-下载WordPress安装包" class="headerlink" title="2.下载WordPress安装包"></a>2.下载WordPress安装包</h4><p>下载地址：<a target="_blank" rel="noopener" href="https://wordpress.org/">https://wordpress.org/</a></p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://zh-cn.wordpress.com/">https://zh-cn.wordpress.com/</a></p>
+<h4 id="3-在宝塔面板添加站点"><a href="#3-在宝塔面板添加站点" class="headerlink" title="3.在宝塔面板添加站点"></a>3.在宝塔面板添加站点</h4><p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120143808333.png" alt="image-20220120143808333"></p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120143828396.png" alt="image-20220120143828396"></p>
+<p>没有买域名可以填写公网IP，创建FTP与数据库，用户名，密码自己填写<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120143933764.png" alt="image-20220120143933764"></p>
+<p>进入网站站点的根目录。后面安装任何网站程序的步骤都会在这个根目录下进行。只要新建一个站点，都会有唯一的站点根目录。站点根目录下的文件就是网站程序了。</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144048706.png" alt="image-20220120144048706"></p>
+<p>上传刚刚下载的WordPress安装包，并解压，解压后生成了一个WordPress文件夹。将里面的文件剪切到上一层文件夹里就可以了</p>
+<p>或者，由于站点根目录下安装包解压文件解压到”站点根目录/wordpress”目录下了。所以站点配置文件的root需要改为:</p>
+<p>root /www/wwwroot/公网IP/wordpress;</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144414346.png" alt="image-20220120144414346"></p>
+<h4 id="4-在线安装WordPress"><a href="#4-在线安装WordPress" class="headerlink" title="4.在线安装WordPress"></a>4.在线安装WordPress</h4><p>直接访问公网IP，开始安装WordPress</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144623459.png" alt="image-20220120144623459"></p>
+<p>填写数据库名相关信息，也就是刚刚创建站点时填写的</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144713663.png" alt="image-20220120144713663"></p>
+<p>提交后，就现在安装</p>
+<p>填写网站站点相关信息<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144831666.png" alt="image-20220120144831666"></p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144849472.png" alt="image-20220120144849472"></p>
+<p>登录后就可访问网站后台管理页面</p>
+<p><img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144919261.png" alt="image-20220120144919261"></p>
+<p>访问网站界面<img src="/2022/01/20/BLOG-%E6%90%AD%E5%BB%BA/image-20220120144951520.png" alt="image-20220120144951520"></p>
+<p>之后可通过公网IP/wp-admin 访问网站后台管理页面，编辑博客</p>
+<h4 id="5-问题"><a href="#5-问题" class="headerlink" title="5.问题"></a>5.问题</h4><p>就是服务器系统的选择，选得好就顺利，centos比较好</p>
+<p>上传图片，打开hexo的配置文件_config.yml,找到 post_asset_folder，把这个选项从false改成true</p>
+<p>需要安装插件     npm install hexo-asset-image –save                                           新建一篇文章hexo n “name”,在source/_posts文件下生成一个文件夹和一个md文件，将图片复制到文件夹里，在md上传图片，记得用相对路径</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/01/17/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-chevron-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/01/24/Nginx/" rel="next" title="Nginx">
+                  Nginx <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

